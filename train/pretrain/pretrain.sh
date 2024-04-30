@@ -1,3 +1,4 @@
+# train/pretrain/pretrain.sh
 output_model=output_model
 if [ ! -d ${output_model} ];then  
     mkdir ${output_model}
