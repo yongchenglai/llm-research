@@ -5,6 +5,7 @@ if [ ! -d ${output_model} ];then
 fi
 cp ./pretrain.sh ${output_model}
 cp ./ds_config_zero*.json ${output_model}
+
 export CUDA_HOME=/usr/local/cuda/
 export NCCL_P2P_DISABLE=1
 
