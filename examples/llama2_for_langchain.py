@@ -18,15 +18,23 @@ class Llama2(LLM):
         if bit4 == False:
             from transformers import AutoModelForCausalLM
             device_map = "cuda:0" if torch.cuda.is_available() else "auto"
-            self.model = AutoModelForCausalLM.from_pretrained(model_name_or_path, device_map=device_map,
-                                                              torch_dtype=torch.float16, load_in_8bit=True,
-                                                              trust_remote_code=True, use_flash_attention_2=True)
+            self.model = AutoModelForCausalLM.from_pretrained(
+                model_name_or_path,
+                device_map=device_map,
+                torch_dtype=torch.float16,
+                load_in_8bit=True,
+                trust_remote_code=True,
+                use_flash_attention_2=True)
             self.model.eval()
         else:
             from auto_gptq import AutoGPTQForCausalLM
-            self.model = AutoGPTQForCausalLM.from_quantized(model_name_or_path, low_cpu_mem_usage=True, device="cuda:0",
-                                                            use_triton=False, inject_fused_attention=False,
-                                                            inject_fused_mlp=False)
+            self.model = AutoGPTQForCausalLM.from_quantized(
+                model_name_or_path,
+                low_cpu_mem_usage=True,
+                device="cuda:0",
+                use_triton=False,
+                inject_fused_attention=False,
+                inject_fused_mlp=False)
 
         if torch.__version__ >= "2" and sys.platform != "win32":
             self.model = torch.compile(self.model)
