@@ -108,29 +108,35 @@ class ModelArguments:
     )
     config_name: Optional[str] = field(
         default=None,
-        metadata={"help": "Pretrained config name or path if not the same as model_name"}
+        metadata={"help": "Pretrained config name or path "
+                          "if not the same as model_name"}
     )
     tokenizer_name: Optional[str] = field(
         default=None,
-        metadata={"help": "Pretrained tokenizer name or path if not the same as model_name"}
+        metadata={"help": "Pretrained tokenizer name or path "
+                          "if not the same as model_name"}
     )
     cache_dir: Optional[str] = field(
         default=None,
-        metadata={"help": "Where do you want to store the pretrained models downloaded from huggingface.co"},
+        metadata={"help": "Where do you want to store the pretrained "
+                          "models downloaded from huggingface.co"},
     )
     use_fast_tokenizer: bool = field(
         default=True,
-        metadata={"help": "Whether to use one of the fast tokenizer (backed by the tokenizers library) or not."},
+        metadata={"help": "Whether to use one of the fast tokenizer "
+                          "(backed by the tokenizers library) or not."},
     )
     model_revision: str = field(
         default="main",
-        metadata={"help": "The specific model version to use (can be a branch name, tag name or commit id)."},
+        metadata={"help": "The specific model version to use "
+                          "(can be a branch name, tag name or commit id)."},
     )
     use_auth_token: bool = field(
         default=False,
         metadata={
             "help": (
-                "Will use the token generated when running `huggingface-cli login` (necessary to use this script "
+                "Will use the token generated when running `huggingface-cli login` "
+                "(necessary to use this script "
                 "with private models)."
             )
         },
@@ -139,7 +145,8 @@ class ModelArguments:
         default=None,
         metadata={
             "help": (
-                "Override the default `torch.dtype` and load the model under this dtype. If `auto` is passed, the "
+                "Override the default `torch.dtype` and load the model under "
+                "this dtype. If `auto` is passed, the "
                 "dtype will be automatically derived from the model's weights."
             ),
             "choices": ["auto", "bfloat16", "float16", "float32"],
@@ -147,9 +154,12 @@ class ModelArguments:
     )
 
     def __post_init__(self):
-        if self.config_overrides is not None and (self.config_name is not None or self.model_name_or_path is not None):
+        if self.config_overrides is not None \
+                and (self.config_name is not None
+                     or self.model_name_or_path is not None):
             raise ValueError(
-                "--config_overrides can't be used in combination with --config_name or --model_name_or_path"
+                "--config_overrides can't be used in combination with "
+                "--config_name or --model_name_or_path"
             )
 
 
@@ -165,21 +175,23 @@ class DataTrainingArguments:
     )
     dataset_config_name: Optional[str] = field(
         default=None,
-        metadata={"help": "The configuration name of the dataset to use (via the datasets library)."}
+        metadata={"help": "The configuration name of the dataset to use "
+                          "(via the datasets library)."}
     )
     train_files: Optional[List[str]]  = field(
         default=None,
         metadata={"help": "The input training data file (a text file)."})
     validation_files: Optional[List[str]]  = field(
         default=None,
-        metadata={"help": "An optional input evaluation data file to evaluate the perplexity on (a text file)."},
+        metadata={"help": "An optional input evaluation data file "
+                          "to evaluate the perplexity on (a text file)."},
     )
     max_train_samples: Optional[int] = field(
         default=None,
         metadata={
             "help": (
-                "For debugging purposes or quicker training, truncate the number of training examples to this "
-                "value if set."
+                "For debugging purposes or quicker training, "
+                "truncate the number of training examples to this value if set."
             )
         },
     )
@@ -187,29 +199,35 @@ class DataTrainingArguments:
         default=None,
         metadata={
             "help": (
-                "For debugging purposes or quicker training, truncate the number of evaluation examples to this "
+                "For debugging purposes or quicker training, "
+                "truncate the number of evaluation examples to this "
                 "value if set."
             )
         },
     )
-    streaming: bool = field(default=False, metadata={"help": "Enable streaming mode"})
+    streaming: bool = field(
+        default=False,
+        metadata={"help": "Enable streaming mode"})
     block_size: Optional[int] = field(
         default=None,
         metadata={
             "help": (
                 "Optional input sequence length after tokenization. "
                 "The training dataset will be truncated in block of this size for training. "
-                "Default to the model max input length for single sentence inputs (take into account special tokens)."
+                "Default to the model max input length for single sentence inputs "
+                "(take into account special tokens)."
             )
         },
     )
     overwrite_cache: bool = field(
-        default=False, metadata={"help": "Overwrite the cached training and evaluation sets"}
+        default=False,
+        metadata={"help": "Overwrite the cached training and evaluation sets"}
     )
     validation_split_percentage: Optional[int] = field(
         default=5,
         metadata={
-            "help": "The percentage of the train set used as validation set in case there's no validation split"
+            "help": "The percentage of the train set used as "
+                    "validation set in case there's no validation split"
         },
     )
     preprocessing_num_workers: Optional[int] = field(
@@ -217,22 +235,29 @@ class DataTrainingArguments:
         metadata={"help": "The number of processes to use for the preprocessing."},
     )
     keep_linebreaks: bool = field(
-        default=True, metadata={"help": "Whether to keep line breaks when using TXT files or not."}
+        default=True,
+        metadata={"help": "Whether to keep line breaks when using TXT files or not."}
     )
 
     def __post_init__(self):
         if self.streaming:
-            require_version("datasets>=2.0.0", "The streaming feature requires `datasets>=2.0.0`")
+            require_version(
+                "datasets>=2.0.0",
+                "The streaming feature requires `datasets>=2.0.0`")
 
-        if self.dataset_name is None and self.train_files is None and self.validation_files is None:
+        if self.dataset_name is None \
+                and self.train_files is None \
+                and self.validation_files is None:
             raise ValueError("Need either a dataset name or a training/validation file.")
         else:
             if self.train_files is not None:
                 extension = self.train_files[0].split(".")[-1]
-                assert extension in ["csv", "json", "txt"], "`train_file` should be a csv, a json or a txt file."
+                assert extension in ["csv", "json", "txt"], \
+                    "`train_file` should be a csv, a json or a txt file."
             if self.validation_files is not None:
                 extension = self.validation_files[0].split(".")[-1]
-                assert extension in ["csv", "json", "txt"], "`validation_file` should be a csv, a json or a txt file."
+                assert extension in ["csv", "json", "txt"], \
+                    "`validation_file` should be a csv, a json or a txt file."
                 
 def main():
     # See all possible arguments in src/transformers/training_args.py
