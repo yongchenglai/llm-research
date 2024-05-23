@@ -102,28 +102,56 @@ with gr.Blocks() as demo:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model_name_or_path", type=str, help='mode name or path')
-    parser.add_argument("--is_4bit", action='store_true', help='use 4bit model')
+    parser.add_argument(
+        "--model_name_or_path",
+        type=str,
+        help='mode name or path')
+    parser.add_argument(
+        "--is_4bit",
+        action='store_true',
+        help='use 4bit model')
     args = parser.parse_args()
+
     # tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path,use_fast=False)
     # tokenizer.pad_token = tokenizer.eos_token
-    if args.is_4bit==False:
+    if args.is_4bit == False:
         config = PeftConfig.from_pretrained(args.model_name_or_path)
-        tokenizer = AutoTokenizer.from_pretrained(config.base_model_name_or_path,use_fast=False)
+        tokenizer = AutoTokenizer.from_pretrained(
+            config.base_model_name_or_path,
+            use_fast=False)
         tokenizer.pad_token = tokenizer.eos_token
-        model = AutoModelForCausalLM.from_pretrained(config.base_model_name_or_path,
-                                                     device_map='cuda:0' if torch.cuda.is_available() else "auto",
-                                                     torch_dtype=torch.float16,
-                                                     load_in_8bit=True,
-                                                     low_cpu_mem_usage=True,
-                                                     trust_remote_code=True,
-                                                     use_flash_attention_2=True)
-        model = PeftModel.from_pretrained(model, args.model_name_or_path, device_map={"": 0})
+        model = AutoModelForCausalLM.from_pretrained(
+            config.base_model_name_or_path,
+            device_map='cuda:0' if torch.cuda.is_available() else "auto",
+            torch_dtype=torch.float16,
+            load_in_8bit=True,
+            low_cpu_mem_usage=True,
+            trust_remote_code=True,
+            use_flash_attention_2=True)
+        model = PeftModel.from_pretrained(
+            model,
+            args.model_name_or_path,
+            device_map={"": 0})
         model.eval()
+
     else:
         from auto_gptq import AutoGPTQForCausalLM
-        model = AutoGPTQForCausalLM.from_quantized(args.model_name_or_path,low_cpu_mem_usage=True, device="cuda:0", use_triton=False,inject_fused_attention=False,inject_fused_mlp=False)
-    streamer = TextIteratorStreamer(tokenizer,skip_prompt=True)
+        model = AutoGPTQForCausalLM.from_quantized(
+            args.model_name_or_path,
+            low_cpu_mem_usage=True,
+            device="cuda:0",
+            use_triton=False,
+            inject_fused_attention=False,
+            inject_fused_mlp=False)
+
+    streamer = TextIteratorStreamer(tokenizer, skip_prompt=True)
+
     if torch.__version__ >= "2" and sys.platform != "win32":
         model = torch.compile(model)
-    demo.queue().launch(share=False, debug=True,server_name="0.0.0.0")
+
+    demo.queue().launch(
+        share=False,
+        debug=True,
+        server_name="0.0.0.0")
+
+
