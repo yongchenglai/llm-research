@@ -449,8 +449,8 @@ def main():
             "and load it from here, using --tokenizer_name."
         )
 
-    print(training_args.local_rank,'end load tokenizer')
-    print(training_args.local_rank,'start load model')
+    print(training_args.local_rank, 'end load tokenizer')
+    print(training_args.local_rank, 'start load model')
 
     if model_args.model_name_or_path:
         torch_dtype = (
@@ -469,11 +469,16 @@ def main():
             use_auth_token=True if model_args.use_auth_token else None,
         )
     else:
-        model = AutoModelForCausalLM.from_config(config,trust_remote_code=True)
+        model = AutoModelForCausalLM.from_config(
+            config,
+            trust_remote_code=True)
         n_params = sum({p.data_ptr(): p.numel() for p in model.parameters()}.values())
         logger.info(f"Training new model from scratch - Total size={n_params/2**20:.2f}M params")
+
     print(training_args.local_rank,'end load model')
-    # We resize the embeddings only when necessary to avoid index errors. If you are creating a model from scratch
+
+    # We resize the embeddings only when necessary to avoid index errors.
+    # If you are creating a model from scratch
     # on a small vocab and want a smaller embedding size, remove this test.
     embedding_size = model.get_input_embeddings().weight.shape[0]
     if len(tokenizer) > embedding_size:
@@ -496,8 +501,10 @@ def main():
     print(column_names)
     text_column_name = "text" if "text" in column_names else column_names[0]
 
-    # since this will be pickled to avoid _LazyModule error in Hasher force logger loading before tokenize_function
-    tok_logger = transformers.utils.logging.get_logger("transformers.tokenization_utils_base")
+    # since this will be pickled to avoid _LazyModule error in
+    # Hasher force logger loading before tokenize_function
+    tok_logger = transformers.utils.logging.get_logger(
+        "transformers.tokenization_utils_base")
 
     def tokenize_function(examples):
         with CaptureLogger(tok_logger) as cl:
@@ -526,26 +533,32 @@ def main():
         block_size = tokenizer.model_max_length
         if block_size > 1024:
             logger.warning(
-                "The chosen tokenizer supports a `model_max_length` that is longer than the default `block_size` value"
-                " of 1024. If you would like to use a longer `block_size` up to `tokenizer.model_max_length` you can"
+                "The chosen tokenizer supports a `model_max_length` "
+                "that is longer than the default `block_size` value"
+                " of 1024. If you would like to use a longer `block_size` "
+                "up to `tokenizer.model_max_length` you can"
                 " override this default with `--block_size xxx`."
             )
             block_size = 1024
     else:
         if data_args.block_size > tokenizer.model_max_length:
             logger.warning(
-                f"The block_size passed ({data_args.block_size}) is larger than the maximum length for the model"
-                f"({tokenizer.model_max_length}). Using block_size={tokenizer.model_max_length}."
+                f"The block_size passed ({data_args.block_size}) "
+                f"is larger than the maximum length for the model"
+                f"({tokenizer.model_max_length}). "
+                f"Using block_size={tokenizer.model_max_length}."
             )
         block_size = min(data_args.block_size, tokenizer.model_max_length)
 
-    # Main data processing function that will concatenate all texts from our dataset and generate chunks of block_size.
+    # Main data processing function that will concatenate all texts
+    # from our dataset and generate chunks of block_size.
     def group_texts(examples):
         # Concatenate all texts.
         concatenated_examples = {k: list(chain(*examples[k])) for k in examples.keys()}
         # concatenated_examples = {k: sum(examples[k], []) for k in examples.keys()}
         total_length = len(concatenated_examples[list(examples.keys())[0]])
-        # We drop the small remainder, we could add padding if the model supported it instead of this drop, you can
+        # We drop the small remainder, we could add padding
+        # if the model supported it instead of this drop, you can
         # customize this part to your needs.
         if total_length >= block_size:
             total_length = (total_length // block_size) * block_size
@@ -555,15 +568,19 @@ def main():
             for k, t in concatenated_examples.items()
         }
         # print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))       
-        logger.info("group texts input examples length%d after_group size%d"%(len(examples['input_ids']),len(result["input_ids"])))
+        logger.info("group texts input examples length%d after_group size%d"%(
+            len(examples['input_ids']), len(result["input_ids"])))
         result["labels"] = result["input_ids"].copy()
         return result
 
-    # Note that with `batched=True`, this map processes 1,000 texts together, so group_texts throws away a remainder
-    # for each of those groups of 1,000 texts. You can adjust that batch_size here but a higher value might be slower
+    # Note that with `batched=True`, this map processes 1,000 texts together,
+    # so group_texts throws away a remainder
+    # for each of those groups of 1,000 texts. You can adjust that batch_size
+    # here but a higher value might be slower
     # to preprocess.
     #
-    # To speed up this part, we use multiprocessing. See the documentation of the map method for more information:
+    # To speed up this part, we use multiprocessing.
+    # See the documentation of the map method for more information:
     # https://huggingface.co/docs/datasets/package_reference/main_classes.html#datasets.Dataset.map
 
     with training_args.main_process_first(desc="grouping texts together"):
@@ -582,12 +599,14 @@ def main():
                 batched=True,
                 batch_size = 60000,
             )
-    print(training_args.local_rank,'start select train_dataset')
+
+    print(training_args.local_rank, 'start select train_dataset')
     if training_args.do_train:
         if "train" not in tokenized_datasets:
             raise ValueError("--do_train requires a train dataset")
         train_dataset = lm_datasets["train"]
-        if data_args.max_train_samples is not None and data_args.streaming==False:
+        if data_args.max_train_samples is not None \
+                and data_args.streaming == False:
             max_train_samples = min(len(train_dataset), data_args.max_train_samples)
             train_dataset = train_dataset.select(range(max_train_samples))
     print(training_args.local_rank,'end select train_dataset')
