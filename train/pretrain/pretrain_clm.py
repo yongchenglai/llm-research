@@ -600,13 +600,15 @@ def main():
                 batch_size = 60000,
             )
 
+
     print(training_args.local_rank, 'start select train_dataset')
+
     if training_args.do_train:
         if "train" not in tokenized_datasets:
             raise ValueError("--do_train requires a train dataset")
         train_dataset = lm_datasets["train"]
         if data_args.max_train_samples is not None \
-                and data_args.streaming == False:
+                and data_args.streaming==False:
             max_train_samples = min(len(train_dataset), data_args.max_train_samples)
             train_dataset = train_dataset.select(range(max_train_samples))
     print(training_args.local_rank,'end select train_dataset')
@@ -614,18 +616,21 @@ def main():
     if training_args.do_eval:
         if "validation" not in tokenized_datasets:
             raise ValueError("--do_eval requires a validation dataset")
+
         print(training_args.local_rank,'start select eval_dataset')
         eval_dataset = lm_datasets["validation"]
         if data_args.max_eval_samples is not None and data_args.streaming==False :
             max_eval_samples = min(len(eval_dataset), data_args.max_eval_samples)
             eval_dataset = eval_dataset.select(range(max_eval_samples))
         print(training_args.local_rank,'end select eval_dataset')
+
         def preprocess_logits_for_metrics(logits, labels):
             if isinstance(logits, tuple):
                 # Depending on the model and config, logits may contain extra tensors,
                 # like past_key_values, but logits always come first
                 logits = logits[0]
             return logits.argmax(dim=-1)
+
         print(training_args.local_rank,'start load metric')
         metric = evaluate.load("accuracy.py")
         print(training_args.local_rank,'end load metric')
@@ -638,7 +643,7 @@ def main():
             preds = preds[:, :-1].reshape(-1)
             return metric.compute(predictions=preds, references=labels)
     
-    print(training_args.local_rank,'Initialize our Trainer')
+    print(training_args.local_rank, 'Initialize our Trainer')
     trainer = Trainer(
         model=model,
         args=training_args,
