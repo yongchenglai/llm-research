@@ -268,12 +268,14 @@ def main():
     if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
         # If we pass only one argument to the script and it's the path to a json file,
         # let's parse it to get our arguments.
-        model_args, data_args, training_args = parser.parse_json_file(json_file=os.path.abspath(sys.argv[1]))
+        model_args, data_args, training_args = parser.parse_json_file(
+            json_file=os.path.abspath(sys.argv[1]))
     else:
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
-    # Sending telemetry. Tracking the example usage helps us better allocate resources to maintain them. The
-    # information sent is the one passed as arguments along with your Python/PyTorch versions.
+    # Sending telemetry. Tracking the example usage helps us better allocate
+    # resources to maintain them. The information sent is the one passed
+    # as arguments along with your Python/PyTorch versions.
     send_example_telemetry("run_clm", model_args, data_args)
 
     # Setup logging
@@ -284,7 +286,8 @@ def main():
     )
 
     if training_args.should_log:
-        # The default of training_args.log_level is passive, so we set log level at info here to have that default.
+        # The default of training_args.log_level is passive,
+        # so we set log level at info here to have that default.
         transformers.utils.logging.set_verbosity_info()
 
     log_level = training_args.get_process_log_level()
@@ -296,38 +299,48 @@ def main():
 
     # Log on each process the small summary:
     logger.warning(
-        f"Process rank: {training_args.local_rank}, device: {training_args.device}, n_gpu: {training_args.n_gpu}"
-        + f"distributed training: {bool(training_args.local_rank != -1)}, 16-bits training: {training_args.fp16}"
+        f"Process rank: {training_args.local_rank}, "
+        + f"device: {training_args.device}, "
+        + f"n_gpu: {training_args.n_gpu}"
+        + f"distributed training: {bool(training_args.local_rank != -1)}, "
+        + f"16-bits training: {training_args.fp16}"
     )
     logger.info(f"Training/evaluation parameters {training_args}")
 
     # Detecting last checkpoint.
     last_checkpoint = None
-    if os.path.isdir(training_args.output_dir) and training_args.do_train and not training_args.overwrite_output_dir:
+    if os.path.isdir(training_args.output_dir) \
+            and training_args.do_train \
+            and not training_args.overwrite_output_dir:
         last_checkpoint = get_last_checkpoint(training_args.output_dir)
         if last_checkpoint is None and len(os.listdir(training_args.output_dir)) > 0:
             raise ValueError(
                 f"Output directory ({training_args.output_dir}) already exists and is not empty. "
                 "Use --overwrite_output_dir to overcome."
             )
-        elif last_checkpoint is not None and training_args.resume_from_checkpoint is None:
+        elif last_checkpoint is not None \
+                and training_args.resume_from_checkpoint is None:
             logger.info(
-                f"Checkpoint detected, resuming training at {last_checkpoint}. To avoid this behavior, change "
-                "the `--output_dir` or add `--overwrite_output_dir` to train from scratch."
+                f"Checkpoint detected, resuming training at {last_checkpoint}. "
+                f"To avoid this behavior, change the `--output_dir` "
+                "or add `--overwrite_output_dir` to train from scratch."
             )
 
     # Set seed before initializing model.
     set_seed(training_args.seed)
 
-    # Get the datasets: you can either provide your own CSV/JSON/TXT training and evaluation files (see below)
-    # or just provide the name of one of the public datasets available on the hub at https://huggingface.co/datasets/
+    # Get the datasets: you can either provide your own CSV/JSON/TXT
+    # training and evaluation files (see below)
+    # or just provide the name of one of the public datasets available
+    # on the hub at https://huggingface.co/datasets/
     # (the dataset will be downloaded automatically from the datasets Hub).
     #
-    # For CSV/JSON files, this script will use the column called 'text' or the first column if no column called
+    # For CSV/JSON files, this script will use the column called 'text'
+    # or the first column if no column called
     # 'text' is found. You can easily tweak this behavior (see below).
     #
-    # In distributed training, the load_dataset function guarantee that only one local process can concurrently
-    # download the dataset.
+    # In distributed training, the load_dataset function guarantee
+    # that only one local process can concurrently download the dataset.
     if True:
         data_files = {}
         dataset_args = {}
@@ -335,7 +348,7 @@ def main():
             
             print(data_args.train_files)
             data_files["train"] = data_args.train_files
-            print('训练文件总个数',len(data_args.train_files))
+            print('训练文件总个数', len(data_args.train_files))
         if data_args.validation_files is not None:
             data_files["validation"] = data_args.validation_files
         extension = (
