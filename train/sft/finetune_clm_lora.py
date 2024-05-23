@@ -163,7 +163,8 @@ class ModelArguments:
         default=None,
         metadata={
             "help": (
-                "Override the default `torch.dtype` and load the model under this dtype. If `auto` is passed, the "
+                "Override the default `torch.dtype` and load the model "
+                "under this dtype. If `auto` is passed, the "
                 "dtype will be automatically derived from the model's weights."
             ),
             "choices": ["auto", "bfloat16", "float16", "float32"],
@@ -171,9 +172,11 @@ class ModelArguments:
     )
 
     def __post_init__(self):
-        if self.config_overrides is not None and (self.config_name is not None or self.model_name_or_path is not None):
+        if self.config_overrides is not None \
+                and (self.config_name is not None or self.model_name_or_path is not None):
             raise ValueError(
-                "--config_overrides can't be used in combination with --config_name or --model_name_or_path"
+                "--config_overrides can't be used in combination with "
+                "--config_name or --model_name_or_path"
             )
         if type(self.target_modules)==str:
             self.target_modules = self.target_modules.split(',')
@@ -185,25 +188,32 @@ class DataTrainingArguments:
     Arguments pertaining to what data we are going to input our model for training and eval.
     """
     train_on_inputs: bool = field(
-        default=False, metadata={"help": "Overwrite the cached training and evaluation sets"}
+        default=False,
+        metadata={"help": "Overwrite the cached training and evaluation sets"}
     )
     dataset_name: Optional[str] = field(
-        default=None, metadata={"help": "The name of the dataset to use (via the datasets library)."}
+        default=None,
+        metadata={"help": "The name of the dataset to use (via the datasets library)."}
     )
     dataset_config_name: Optional[str] = field(
-        default=None, metadata={"help": "The configuration name of the dataset to use (via the datasets library)."}
+        default=None,
+        metadata={"help": "The configuration name of the dataset to use "
+                          "(via the datasets library)."}
     )
-    train_files: Optional[List[str]]  = field(default=None, metadata={"help": "The input training data file (a text file)."})
+    train_files: Optional[List[str]]  = field(
+        default=None,
+        metadata={"help": "The input training data file (a text file)."})
     validation_files: Optional[List[str]]  = field(
         default=None,
-        metadata={"help": "An optional input evaluation data file to evaluate the perplexity on (a text file)."},
+        metadata={"help": "An optional input evaluation data file to "
+                          "evaluate the perplexity on (a text file)."},
     )
     max_train_samples: Optional[int] = field(
         default=None,
         metadata={
             "help": (
-                "For debugging purposes or quicker training, truncate the number of training examples to this "
-                "value if set."
+                "For debugging purposes or quicker training, "
+                "truncate the number of training examples to this value if set."
             )
         },
     )
@@ -211,7 +221,8 @@ class DataTrainingArguments:
         default=None,
         metadata={
             "help": (
-                "For debugging purposes or quicker training, truncate the number of evaluation examples to this "
+                "For debugging purposes or quicker training, "
+                "truncate the number of evaluation examples to this "
                 "value if set."
             )
         },
@@ -223,7 +234,8 @@ class DataTrainingArguments:
             "help": (
                 "Optional input sequence length after tokenization. "
                 "The training dataset will be truncated in block of this size for training. "
-                "Default to the model max input length for single sentence inputs (take into account special tokens)."
+                "Default to the model max input length for single sentence inputs "
+                "(take into account special tokens)."
             )
         },
     )
