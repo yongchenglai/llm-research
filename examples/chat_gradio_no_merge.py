@@ -127,7 +127,7 @@ if __name__ == "__main__":
             load_in_8bit=True,
             low_cpu_mem_usage=True,
             trust_remote_code=True,
-            use_flash_attention_2=True)
+            attn_implementation="flash_attention_2")
         model = PeftModel.from_pretrained(
             model,
             args.model_name_or_path,
