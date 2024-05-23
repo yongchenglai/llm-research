@@ -126,7 +126,8 @@ class ModelArguments:
     )
     cache_dir: Optional[str] = field(
         default=None,
-        metadata={"help": "Where do you want to store the pretrained models downloaded from huggingface.co"},
+        metadata={"help": "Where do you want to store the "
+                          "pretrained models downloaded from huggingface.co"},
     )
     lora_r: Optional[int] = field(default=16)
     lora_alpha: Optional[int] = field(default=32)
@@ -139,19 +140,21 @@ class ModelArguments:
     )
     use_fast_tokenizer: bool = field(
         default=True,
-        metadata={"help": "Whether to use one of the fast tokenizer (backed by the tokenizers library) or not."},
+        metadata={"help": "Whether to use one of the fast tokenizer "
+                          "(backed by the tokenizers library) or not."},
     )
     load_in_bits: Optional[int] = field(default=8)
     model_revision: str = field(
         default="main",
-        metadata={"help": "The specific model version to use (can be a branch name, tag name or commit id)."},
+        metadata={"help": "The specific model version to use "
+                          "(can be a branch name, tag name or commit id)."},
     )
     use_auth_token: bool = field(
         default=False,
         metadata={
             "help": (
-                "Will use the token generated when running `huggingface-cli login` (necessary to use this script "
-                "with private models)."
+                "Will use the token generated when running `huggingface-cli login` "
+                "(necessary to use this script with private models)."
             )
         },
     )
