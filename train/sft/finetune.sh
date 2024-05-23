@@ -42,7 +42,4 @@ deepspeed --include localhost:1,0 finetune_clm.py \
     --bf16_full_eval \
     --ddp_timeout 18000000 \
     | tee -a ${output_model}/train.log
-    
-
-
     # --resume_from_checkpoint ${output_model}/checkpoint-20400 \
