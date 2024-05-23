@@ -185,7 +185,8 @@ class ModelArguments:
 @dataclass
 class DataTrainingArguments:
     """
-    Arguments pertaining to what data we are going to input our model for training and eval.
+    Arguments pertaining to what data we are going to
+    input our model for training and eval.
     """
     train_on_inputs: bool = field(
         default=False,
@@ -227,7 +228,9 @@ class DataTrainingArguments:
             )
         },
     )
-    streaming: bool = field(default=False, metadata={"help": "Enable streaming mode"})
+    streaming: bool = field(
+        default=False,
+        metadata={"help": "Enable streaming mode"})
     block_size: Optional[int] = field(
         default=None,
         metadata={
@@ -240,12 +243,14 @@ class DataTrainingArguments:
         },
     )
     overwrite_cache: bool = field(
-        default=False, metadata={"help": "Overwrite the cached training and evaluation sets"}
+        default=False,
+        metadata={"help": "Overwrite the cached training and evaluation sets"}
     )
     validation_split_percentage: Optional[int] = field(
         default=5,
         metadata={
-            "help": "The percentage of the train set used as validation set in case there's no validation split"
+            "help": "The percentage of the train set used as validation set "
+                    "in case there's no validation split"
         },
     )
     preprocessing_num_workers: Optional[int] = field(
@@ -253,7 +258,8 @@ class DataTrainingArguments:
         metadata={"help": "The number of processes to use for the preprocessing."},
     )
     keep_linebreaks: bool = field(
-        default=True, metadata={"help": "Whether to keep line breaks when using TXT files or not."}
+        default=True, metadata={"help": "Whether to keep line breaks "
+                                        "when using TXT files or not."}
     )
 
     def __post_init__(self):
