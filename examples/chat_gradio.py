@@ -80,6 +80,7 @@ with gr.Blocks() as demo:
             history[-1][1] = bot_message
             yield history
         end_time =time.time()
+        
         print()
         print('生成耗时：',end_time-start_time,
               '文字长度：',len(bot_message),
