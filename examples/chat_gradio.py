@@ -139,6 +139,7 @@ if __name__ == "__main__":
             inject_fused_mlp=False)
 
     streamer = TextIteratorStreamer(tokenizer, skip_prompt=True)
+    
     if torch.__version__ >= "2" and sys.platform != "win32":
         model = torch.compile(model)
 
