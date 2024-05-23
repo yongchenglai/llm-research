@@ -118,11 +118,13 @@ class ModelArguments:
     )
     config_name: Optional[str] = field(
         default=None,
-        metadata={"help": "Pretrained config name or path if not the same as model_name"}
+        metadata={"help": "Pretrained config name or path "
+                          "if not the same as model_name"}
     )
     tokenizer_name: Optional[str] = field(
         default=None,
-        metadata={"help": "Pretrained tokenizer name or path if not the same as model_name"}
+        metadata={"help": "Pretrained tokenizer name or path "
+                          "if not the same as model_name"}
     )
     cache_dir: Optional[str] = field(
         default=None,
@@ -134,7 +136,8 @@ class ModelArguments:
     target_modules: Optional[str] = field(
         default='q_proj,v_proj,k_proj,o_proj,gate_proj,down_proj,up_proj',
         metadata={
-            "help": "List of module names or regex expression of the module names to replace with Lora."
+            "help": "List of module names or regex expression of "
+                    "the module names to replace with Lora."
             "For example, ['q', 'v'] or '.*decoder.*(SelfAttention|EncDecAttention).*(q|v)$' "
         },
     )
@@ -264,17 +267,23 @@ class DataTrainingArguments:
 
     def __post_init__(self):
         if self.streaming:
-            require_version("datasets>=2.0.0", "The streaming feature requires `datasets>=2.0.0`")
+            require_version(
+                "datasets>=2.0.0",
+                "The streaming feature requires `datasets>=2.0.0`")
 
-        if self.dataset_name is None and self.train_files is None and self.validation_files is None:
+        if self.dataset_name is None \
+                and self.train_files is None and self.validation_files is None:
             raise ValueError("Need either a dataset name or a training/validation file.")
         else:
             if self.train_files is not None:
                 extension = self.train_files[0].split(".")[-1]
-                assert extension in ["csv", "json", "txt"], "`train_file` should be a csv, a json or a txt file."
+                assert extension in ["csv", "json", "txt"], \
+                    "`train_file` should be a csv, a json or a txt file."
             if self.validation_files is not None:
                 extension = self.validation_files[0].split(".")[-1]
-                assert extension in ["csv", "json", "txt"], "`validation_file` should be a csv, a json or a txt file."
+                assert extension in ["csv", "json", "txt"], \
+                    "`validation_file` should be a csv, a json or a txt file."
+
                 
 class SavePeftModelCallback(TrainerCallback):
     def on_save(
