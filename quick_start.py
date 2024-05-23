@@ -11,7 +11,7 @@ model = AutoModelForCausalLM.from_pretrained(
     torch_dtype=torch.float16,
     load_in_8bit=True,
     trust_remote_code=True,
-    use_flash_attention_2=True)
+    attn_implementation="flash_attention_2")
 
 model = model.eval()
 tokenizer = AutoTokenizer.from_pretrained(
@@ -22,10 +22,10 @@ tokenizer.pad_token = tokenizer.eos_token
 input_ids = tokenizer(
     ['<s>Human: 介绍一下中国\n</s><s>Assistant: '],
     return_tensors="pt",
-    add_special_tokens=False).input_ids
+    add_special_tokens=False).input_ids.to('cuda')
 
-if torch.cuda.is_available():
-    input_ids = input_ids.to('cuda')
+#if torch.cuda.is_available():
+    #input_ids = input_ids.to('cuda')
 
 generate_input = {
     "input_ids":input_ids,
