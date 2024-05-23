@@ -1,7 +1,8 @@
 # chat_gradio.py
 import gradio as gr
 import time
-from transformers import AutoTokenizer, AutoModelForCausalLM, TextIteratorStreamer
+from transformers import AutoTokenizer, \
+    AutoModelForCausalLM, TextIteratorStreamer
 from threading import Thread
 import torch, sys, os
 import json
