@@ -98,11 +98,21 @@ with gr.Blocks() as demo:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model_name_or_path", type=str, help='mode name or path')
-    parser.add_argument("--is_4bit", action='store_true', help='use 4bit model')
+    parser.add_argument(
+        "--model_name_or_path",
+        type=str,
+        help='mode name or path')
+    parser.add_argument(
+        "--is_4bit",
+        action='store_true',
+        help='use 4bit model')
     args = parser.parse_args()
-    tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path,use_fast=False)
+
+    tokenizer = AutoTokenizer.from_pretrained(
+        args.model_name_or_path,
+        use_fast=False)
     tokenizer.pad_token = tokenizer.eos_token
+    
     if args.is_4bit==False:
         model = AutoModelForCausalLM.from_pretrained(
             args.model_name_or_path,
