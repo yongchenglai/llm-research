@@ -2,6 +2,8 @@
 # python quick_start.py
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
+
+
 device_map = "cuda:0" if torch.cuda.is_available() else "auto"
 model = AutoModelForCausalLM.from_pretrained(
     'FlagAlpha/Atom-7B-Chat',
@@ -11,7 +13,7 @@ model = AutoModelForCausalLM.from_pretrained(
     trust_remote_code=True,
     use_flash_attention_2=True)
 
-model =model.eval()
+model = model.eval()
 tokenizer = AutoTokenizer.from_pretrained(
     'FlagAlpha/Atom-7B-Chat',
     use_fast=False)
@@ -23,7 +25,7 @@ input_ids = tokenizer(
     add_special_tokens=False).input_ids
 
 if torch.cuda.is_available():
-  input_ids = input_ids.to('cuda')
+    input_ids = input_ids.to('cuda')
 
 generate_input = {
     "input_ids":input_ids,
@@ -38,7 +40,7 @@ generate_input = {
     "pad_token_id":tokenizer.pad_token_id
 }
 
-generate_ids  = model.generate(**generate_input)
+generate_ids = model.generate(**generate_input)
 text = tokenizer.decode(generate_ids[0])
 print(text)
 
