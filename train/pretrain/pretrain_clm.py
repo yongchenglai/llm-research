@@ -349,8 +349,10 @@ def main():
             print(data_args.train_files)
             data_files["train"] = data_args.train_files
             print('训练文件总个数', len(data_args.train_files))
+
         if data_args.validation_files is not None:
             data_files["validation"] = data_args.validation_files
+
         extension = (
             data_files["train"][0].split(".")[-1]
             if data_files["train"] is not None
@@ -365,13 +367,16 @@ def main():
             extension,
             data_files=data_files,
             streaming=data_args.streaming,
-            cache_dir=os.path.join(training_args.output_dir,'dataset_cache'),
+            cache_dir=os.path.join(training_args.output_dir, 'dataset_cache'),
             use_auth_token=True if model_args.use_auth_token else None,
             **dataset_args,
         )
         if data_args.streaming:
-            raw_datasets = raw_datasets.shuffle(seed=training_args.seed, buffer_size=1000000)
-        # If no validation data is there, validation_split_percentage will be used to divide the dataset.
+            raw_datasets = raw_datasets.shuffle(
+                seed=training_args.seed,
+                buffer_size=1000000)
+        # If no validation data is there,
+        # validation_split_percentage will be used to divide the dataset.
         if "validation" not in raw_datasets.keys():
             raw_datasets["validation"] = load_dataset(
                 extension,
@@ -390,14 +395,15 @@ def main():
                 **dataset_args,
             )
 
-    # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
+    # See more about loading any type of standard or custom dataset
+    # (from files, python dict, pandas DataFrame, etc) at
     # https://huggingface.co/docs/datasets/loading_datasets.html.
 
     # Load pretrained model and tokenizer
     #
     # Distributed training:
-    # The .from_pretrained methods guarantee that only one local process can concurrently
-    # download model & vocab.
+    # The .from_pretrained methods guarantee that only one local process
+    # can concurrently download model & vocab.
 
     config_kwargs = {
         "cache_dir": model_args.cache_dir,
