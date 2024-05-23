@@ -486,8 +486,8 @@ def main():
         lora_alpha=model_args.lora_alpha,
         # target_modules=["query_key_value"],
         # target_modules =  ['q_proj', 'k_proj', 'v_proj', 'o_proj'],
-        target_modules =  model_args.target_modules,
-        fan_in_fan_out = False,
+        target_modules=model_args.target_modules,
+        fan_in_fan_out=False,
         lora_dropout=0.05,
         inference_mode=False,
         bias="none",
@@ -523,14 +523,17 @@ def main():
             # device_map  = 'auto'
             device_map={"": int(os.environ.get("LOCAL_RANK") or 0)}
         )
-        # model = prepare_model_for_int8_training(model, output_embedding_layer_name="embed_out", layer_norm_names=[])
+        # model = prepare_model_for_int8_training(model,
+        # output_embedding_layer_name="embed_out", layer_norm_names=[])
         
     else:
         model = AutoModelForCausalLM.from_config(config)
         n_params = sum({p.data_ptr(): p.numel() for p in model.parameters()}.values())
-        logger.info(f"Training new model from scratch - Total size={n_params/2**20:.2f}M params")
+        logger.info(f"Training new model from scratch - "
+                    f"Total size={n_params/2**20:.2f}M params")
 
-    # We resize the embeddings only when necessary to avoid index errors. If you are creating a model from scratch
+    # We resize the embeddings only when necessary to avoid index errors.
+    # If you are creating a model from scratch
     # on a small vocab and want a smaller embedding size, remove this test.
     embedding_size = model.get_input_embeddings().weight.shape[0]
     if len(tokenizer) > embedding_size:
@@ -557,17 +560,29 @@ def main():
     else:
         raise ValueError('输入文件列数不对')
     print('train_on_inputs',train_on_inputs)
-    # since this will be pickled to avoid _LazyModule error in Hasher force logger loading before tokenize_function
-    tok_logger = transformers.utils.logging.get_logger("transformers.tokenization_utils_base")
+    # since this will be pickled to avoid _LazyModule error
+    # in Hasher force logger loading before tokenize_function
+    tok_logger = transformers.utils.logging.get_logger(
+        "transformers.tokenization_utils_base")
 
     def tokenize_function(examples):
         with CaptureLogger(tok_logger) as cl:
-            output = tokenizer([ item for item in examples[text_column_name]],truncation=True,max_length=data_args.block_size,padding=False,return_tensors=None)
+            output = tokenizer(
+                [ item for item in examples[text_column_name]],
+                truncation=True,
+                max_length=data_args.block_size,
+                padding=False,
+                return_tensors=None)
             output['labels'] = output['input_ids'].copy()
         return output
 
     def tokenize(prompt):
-        result = tokenizer(prompt,truncation=True,max_length=data_args.block_size,padding=False,return_tensors=None)
+        result = tokenizer(
+            prompt,
+            truncation=True,
+            max_length=data_args.block_size,
+            padding=False,
+            return_tensors=None)
         result["labels"] = result["input_ids"].copy()
         return result
 
