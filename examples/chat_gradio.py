@@ -40,13 +40,13 @@ with gr.Blocks() as demo:
         slider_context_times = int(slider_context_times)
         history_true = history[1:-1]
         prompt = ''
-        if slider_context_times>0:
-            prompt += '\n'.join([("<s>Human: "+one_chat[0].replace('<br>','\n')+'\n</s>'
+        if slider_context_times > 0:
+            prompt += '\n'.join([("<s>Human: "+one_chat[0].replace('<br>', '\n')+'\n</s>'
                 if one_chat[0] else '')
-                    +"<s>Assistant: "+one_chat[1].replace('<br>','\n')+'\n</s>'
+                    + "<s>Assistant: "+one_chat[1].replace('<br>', '\n')+'\n</s>'
                 for one_chat in history_true[-slider_context_times:] ])
 
-        prompt +=  "<s>Human: "+history[-1][0].replace('<br>','\n')+"\n</s><s>Assistant:"
+        prompt += "<s>Human: "+history[-1][0].replace('<br>', '\n')+"\n</s><s>Assistant:"
 
         input_ids = tokenizer(
             [prompt],
@@ -54,17 +54,17 @@ with gr.Blocks() as demo:
             add_special_tokens=False).input_ids[:,-512:].to('cuda')
 
         generate_input = {
-            "input_ids":input_ids,
-            "max_new_tokens":512,
-            "do_sample":True,
-            "top_k":50,
-            "top_p":top_p,
-            "temperature":temperature,
-            "repetition_penalty":1.3,
-            "streamer":streamer,
-            "eos_token_id":tokenizer.eos_token_id,
-            "bos_token_id":tokenizer.bos_token_id,
-            "pad_token_id":tokenizer.pad_token_id
+            "input_ids": input_ids,
+            "max_new_tokens": 512,
+            "do_sample": True,
+            "top_k": 50,
+            "top_p": top_p,
+            "temperature": temperature,
+            "repetition_penalty": 1.3,
+            "streamer": streamer,
+            "eos_token_id": tokenizer.eos_token_id,
+            "bos_token_id": tokenizer.bos_token_id,
+            "pad_token_id": tokenizer.pad_token_id
         }
 
         thread = Thread(target=model.generate, kwargs=generate_input)
@@ -75,7 +75,7 @@ with gr.Blocks() as demo:
         print('Assistant: ', end='', flush=True)
         for new_text in streamer:
             print(new_text, end='', flush=True)
-            if len(new_text)==0:
+            if len(new_text) == 0:
                 continue
             if new_text != '</s>':
                 bot_message += new_text
@@ -83,7 +83,7 @@ with gr.Blocks() as demo:
                 bot_message = bot_message.split('Human:')[0]
             history[-1][1] = bot_message
             yield history
-        end_time =time.time()
+        end_time = time.time()
 
         print()
         print('生成耗时：', end_time-start_time,
@@ -125,8 +125,9 @@ if __name__ == "__main__":
             torch_dtype=torch.float16,
             load_in_8bit=True,
             trust_remote_code=True,
-            use_flash_attention_2=True)
+            attn_implementation="flash_attention_2")
         model.eval()
+
     else:
         from auto_gptq import AutoGPTQForCausalLM
         model = AutoGPTQForCausalLM.from_quantized(
