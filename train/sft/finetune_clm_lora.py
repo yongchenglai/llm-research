@@ -694,8 +694,10 @@ def main():
         data_collator=transformers.DataCollatorForSeq2Seq(
             tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True
         ),
-        compute_metrics=compute_metrics if training_args.do_eval and not is_torch_tpu_available() else None,
-        preprocess_logits_for_metrics=preprocess_logits_for_metrics if training_args.do_eval and not is_torch_tpu_available()else None,
+        compute_metrics=compute_metrics \
+        if training_args.do_eval and not is_torch_tpu_available() else None,
+        preprocess_logits_for_metrics=preprocess_logits_for_metrics \
+        if training_args.do_eval and not is_torch_tpu_available()else None,
         callbacks=([SavePeftModelCallback] if isinstance(model, PeftModel) else None),
     )
 
@@ -712,7 +714,8 @@ def main():
                 resume_from_checkpoint = (
                     False  # So the trainer won't try loading its state
                 )
-            # The two files above have a different name depending on how they were saved, but are actually the same.
+            # The two files above have a different name depending
+            # on how they were saved, but are actually the same.
             if os.path.exists(checkpoint_name):
                 print(f"Restarting from {checkpoint_name}")
                 adapters_weights = torch.load(checkpoint_name)
@@ -732,7 +735,8 @@ def main():
         metrics = train_result.metrics
 
         max_train_samples = (
-            data_args.max_train_samples if data_args.max_train_samples is not None else len(train_dataset)
+            data_args.max_train_samples
+            if data_args.max_train_samples is not None else len(train_dataset)
         )
         metrics["train_samples"] = min(max_train_samples, len(train_dataset))
 
