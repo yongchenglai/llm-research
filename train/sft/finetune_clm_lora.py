@@ -334,7 +334,8 @@ def main():
     )
 
     if training_args.should_log:
-        # The default of training_args.log_level is passive, so we set log level at info here to have that default.
+        # The default of training_args.log_level is passive,
+        # so we set log level at info here to have that default.
         transformers.utils.logging.set_verbosity_info()
 
     log_level = training_args.get_process_log_level()
@@ -346,8 +347,11 @@ def main():
 
     # Log on each process the small summary:
     logger.warning(
-        f"Process rank: {training_args.local_rank}, device: {training_args.device}, n_gpu: {training_args.n_gpu}"
-        + f"distributed training: {bool(training_args.local_rank != -1)}, 16-bits training: {training_args.fp16}"
+        f"Process rank: {training_args.local_rank}, "
+        + f"device: {training_args.device}, "
+        + f"n_gpu: {training_args.n_gpu}"
+        + f"distributed training: {bool(training_args.local_rank != -1)}, "
+        + f"16-bits training: {training_args.fp16}"
     )
     logger.info(f"Training/evaluation parameters {training_args}")
 
@@ -364,21 +368,26 @@ def main():
             )
         elif last_checkpoint is not None and training_args.resume_from_checkpoint is None:
             logger.info(
-                f"Checkpoint detected, resuming training at {last_checkpoint}. To avoid this behavior, change "
+                f"Checkpoint detected, resuming training at {last_checkpoint}. "
+                f"To avoid this behavior, change "
                 "the `--output_dir` or add `--overwrite_output_dir` to train from scratch."
             )
 
     # Set seed before initializing model.
     set_seed(training_args.seed)
 
-    # Get the datasets: you can either provide your own CSV/JSON/TXT training and evaluation files (see below)
-    # or just provide the name of one of the public datasets available on the hub at https://huggingface.co/datasets/
+    # Get the datasets: you can either provide your own CSV/JSON/TXT
+    # training and evaluation files (see below)
+    # or just provide the name of one of the public datasets available
+    # on the hub at https://huggingface.co/datasets/
     # (the dataset will be downloaded automatically from the datasets Hub).
     #
-    # For CSV/JSON files, this script will use the column called 'text' or the first column if no column called
+    # For CSV/JSON files, this script will use the column called 'text'
+    # or the first column if no column called
     # 'text' is found. You can easily tweak this behavior (see below).
     #
-    # In distributed training, the load_dataset function guarantee that only one local process can concurrently
+    # In distributed training, the load_dataset function guarantee
+    # that only one local process can concurrently
     # download the dataset.
     if True:
         data_files = {}
