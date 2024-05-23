@@ -664,7 +664,7 @@ def main():
         elif last_checkpoint is not None:
             checkpoint = last_checkpoint
 
-        print(training_args.local_rank,'start train')
+        print(training_args.local_rank, 'start train')
         train_result = trainer.train(resume_from_checkpoint=checkpoint)
         trainer.save_model()  # Saves the tokenizer too for easy upload
 
