@@ -13,10 +13,12 @@ with gr.Blocks() as demo:
     chatbot = gr.Chatbot()
     msg = gr.Textbox()
     state = gr.State()
+
     with gr.Row():
         clear = gr.Button("新话题")
         re_generate = gr.Button("重新回答")
         sent_bt = gr.Button("发送")
+
     with gr.Accordion("生成参数", open=False):
         slider_temp = gr.Slider(minimum=0, maximum=1,
                                 label="temperature", value=0.3)
@@ -24,8 +26,10 @@ with gr.Blocks() as demo:
                                  label="top_p", value=0.95)
         slider_context_times = gr.Slider(minimum=0, maximum=5,
                                  label="上文轮次", value=0,step=2.0)
+
     def user(user_message, history):
         return "", history + [[user_message, None]]
+
     def bot(history,temperature,top_p,slider_context_times):
         if pandas.isnull(history[-1][1])==False:
             history[-1][1] = None
@@ -38,9 +42,14 @@ with gr.Blocks() as demo:
                 if one_chat[0] else '')  +"<s>Assistant: "
                                  +one_chat[1].replace('<br>','\n')+'\n</s>'
                 for one_chat in history_true[-slider_context_times:] ])
+
         prompt +=  "<s>Human: "+history[-1][0].replace('<br>','\n')+"\n</s><s>Assistant:"
-        input_ids = tokenizer([prompt], return_tensors="pt",
-                              add_special_tokens=False).input_ids[:,-512:].to('cuda')
+
+        input_ids = tokenizer(
+            [prompt],
+            return_tensors="pt",
+            add_special_tokens=False).input_ids[:,-512:].to('cuda')
+
         generate_input = {
             "input_ids":input_ids,
             "max_new_tokens":512,
@@ -85,6 +94,7 @@ with gr.Blocks() as demo:
     re_generate.click( bot, [chatbot,slider_temp,
                              slider_top_p,slider_context_times], chatbot )
     clear.click(lambda: [], None, chatbot, queue=False)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
