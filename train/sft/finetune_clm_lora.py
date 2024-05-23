@@ -407,11 +407,12 @@ def main():
         raw_datasets = load_dataset(
             extension,
             data_files=data_files,
-            cache_dir=os.path.join(training_args.output_dir,'dataset_cache'),
+            cache_dir=os.path.join(training_args.output_dir, 'dataset_cache'),
             use_auth_token=True if model_args.use_auth_token else None,
             **dataset_args,
         )
-        # If no validation data is there, validation_split_percentage will be used to divide the dataset.
+        # If no validation data is there, validation_split_percentage
+        # will be used to divide the dataset.
         if "validation" not in raw_datasets.keys():
             raw_datasets["validation"] = load_dataset(
                 extension,
@@ -430,7 +431,8 @@ def main():
                 **dataset_args,
             )
 
-    # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
+    # See more about loading any type of standard or custom dataset
+    # (from files, python dict, pandas DataFrame, etc) at
     # https://huggingface.co/docs/datasets/loading_datasets.html.
 
     # Load pretrained model and tokenizer
@@ -464,13 +466,19 @@ def main():
         "padding_side":'left'
     }
     if model_args.tokenizer_name:
-        tokenizer = AutoTokenizer.from_pretrained(model_args.tokenizer_name, **tokenizer_kwargs)
+        tokenizer = AutoTokenizer.from_pretrained(
+            model_args.tokenizer_name,
+            **tokenizer_kwargs)
     elif model_args.model_name_or_path:
-        tokenizer = AutoTokenizer.from_pretrained(model_args.model_name_or_path, **tokenizer_kwargs)
+        tokenizer = AutoTokenizer.from_pretrained(
+            model_args.model_name_or_path,
+            **tokenizer_kwargs)
     else:
         raise ValueError(
-            "You are instantiating a new tokenizer from scratch. This is not supported by this script."
-            "You can do it from another script, save it, and load it from here, using --tokenizer_name."
+            "You are instantiating a new tokenizer from scratch. "
+            "This is not supported by this script."
+            "You can do it from another script, save it, "
+            "and load it from here, using --tokenizer_name."
         )
     tokenizer.pad_token = tokenizer.eos_token
     lora_config = LoraConfig(
