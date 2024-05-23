@@ -112,7 +112,7 @@ if __name__ == "__main__":
         args.model_name_or_path,
         use_fast=False)
     tokenizer.pad_token = tokenizer.eos_token
-    
+
     if args.is_4bit==False:
         model = AutoModelForCausalLM.from_pretrained(
             args.model_name_or_path,
@@ -131,6 +131,7 @@ if __name__ == "__main__":
             use_triton=False,
             inject_fused_attention=False,
             inject_fused_mlp=False)
+
     streamer = TextIteratorStreamer(tokenizer,skip_prompt=True)
     if torch.__version__ >= "2" and sys.platform != "win32":
         model = torch.compile(model)
