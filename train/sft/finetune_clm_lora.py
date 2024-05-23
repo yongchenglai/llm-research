@@ -284,7 +284,7 @@ class DataTrainingArguments:
                 assert extension in ["csv", "json", "txt"], \
                     "`validation_file` should be a csv, a json or a txt file."
 
-                
+
 class SavePeftModelCallback(TrainerCallback):
     def on_save(
         self,
@@ -304,6 +304,7 @@ class SavePeftModelCallback(TrainerCallback):
             if os.path.exists(pytorch_model_path):
                 os.remove(pytorch_model_path)
             return control
+
 
 def main():
     # See all possible arguments in src/transformers/training_args.py
