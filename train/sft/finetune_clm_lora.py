@@ -28,7 +28,7 @@ import random
 from dataclasses import dataclass, field
 from itertools import chain
 import deepspeed
-from typing import Optional,List,Union
+from typing import Optional, List, Union
 
 import datasets
 import evaluate
@@ -70,10 +70,13 @@ from transformers.utils.versions import require_version
 import pdb
 
 
-# Will error if the minimal version of Transformers is not installed. Remove at your own risks.
+# Will error if the minimal version of Transformers is not installed.
+# Remove at your own risks.
 # check_min_version("4.27.0.dev0")
 
-require_version("datasets>=1.8.0", "To fix: pip install -r examples/pytorch/language-modeling/requirements.txt")
+require_version(
+    "datasets>=1.8.0",
+    "To fix: pip install -r examples/pytorch/language-modeling/requirements.txt")
 
 logger = logging.getLogger(__name__)
 
