@@ -1,4 +1,4 @@
-torch==2.1.2
+torch==2.2.2
 bitsandbytes==0.42.0
 accelerate==0.27.2
 numpy==1.26.4
