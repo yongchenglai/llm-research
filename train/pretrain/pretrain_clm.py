@@ -160,12 +160,16 @@ class DataTrainingArguments:
     """
 
     dataset_name: Optional[str] = field(
-        default=None, metadata={"help": "The name of the dataset to use (via the datasets library)."}
+        default=None,
+        metadata={"help": "The name of the dataset to use (via the datasets library)."}
     )
     dataset_config_name: Optional[str] = field(
-        default=None, metadata={"help": "The configuration name of the dataset to use (via the datasets library)."}
+        default=None,
+        metadata={"help": "The configuration name of the dataset to use (via the datasets library)."}
     )
-    train_files: Optional[List[str]]  = field(default=None, metadata={"help": "The input training data file (a text file)."})
+    train_files: Optional[List[str]]  = field(
+        default=None,
+        metadata={"help": "The input training data file (a text file)."})
     validation_files: Optional[List[str]]  = field(
         default=None,
         metadata={"help": "An optional input evaluation data file to evaluate the perplexity on (a text file)."},
