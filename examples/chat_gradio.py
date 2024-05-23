@@ -8,6 +8,7 @@ import json
 import pandas
 import argparse
 
+
 with gr.Blocks() as demo:
     gr.Markdown("""<h1><center>智能助手</center></h1>""")
     chatbot = gr.Chatbot()
@@ -63,6 +64,7 @@ with gr.Blocks() as demo:
             "bos_token_id":tokenizer.bos_token_id,
             "pad_token_id":tokenizer.pad_token_id
         }
+
         thread = Thread(target=model.generate, kwargs=generate_input)
         thread.start()
         start_time = time.time()

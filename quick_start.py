@@ -20,7 +20,7 @@ tokenizer = AutoTokenizer.from_pretrained(
 
 tokenizer.pad_token = tokenizer.eos_token
 input_ids = tokenizer(
-    ['<s>Human: 介绍一下中国\n</s><s>Assistant: '],
+    ['<s>Human: 详细介绍一下中国\n</s><s>Assistant: '],
     return_tensors="pt",
     add_special_tokens=False).input_ids
 
