@@ -1,4 +1,5 @@
-#output_model=save_folder
+# train/sft/finetune_lora.sh
+# output_model=save_folder
 output_model=../../FlagAlpha/Meta-Llama-3-8B-Instruct-lora
 # 需要修改到自己的输入目录
 if [ ! -d ${output_model} ];then  
