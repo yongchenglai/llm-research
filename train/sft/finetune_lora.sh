@@ -1,5 +1,5 @@
 #output_model=save_folder
-output_model=./../FlagAlpha/Meta-Llama-3-8B-Instruct-lora
+output_model=../../FlagAlpha/Meta-Llama-3-8B-Instruct-lora
 # 需要修改到自己的输入目录
 if [ ! -d ${output_model} ];then  
     mkdir -p ${output_model}
@@ -8,7 +8,6 @@ export CUDA_HOME=/usr/local/cuda/
 export NCCL_P2P_DISABLE=1
 cp ./finetune.sh ${output_model}
 deepspeed --include localhost:0 finetune_clm_lora.py \
-    #--model_name_or_path meta-llama/Llama-2-7b-chat-hf \
     --model_name_or_path ../../FlagAlpha/Meta-Llama-3-8B-Instruct \
     --train_files ../../data/train_sft.csv \
     --validation_files  ../../data/dev_sft.csv \
