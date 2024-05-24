@@ -6,7 +6,7 @@ if [ ! -d ${output_model} ];then
 fi
 export CUDA_HOME=/usr/local/cuda/
 export NCCL_P2P_DISABLE=1
-cp ./finetune.sh ${output_model}
+cp ./finetune_lora.sh ${output_model}
 deepspeed --include localhost:0 finetune_clm_lora.py \
     --model_name_or_path ../../FlagAlpha/Meta-Llama-3-8B-Instruct \
     --train_files ../../data/train_sft.csv \
