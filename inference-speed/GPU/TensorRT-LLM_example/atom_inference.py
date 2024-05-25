@@ -69,8 +69,8 @@ class AtomTRTApi:
                     prompt +=  merge_lambda(input_text)
             if len(system_prefix)>0:
                 prompt = '<s>System: '+system_prefix.strip()+'\n</s>'+prompt
-            print('输入模型的完整输入:',prompt)
-            input_ids = [self.tokenizer(prompt,add_special_tokens=False).input_ids]
+            print('输入模型的完整输入:', prompt)
+            input_ids = [self.tokenizer(prompt, add_special_tokens=False).input_ids]
             print(input_ids)
             input_ids = [
                 torch.tensor(x, dtype=torch.int32).unsqueeze(0) for x in input_ids
