@@ -206,7 +206,8 @@ class DataTrainingArguments:
     )
     train_files: Optional[List[str]]  = field(
         default=None,
-        metadata={"help": "The input training data file (a text file)."})
+        metadata={"help": "The input training data file (a text file)."}
+    )
     validation_files: Optional[List[str]]  = field(
         default=None,
         metadata={"help": "An optional input evaluation data file to "
