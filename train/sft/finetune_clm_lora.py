@@ -559,7 +559,7 @@ def main():
         train_on_inputs=False
     else:
         raise ValueError('输入文件列数不对')
-    print('train_on_inputs',train_on_inputs)
+    print('train_on_inputs', train_on_inputs)
     # since this will be pickled to avoid _LazyModule error
     # in Hasher force logger loading before tokenize_function
     tok_logger = transformers.utils.logging.get_logger(
