@@ -25,6 +25,7 @@ RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple \
 #克隆Hugging Face仓库
 #RUN  git clone https://huggingface.co/FlagAlpha/Atom-7B-Chat
 #COPY ../FlagAlpha/Atom-7B-Chat  /root/Llama-Chinese/Atom-7B-Chat/
+RUN chmod u+x examples/chat_gradio.py
 
 #开启7860端口
 EXPOSE 7860
