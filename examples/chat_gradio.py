@@ -51,7 +51,7 @@ with gr.Blocks() as demo:
         input_ids = tokenizer(
             [prompt],
             return_tensors="pt",
-            add_special_tokens=False).input_ids[:,-512:].to('cuda')
+            add_special_tokens=False).input_ids[:, -512:].to('cuda')
 
         generate_input = {
             "input_ids": input_ids,
