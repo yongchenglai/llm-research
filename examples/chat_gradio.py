@@ -11,15 +11,15 @@ import argparse
 
 
 with gr.Blocks() as demo:
-    gr.Markdown("""<h1><center>智能助手</center></h1>""")
+    gr.Markdown("""<h1><center>巴比奇科技智能助手</center></h1>""")
     chatbot = gr.Chatbot()
     msg = gr.Textbox()
     state = gr.State()
 
     with gr.Row():
-        clear = gr.Button("新话题")
-        re_generate = gr.Button("重新回答")
         sent_bt = gr.Button("发送")
+        re_generate = gr.Button("重新回答")
+        clear = gr.Button("新话题")
 
     with gr.Accordion("生成参数", open=False):
         slider_temp = gr.Slider(
