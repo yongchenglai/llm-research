@@ -13,13 +13,14 @@ parser.add_argument(
     '--model_source',
     default="llama_chinese",
     choices=["llama_chinese", "llama2_meta", "llama3_meta"],
-    required=False, 
+    required=False,
     type=str)
 args = parser.parse_args()
 
 
 def get_prompt_llama_chinese(
-    chat_history, system_prompt=""
+    chat_history,
+    system_prompt=""
 ) -> str:
     prompt = ''
     for input_text_one in chat_history:
@@ -33,6 +34,7 @@ def get_prompt_llama_chinese(
         prompt = '<s>System: '+system_prompt.strip()+'\n</s>'+prompt
                 
     return prompt
+
 
 def get_prompt_llama2_meta(chat_history, system_prompt=""):
     B_INST, E_INST = "[INST]", "[/INST]"
@@ -66,6 +68,7 @@ def get_prompt_llama2_meta(chat_history, system_prompt=""):
                 ret += "[/INST]"
     print("prompt:{}".format(ret))
     return ret
+
 
 def get_prompt_llama3_meta(chat_history, system_prompt=""):
     system_format='<|start_header_id|>system<|end_header_id|>\n\n{content}<|eot_id|>'
@@ -128,6 +131,7 @@ def test_api_server(chat_history=[], system_prompt=""):
         print(e)
 
     return result
+
 
 if __name__ == "__main__":
     # 多伦对话测试
