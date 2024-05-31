@@ -1,3 +1,4 @@
+# client_test.py
 # coding=utf-8
 import json
 import time
@@ -8,7 +9,11 @@ import urllib.request
 import sys
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--model_source', default="llama_chinese", choices =["llama_chinese", "llama2_meta", "llama3_meta"], required=False,type=str)
+parser.add_argument(
+    '--model_source',
+    default="llama_chinese",
+    choices =["llama_chinese", "llama2_meta", "llama3_meta"],
+    required=False,type=str)
 args = parser.parse_args()
 
 def get_prompt_llama_chinese(
