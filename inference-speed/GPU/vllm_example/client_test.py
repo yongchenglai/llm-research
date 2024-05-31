@@ -71,17 +71,17 @@ def get_prompt_llama2_meta(chat_history, system_prompt=""):
 
 
 def get_prompt_llama3_meta(chat_history, system_prompt=""):
-    system_format='<|start_header_id|>system<|end_header_id|>\n\n{content}<|eot_id|>'
-    user_format='<|start_header_id|>user<|end_header_id|>\n\n{content}<|eot_id|>'
-    assistant_format='<|start_header_id|>assistant<|end_header_id|>\n\n{content}<|eot_id|>\n'
+    system_format = '<|start_header_id|>system<|end_header_id|>\n\n{content}<|eot_id|>'
+    user_format = '<|start_header_id|>user<|end_header_id|>\n\n{content}<|eot_id|>'
+    assistant_format = '<|start_header_id|>assistant<|end_header_id|>\n\n{content}<|eot_id|>\n'
     prompt_str = ''
     # 拼接历史对话
     for item in chat_history:
-        if item['role']=='Human':
-            prompt_str+=user_format.format(content=item['content'])
+        if item['role'] == 'Human':
+            prompt_str += user_format.format(content=item['content'])
         else:
-            prompt_str+=assistant_format.format(content=item['content'])
-    if len(system_prompt)>0:
+            prompt_str += assistant_format.format(content=item['content'])
+    if len(system_prompt) > 0:
         prompt_str = system_format.format(content=system_prompt) + prompt_str
     prompt_str = "<|begin_of_text|>" + prompt_str
     return prompt_str
@@ -99,17 +99,17 @@ def test_api_server(chat_history=[], system_prompt=""):
 
     data = {
           "prompt": prompt,
-          "stream" : False,
-          "n" : 1,
+          "stream": False,
+          "n": 1,
           "best_of": 1, 
           "presence_penalty": 0.0, 
           "frequency_penalty": 0.2, 
           "temperature": 0.3, 
-          "top_p" : 0.95, 
+          "top_p": 0.95,
           "top_k": 50, 
           "use_beam_search": False, 
           "stop": [], 
-          "ignore_eos" :False, 
+          "ignore_eos": False,
           "max_tokens": 2048, 
           "logprobs": None
     }
