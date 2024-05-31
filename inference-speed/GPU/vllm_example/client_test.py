@@ -143,6 +143,6 @@ if __name__ == "__main__":
     """
     # 单轮对话  
     last_question = "怎么去北京"
-    chat_history = [ {"role" : "Human", "content": last_question}]
+    chat_history = [{"role": "Human", "content": last_question}]
     test_api_server(chat_history)
 
