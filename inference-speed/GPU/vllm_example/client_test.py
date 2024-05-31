@@ -12,9 +12,11 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     '--model_source',
     default="llama_chinese",
-    choices =["llama_chinese", "llama2_meta", "llama3_meta"],
-    required=False,type=str)
+    choices=["llama_chinese", "llama2_meta", "llama3_meta"],
+    required=False, 
+    type=str)
 args = parser.parse_args()
+
 
 def get_prompt_llama_chinese(
     chat_history, system_prompt=""
