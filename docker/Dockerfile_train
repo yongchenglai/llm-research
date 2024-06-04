@@ -10,8 +10,8 @@ RUN pip install transformers   \
         -i https://pypi.tuna.tsinghua.edu.cn/simple \
         --trusted-host pypi.tuna.tsinghua.edu.cn
 
-RUN pip install peft -i  \
-        https://pypi.tuna.tsinghua.edu.cn/simple \
+RUN pip install peft   \
+        -i https://pypi.tuna.tsinghua.edu.cn/simple \
         --trusted-host pypi.tuna.tsinghua.edu.cn
 
 RUN pip install accelerate  \
