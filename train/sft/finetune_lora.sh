@@ -1,6 +1,6 @@
 # train/sft/finetune_lora.sh
 # output_model=save_folder
-output_model=../../FlagAlpha/Meta-Llama-3-8B-Instruct-lora
+output_model=./FlagAlpha/Meta-Llama-3-8B-Instruct-lora
 # 需要修改到自己的输入目录
 if [ ! -d ${output_model} ];then  
     mkdir -p ${output_model}
@@ -9,10 +9,10 @@ export CUDA_HOME=/usr/local/cuda/
 export NCCL_P2P_DISABLE=1
 cp ./finetune_lora.sh ${output_model}
 deepspeed --include localhost:0 finetune_clm_lora.py \
-    --model_name_or_path ../../FlagAlpha/Meta-Llama-3-8B-Instruct \
-    --train_files ../../data/train_sft.csv \
-    --validation_files  ../../data/dev_sft.csv \
-                         ../../data/dev_sft_sharegpt.csv \
+    --model_name_or_path ./FlagAlpha/Meta-Llama-3-8B-Instruct \
+    --train_files ./data/train_sft.csv \
+    --validation_files  ./data/dev_sft.csv \
+                        ./data/dev_sft_sharegpt.csv \
     --per_device_train_batch_size 1 \
     --per_device_eval_batch_size 1 \
     --do_train \
@@ -34,8 +34,8 @@ deepspeed --include localhost:0 finetune_clm_lora.py \
     --logging_steps 10 \
     --save_strategy steps \
     --preprocessing_num_workers 10 \
-    --save_steps 20 \
-    --eval_steps 20 \
+    --save_steps 200 \
+    --eval_steps 200 \
     --save_total_limit 2000 \
     --seed 42 \
     --disable_tqdm false \
@@ -49,6 +49,7 @@ deepspeed --include localhost:0 finetune_clm_lora.py \
     --gradient_checkpointing \
     --bf16_full_eval \
     --ddp_timeout 18000000 \
+    --resume_from_checkpoint ${output_model}/checkpoint-2020 \
     | tee -a ${output_model}/train.log
     # --resume_from_checkpoint ${output_model}/checkpoint-20400 \
 
