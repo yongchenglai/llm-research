@@ -3,23 +3,23 @@ FROM pytorch/pytorch:2.1.2-cuda12.1-cudnn8-devel  as builder
 
 RUN apt-get update -y --allow-unauthenticated 
 RUN apt install git tmux htop vim -y 
-RUN pip install bitsandbytes \
+RUN pip install bitsandbytes==0.42.0 \
         -i https://pypi.tuna.tsinghua.edu.cn/simple  \
          --trusted-host pypi.tuna.tsinghua.edu.cn
 
-RUN pip install transformers   \
+RUN pip install transformers==4.39.0   \
         -i https://pypi.tuna.tsinghua.edu.cn/simple \
         --trusted-host pypi.tuna.tsinghua.edu.cn
 
-RUN pip install peft   \
+RUN pip install peft==0.8.2   \
         -i https://pypi.tuna.tsinghua.edu.cn/simple \
         --trusted-host pypi.tuna.tsinghua.edu.cn
 
-RUN pip install accelerate  \
+RUN pip install accelerate==0.27.2  \
         -i https://pypi.tuna.tsinghua.edu.cn/simple \
         --trusted-host pypi.tuna.tsinghua.edu.cn
 
-RUN pip install deepspeed  \
+RUN pip install deepspeed==0.14.0  \
         -i https://pypi.tuna.tsinghua.edu.cn/simple \
         --trusted-host pypi.tuna.tsinghua.edu.cn
 
