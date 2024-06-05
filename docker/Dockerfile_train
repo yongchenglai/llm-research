@@ -1,3 +1,4 @@
+# docker/Dockerfile_train
 FROM pytorch/pytorch:2.1.2-cuda12.1-cudnn8-devel  as builder
 
 RUN apt-get update -y --allow-unauthenticated 
