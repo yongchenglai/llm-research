@@ -34,8 +34,8 @@ deepspeed --include localhost:0 train/sft/finetune_clm_lora.py \
     --logging_steps 10 \
     --save_strategy steps \
     --preprocessing_num_workers 10 \
-    --save_steps 20 \
-    --eval_steps 20 \
+    --save_steps 200 \
+    --eval_steps 200 \
     --save_total_limit 2000 \
     --seed 42 \
     --disable_tqdm false \
@@ -49,7 +49,6 @@ deepspeed --include localhost:0 train/sft/finetune_clm_lora.py \
     --gradient_checkpointing \
     --bf16_full_eval \
     --ddp_timeout 18000000 \
-    --resume_from_checkpoint ${output_model}/checkpoint-2020 \
     | tee -a ${output_model}/train.log
     # --resume_from_checkpoint ${output_model}/checkpoint-20400 \
 
