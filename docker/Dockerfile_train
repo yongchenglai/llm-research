@@ -1,30 +1,30 @@
 # docker/Dockerfile_train
 FROM pytorch/pytorch:2.1.2-cuda12.1-cudnn8-devel  as builder
 
-RUN apt-get update -y --allow-unauthenticated 
-RUN apt install git tmux htop vim -y 
-RUN pip install bitsandbytes==0.42.0 \
+RUN apt-get update -y --no-cache-dir --allow-unauthenticated
+RUN apt install -y --no-cache-dir git tmux htop vim
+RUN pip install --no-cache-dir bitsandbytes==0.42.0 \
         -i https://pypi.tuna.tsinghua.edu.cn/simple  \
          --trusted-host pypi.tuna.tsinghua.edu.cn
 
-RUN pip install transformers==4.39.0   \
+RUN pip install --no-cache-dir transformers==4.39.0   \
         -i https://pypi.tuna.tsinghua.edu.cn/simple \
         --trusted-host pypi.tuna.tsinghua.edu.cn
 
-RUN pip install peft==0.8.2   \
+RUN pip install --no-cache-dir peft==0.8.2   \
         -i https://pypi.tuna.tsinghua.edu.cn/simple \
         --trusted-host pypi.tuna.tsinghua.edu.cn
 
-RUN pip install accelerate==0.27.2  \
+RUN pip install --no-cache-dir accelerate==0.27.2  \
         -i https://pypi.tuna.tsinghua.edu.cn/simple \
         --trusted-host pypi.tuna.tsinghua.edu.cn
 
-RUN pip install deepspeed==0.14.0  \
+RUN pip install --no-cache-dir deepspeed==0.14.0  \
         -i https://pypi.tuna.tsinghua.edu.cn/simple \
         --trusted-host pypi.tuna.tsinghua.edu.cn
 
-RUN pip install scipy sentencepiece datasets joblib  \
-        sentence_transformers cn2an evaluate tensorboard wandb \
+RUN pip install --no-cache-dir scipy sentencepiece datasets joblib \
+        sentence_transformers cn2an evaluate tensorboard wandb flash_attn \
         -i https://pypi.tuna.tsinghua.edu.cn/simple  \
         --trusted-host pypi.tuna.tsinghua.edu.cn
 
