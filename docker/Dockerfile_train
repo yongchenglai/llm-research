@@ -1,8 +1,8 @@
 # docker/Dockerfile_train
 FROM pytorch/pytorch:2.1.2-cuda12.1-cudnn8-devel  as builder
 
-RUN apt-get update -y --no-cache-dir --allow-unauthenticated
-RUN apt install -y --no-cache-dir git tmux htop vim
+RUN apt-get update -y --allow-unauthenticated
+RUN apt install -y git tmux htop vim
 RUN pip install --no-cache-dir bitsandbytes==0.42.0 \
         -i https://pypi.tuna.tsinghua.edu.cn/simple  \
          --trusted-host pypi.tuna.tsinghua.edu.cn
