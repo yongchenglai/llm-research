@@ -69,7 +69,6 @@ from transformers.utils.versions import require_version
 
 import pdb
 
-
 # Will error if the minimal version of Transformers is not installed.
 # Remove at your own risks.
 # check_min_version("4.27.0.dev0")
@@ -79,7 +78,6 @@ require_version(
     "To fix: pip install -r examples/pytorch/language-modeling/requirements.txt")
 
 logger = logging.getLogger(__name__)
-
 
 MODEL_CONFIG_CLASSES = list(MODEL_FOR_CAUSAL_LM_MAPPING.keys())
 MODEL_TYPES = tuple(conf.model_type for conf in MODEL_CONFIG_CLASSES)
@@ -138,7 +136,7 @@ class ModelArguments:
         metadata={
             "help": "List of module names or regex expression of "
                     "the module names to replace with Lora."
-            "For example, ['q', 'v'] or '.*decoder.*(SelfAttention|EncDecAttention).*(q|v)$' "
+                    "For example, ['q', 'v'] or '.*decoder.*(SelfAttention|EncDecAttention).*(q|v)$' "
         },
     )
     use_fast_tokenizer: bool = field(
@@ -161,7 +159,7 @@ class ModelArguments:
             )
         },
     )
-    
+
     torch_dtype: Optional[str] = field(
         default=None,
         metadata={
@@ -181,7 +179,7 @@ class ModelArguments:
                 "--config_overrides can't be used in combination with "
                 "--config_name or --model_name_or_path"
             )
-        if type(self.target_modules)==str:
+        if type(self.target_modules) == str:
             self.target_modules = self.target_modules.split(',')
 
 
@@ -289,11 +287,11 @@ class DataTrainingArguments:
 
 class SavePeftModelCallback(TrainerCallback):
     def on_save(
-        self,
-        args: TrainingArguments,
-        state: TrainerState,
-        control: TrainerControl,
-        **kwargs,
+            self,
+            args: TrainingArguments,
+            state: TrainerState,
+            control: TrainerControl,
+            **kwargs,
     ):
         if state.is_world_process_zero:
             print('+++++++++++++++++save call back++++++++++++++++')
@@ -359,7 +357,7 @@ def main():
 
     # Detecting last checkpoint.
     last_checkpoint = None
-    if os.path.isdir(training_args.output_dir)  \
+    if os.path.isdir(training_args.output_dir) \
             and training_args.do_train \
             and not training_args.overwrite_output_dir:
         last_checkpoint = get_last_checkpoint(training_args.output_dir)
@@ -465,7 +463,7 @@ def main():
         "use_fast": model_args.use_fast_tokenizer,
         "revision": model_args.model_revision,
         "use_auth_token": True if model_args.use_auth_token else None,
-        "padding_side":'left'
+        "padding_side": 'left'
     }
     if model_args.tokenizer_name:
         tokenizer = AutoTokenizer.from_pretrained(
@@ -518,21 +516,21 @@ def main():
             revision=model_args.model_revision,
             use_auth_token=True if model_args.use_auth_token else None,
             torch_dtype=torch_dtype,
-            load_in_8bit=True if model_args.load_in_bits==8 else False,
+            load_in_8bit=True if model_args.load_in_bits == 8 else False,
             trust_remote_code=True,
             use_flash_attention_2=True,
-            quantization_config=bnb_config if model_args.load_in_bits==4 else None,
+            quantization_config=bnb_config if model_args.load_in_bits == 4 else None,
             # device_map  = 'auto'
             device_map={"": int(os.environ.get("LOCAL_RANK") or 0)}
         )
         # model = prepare_model_for_int8_training(model,
         # output_embedding_layer_name="embed_out", layer_norm_names=[])
-        
+
     else:
         model = AutoModelForCausalLM.from_config(config)
         n_params = sum({p.data_ptr(): p.numel() for p in model.parameters()}.values())
         logger.info(f"Training new model from scratch - "
-                    f"Total size={n_params/2**20:.2f}M params")
+                    f"Total size={n_params / 2 ** 20:.2f}M params")
 
     # We resize the embeddings only when necessary to avoid index errors.
     # If you are creating a model from scratch
@@ -540,25 +538,25 @@ def main():
     embedding_size = model.get_input_embeddings().weight.shape[0]
     if len(tokenizer) > embedding_size:
         model.resize_token_embeddings(len(tokenizer))
-    if model_args.load_in_bits==8:
+    if model_args.load_in_bits == 8:
         model = prepare_model_for_int8_training(model)
-    elif model_args.load_in_bits==4:
+    elif model_args.load_in_bits == 4:
         model = prepare_model_for_kbit_training(model)
-    
+
     # Preprocessing the datasets.
     # First we tokenize all the texts.
     if training_args.do_train:
         column_names = list(raw_datasets["train"].features)
     else:
         column_names = list(raw_datasets["validation"].features)
-        
+
     train_on_inputs = True
-    if len(column_names)==1:
+    if len(column_names) == 1:
         text_column_name = "text" if "text" in column_names else column_names[0]
-    elif len(column_names)==2:
+    elif len(column_names) == 2:
         input_column_name = 'input' if 'input' in column_names else column_names[0]
         target_column_name = 'target' if 'target' in column_names else column_names[0]
-        train_on_inputs=False
+        train_on_inputs = False
     else:
         raise ValueError('输入文件列数不对')
     print('train_on_inputs', train_on_inputs)
@@ -570,7 +568,7 @@ def main():
     def tokenize_function(examples):
         with CaptureLogger(tok_logger) as cl:
             output = tokenizer(
-                [ item for item in examples[text_column_name]],
+                [item for item in examples[text_column_name]],
                 truncation=True,
                 max_length=data_args.block_size,
                 padding=False,
@@ -591,21 +589,19 @@ def main():
     def generate_and_tokenize_prompt(data_point):
         input_text = data_point[input_column_name]
         target_text = data_point[target_column_name]
-        full_prompt = input_text+target_text
+        full_prompt = input_text + target_text
         tokenized_full_prompt = tokenize(full_prompt)
         if not train_on_inputs:
             user_prompt = input_text
             tokenized_user_prompt = tokenize(user_prompt)
             user_prompt_len = len(tokenized_user_prompt["input_ids"])
             tokenized_full_prompt["labels"] = [
-                -100
-            ] * user_prompt_len + tokenized_full_prompt["labels"][
-                user_prompt_len:
-            ] 
+                                                  -100
+                                              ] * user_prompt_len + tokenized_full_prompt["labels"][
+                                                                    user_prompt_len:
+                                                                    ]
         return tokenized_full_prompt
-    
-    
-    
+
     with training_args.main_process_first(desc="dataset map tokenization"):
         if not data_args.streaming:
             tokenized_datasets = raw_datasets.map(
@@ -618,8 +614,8 @@ def main():
             )
         else:
             tokenized_datasets = raw_datasets.map(
-                tokenize_function if train_on_inputs==True else generate_and_tokenize_prompt,
-                batched=True if train_on_inputs==True else False,
+                tokenize_function if train_on_inputs == True else generate_and_tokenize_prompt,
+                batched=True if train_on_inputs == True else False,
                 remove_columns=column_names,
             )
 
@@ -680,8 +676,6 @@ def main():
             return metric.compute(predictions=preds, references=labels)
         # layer_norm_names=[]
 
-                
-    
     model = get_peft_model(model, lora_config)
     model.print_trainable_parameters()
 
@@ -697,9 +691,9 @@ def main():
             tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True
         ),
         compute_metrics=compute_metrics \
-        if training_args.do_eval and not is_torch_tpu_available() else None,
+            if training_args.do_eval and not is_torch_tpu_available() else None,
         preprocess_logits_for_metrics=preprocess_logits_for_metrics \
-        if training_args.do_eval and not is_torch_tpu_available()else None,
+            if training_args.do_eval and not is_torch_tpu_available() else None,
         callbacks=([SavePeftModelCallback] if isinstance(model, PeftModel) else None),
     )
 
@@ -727,10 +721,10 @@ def main():
             # checkpoint = Fa
         elif last_checkpoint is not None:
             checkpoint = last_checkpoint
-        
+
         if torch.__version__ >= "2" and sys.platform != "win32":
             model = torch.compile(model)
-        
+
         train_result = trainer.train(resume_from_checkpoint=checkpoint)
         trainer.save_model()  # Saves the tokenizer too for easy upload
 
@@ -763,7 +757,6 @@ def main():
 
         trainer.log_metrics("eval", metrics)
         trainer.save_metrics("eval", metrics)
-
 
 
 def _mp_fn(index):
