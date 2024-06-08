@@ -609,8 +609,8 @@ def main():
     with training_args.main_process_first(desc="dataset map tokenization"):
         if not data_args.streaming:
             tokenized_datasets = raw_datasets.map(
-                tokenize_function if train_on_inputs==True else generate_and_tokenize_prompt,
-                batched=True if train_on_inputs==True else False,
+                tokenize_function if train_on_inputs == True else generate_and_tokenize_prompt,
+                batched=True if train_on_inputs == True else False,
                 num_proc=data_args.preprocessing_num_workers,
                 remove_columns=column_names,
                 load_from_cache_file=not data_args.overwrite_cache,
