@@ -502,6 +502,7 @@ def main():
         bnb_4bit_quant_type="nf4",
         bnb_4bit_compute_dtype=torch.bfloat16
     )
+
     if model_args.model_name_or_path:
         torch_dtype = (
             model_args.torch_dtype
@@ -597,11 +598,8 @@ def main():
             user_prompt = input_text
             tokenized_user_prompt = tokenize(user_prompt)
             user_prompt_len = len(tokenized_user_prompt["input_ids"])
-            tokenized_full_prompt["labels"] = [
-                                                  -100
-                                              ] * user_prompt_len + tokenized_full_prompt["labels"][
-                                                                    user_prompt_len:
-                                                                    ]
+            tokenized_full_prompt["labels"] = [-100] * user_prompt_len + \
+                                              tokenized_full_prompt["labels"][user_prompt_len:]
         return tokenized_full_prompt
 
     with training_args.main_process_first(desc="dataset map tokenization"):
