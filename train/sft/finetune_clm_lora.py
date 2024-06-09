@@ -465,6 +465,7 @@ def main():
         "use_auth_token": True if model_args.use_auth_token else None,
         "padding_side": 'left'
     }
+
     if model_args.tokenizer_name:
         tokenizer = AutoTokenizer.from_pretrained(
             model_args.tokenizer_name,
@@ -480,6 +481,7 @@ def main():
             "You can do it from another script, save it, "
             "and load it from here, using --tokenizer_name."
         )
+
     tokenizer.pad_token = tokenizer.eos_token
     lora_config = LoraConfig(
         r=model_args.lora_r,
