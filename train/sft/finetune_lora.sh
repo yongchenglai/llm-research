@@ -8,8 +8,8 @@ fi
 export CUDA_HOME=/usr/local/cuda/
 export NCCL_P2P_DISABLE=1
 cp train/sft/finetune_lora.sh ${output_model}
-deepspeed train/sft/finetune_clm_lora.py \
-    --include localhost:0 \
+deepspeed --include localhost:0 \
+    train/sft/finetune_clm_lora.py \
     --model_name_or_path ./meta-llama/Meta-Llama-3-8B-Instruct \
     --train_files ./data/train_sft.csv \
     --validation_files  ./data/dev_sft.csv ./data/dev_sft_sharegpt.csv \
@@ -49,7 +49,7 @@ deepspeed train/sft/finetune_clm_lora.py \
     --gradient_checkpointing \
     --bf16_full_eval \
     --ddp_timeout 18000000 \
-    --resume_from_checkpoint ${output_model}/checkpoint-450 \
+    --resume_from_checkpoint ${output_model}/checkpoint-200 \
     | tee -a ${output_model}/train.log
     # --resume_from_checkpoint ${output_model}/checkpoint-450 \
 
