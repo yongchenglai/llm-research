@@ -12,8 +12,7 @@ deepspeed train/sft/finetune_clm_lora.py \
     --include localhost:0 \
     --model_name_or_path ./meta-llama/Meta-Llama-3-8B-Instruct \
     --train_files ./data/train_sft.csv \
-    --validation_files  ./data/dev_sft.csv \
-                        ./data/dev_sft_sharegpt.csv \
+    --validation_files  ./data/dev_sft.csv ./data/dev_sft_sharegpt.csv \
     --per_device_train_batch_size 1 \
     --per_device_eval_batch_size 1 \
     --do_train \
