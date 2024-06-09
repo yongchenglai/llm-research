@@ -20,6 +20,7 @@ https://huggingface.co/models?filter=text-generation
 """
 # You can also adapt this script on your own causal language modeling task. Pointers for this are left as comments.
 
+# train/sft/finetune_clm_full_sft.py
 import logging
 import math
 import os
