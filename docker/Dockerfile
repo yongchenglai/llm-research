@@ -36,5 +36,5 @@ RUN chmod u+x /workspace/chat_gradio.py
 EXPOSE 7860
 
 #设置启动命令
-ENTRYPOINT ["python", "chat_gradio.py", \
-            "--model_name_or_path=/workspace/models"]
+#ENTRYPOINT ["python", "chat_gradio.py", \
+#            "--model_name_or_path=/workspace/models"]
