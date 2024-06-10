@@ -5,13 +5,13 @@ RUN apt-get update -y --allow-unauthenticated
 RUN apt install -y git vim git-lfs
 
 #设置工作目录
-WORKDIR /root/Llama-Chinese
+WORKDIR /workspace
 
 # 从git上克隆llama-chinese仓库
 #RUN git clone https://github.com/LlamaFamily/Llama-Chinese.git \
 #   /root/Llama-Chinese
-COPY examples/chat_gradio.py /root/Llama-Chinese/
-COPY requirements.txt /root/Llama-Chinese/
+COPY examples/chat_gradio.py /workspace
+COPY requirements.txt /workspace
 
 # tsinghua source
 RUN mkdir -p ~/.pip
@@ -30,12 +30,11 @@ RUN pip install --no-cache-dir flash_attn
 #克隆Hugging Face仓库
 #RUN  git clone https://huggingface.co/FlagAlpha/Atom-7B-Chat
 #COPY ../FlagAlpha/Atom-7B-Chat  /root/Llama-Chinese/Atom-7B-Chat/
-RUN chmod u+x /root/Llama-Chinese/chat_gradio.py
+RUN chmod u+x /workspace/chat_gradio.py
 
 #开启7860端口
 EXPOSE 7860
 
 #设置启动命令
 ENTRYPOINT ["python", "chat_gradio.py", \
-            "--model_name_or_path", \
-            "/root/Llama-Chinese/Atom-7B-Chat/"]
+            "--model_name_or_path=/workspace/models"]
