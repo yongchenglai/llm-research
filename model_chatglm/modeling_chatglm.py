@@ -556,7 +556,10 @@ class GLMBlock(torch.nn.Module):
         else:
             residual = hidden_states
 
-        layernorm_input = torch.nn.functional.dropout(attention_output, p=self.hidden_dropout, training=self.training)
+        layernorm_input = torch.nn.functional.dropout(
+            attention_output,
+            p=self.hidden_dropout,
+            training=self.training)
         layernorm_input = residual + layernorm_input
 
         # Layer norm post the self attention.
@@ -571,7 +574,10 @@ class GLMBlock(torch.nn.Module):
         else:
             residual = layernorm_input
 
-        output = torch.nn.functional.dropout(mlp_output, p=self.hidden_dropout, training=self.training)
+        output = torch.nn.functional.dropout(
+            mlp_output,
+            p=self.hidden_dropout,
+            training=self.training)
         output = residual + output
 
         return output, kv_cache
@@ -598,8 +604,11 @@ class GLMTransformer(torch.nn.Module):
         if self.post_layer_norm:
             LayerNormFunc = RMSNorm if config.rmsnorm else LayerNorm
             # Final layer norm before output.
-            self.final_layernorm = LayerNormFunc(config.hidden_size, eps=config.layernorm_epsilon, device=device,
-                                                 dtype=config.torch_dtype)
+            self.final_layernorm = LayerNormFunc(
+                config.hidden_size,
+                eps=config.layernorm_epsilon,
+                device=device,
+                dtype=config.torch_dtype)
 
         self.gradient_checkpointing = False
 
@@ -677,14 +686,19 @@ class ChatGLMPreTrainedModel(PreTrainedModel):
 
     def get_masks(self, input_ids, past_key_values, padding_mask=None):
         batch_size, seq_length = input_ids.shape
-        full_attention_mask = torch.ones(batch_size, seq_length, seq_length, device=input_ids.device)
+        full_attention_mask = torch.ones(
+            batch_size,
+            seq_length,
+            seq_length,
+            device=input_ids.device)
         full_attention_mask.tril_()
         past_length = 0
         if past_key_values:
             past_length = past_key_values[0][0].shape[0]
         if past_length:
-            full_attention_mask = torch.cat((torch.ones(batch_size, seq_length, past_length,
-                                                        device=input_ids.device), full_attention_mask), dim=-1)
+            full_attention_mask = torch.cat(
+                (torch.ones(batch_size, seq_length, past_length, device=input_ids.device),
+                 full_attention_mask), dim=-1)
         if padding_mask is not None:
             full_attention_mask = full_attention_mask * padding_mask.unsqueeze(1)
         if not past_length and padding_mask is not None:
@@ -695,7 +709,10 @@ class ChatGLMPreTrainedModel(PreTrainedModel):
 
     def get_position_ids(self, input_ids, device):
         batch_size, seq_length = input_ids.shape
-        position_ids = torch.arange(seq_length, dtype=torch.long, device=device).unsqueeze(0).repeat(batch_size, 1)
+        position_ids = torch.arange(
+            seq_length,
+            dtype=torch.long,
+            device=device).unsqueeze(0).repeat(batch_size, 1)
         return position_ids
 
     def _set_gradient_checkpointing(self, module, value=False):
@@ -752,11 +769,19 @@ class ChatGLMModel(ChatGLMPreTrainedModel):
             config.hidden_size // config.num_attention_heads if config.kv_channels is None else config.kv_channels
         )
 
-        self.rotary_pos_emb = RotaryEmbedding(rotary_dim // 2, original_impl=config.original_rope, device=device,
-                                              dtype=config.torch_dtype)
+        self.rotary_pos_emb = RotaryEmbedding(
+            rotary_dim // 2,
+            original_impl=config.original_rope,
+            device=device,
+            dtype=config.torch_dtype)
         self.encoder = init_method(GLMTransformer, config, **init_kwargs)
-        self.output_layer = init_method(nn.Linear, config.hidden_size, config.padded_vocab_size, bias=False,
-                                        dtype=config.torch_dtype, **init_kwargs)
+        self.output_layer = init_method(
+            nn.Linear,
+            config.hidden_size,
+            config.padded_vocab_size,
+            bias=False,
+            dtype=config.torch_dtype,
+            **init_kwargs)
         self.pre_seq_len = config.pre_seq_len
         self.prefix_projection = config.prefix_projection
         if self.pre_seq_len is not None:
