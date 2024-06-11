@@ -3,7 +3,7 @@
 
 import requests
 
-url = "http://localhost:8080/completion"
+url = "http://localhost:8090/completion"
 headers = {"Content-Type": "application/json"}
 data = {
     "prompt": "system\n你是一位智能助手!\nuser\n你好,请介绍一下埃隆马斯克。请用中文回答。\nassistant\n",
