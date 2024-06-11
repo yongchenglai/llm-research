@@ -1,9 +1,14 @@
 # This code is based on the revised code from fastchat
 # based on tatsu-lab/stanford_alpaca.
-# Here we provide a very simple script for supervised finetuning, which is revised from the training
-# script in Fastchat. The script is used to finetune Qwen with Hugging Face Trainer. You can check the
-# script here. This script for supervised finetuning (SFT) has the following features:
+# Here we provide a very simple script for supervised finetuning,
+# which is revised from the training script in Fastchat.
+# The script is used to finetune Qwen with Hugging Face Trainer.
+# You can check the script here.
+# This script for supervised finetuning (SFT) has the following features:
+# (1)Support single-GPU and multi-GPU training;
+# (2)Support full-parameter tuning, LoRA, and Q-LoRA.
 # https://github.com/QwenLM/Qwen2/blob/main/examples/sft/finetune.py
+
 # finetune_clm_full_lora_qlora.py
 import json
 import logging
