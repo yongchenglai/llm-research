@@ -136,6 +136,7 @@ if __name__ == "__main__":
             device="cuda:0",
             use_triton=False,
             inject_fused_attention=False,
+            trust_remote_code=True,
             inject_fused_mlp=False)
 
     streamer = TextIteratorStreamer(tokenizer, skip_prompt=True)
