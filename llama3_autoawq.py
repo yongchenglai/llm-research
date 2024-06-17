@@ -4,8 +4,8 @@ from transformers import AutoTokenizer
 from transformers import AwqConfig, AutoConfig
 from huggingface_hub import HfApi
 
-model_path = './FlagAlpha/Meta-Llama-3-8B-Instruct/'
-quant_path = './FlagAlpha/Meta-Llama-3-8B-Instruct-awq/'
+model_path = './meta-llama/Meta-Llama-3-8B-Instruct/'
+quant_path = './meta-llama/Meta-Llama-3-8B-Instruct-AWQ/'
 quant_config = {
     "zero_point": True,
     "q_group_size": 128,
