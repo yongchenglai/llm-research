@@ -256,7 +256,9 @@ class Transformer(nn.Module):
         self.n_layers = params.n_layers
 
         self.tok_embeddings = VocabParallelEmbedding(
-            params.vocab_size, params.dim, init_method=lambda x: x
+            params.vocab_size,
+            params.dim,
+            init_method=lambda x: x
         )
 
         self.layers = torch.nn.ModuleList()
@@ -265,7 +267,10 @@ class Transformer(nn.Module):
 
         self.norm = RMSNorm(params.dim, eps=params.norm_eps)
         self.output = ColumnParallelLinear(
-            params.dim, params.vocab_size, bias=False, init_method=lambda x: x
+            params.dim,
+            params.vocab_size,
+            bias=False,
+            init_method=lambda x: x
         )
 
         self.freqs_cis = precompute_freqs_cis(
