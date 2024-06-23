@@ -927,10 +927,12 @@ class MiniCPMDecoderLayer(nn.Module):
 
         self.mlp = MiniCPMMLP(config)
         self.input_layernorm = MiniCPMRMSNorm(
-            config.hidden_size, eps=config.rms_norm_eps
+            config.hidden_size,
+            eps=config.rms_norm_eps
         )
         self.post_attention_layernorm = MiniCPMRMSNorm(
-            config.hidden_size, eps=config.rms_norm_eps
+            config.hidden_size,
+            eps=config.rms_norm_eps
         )
 
         self.scale_depth = config.scale_depth
