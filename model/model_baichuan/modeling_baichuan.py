@@ -669,3 +669,15 @@ class BaiChuanForCausalLM(PreTrainedModel):
         for layer_past in past_key_values:
             reordered_past += (tuple(past_state.index_select(0, beam_idx) for past_state in layer_past),)
         return reordered_past
+
+
+
+
+
+if __name__ == '__main__':
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    model = Model.to(device)
+    # summary可以打印网络结构和参数，方便查看搭建好的网络结构
+    # summary(model, input_size=(3, 224, 224))
+    print(model)
+
