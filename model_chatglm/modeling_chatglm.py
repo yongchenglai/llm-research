@@ -347,9 +347,13 @@ class SelfAttention(torch.nn.Module):
         self.core_attention = CoreAttention(config, self.layer_number)
 
         # Output.
-        self.dense = nn.Linear(self.projection_size, config.hidden_size, bias=config.add_bias_linear,
-                               device=device, **_config_to_kwargs(config)
-                               )
+        self.dense = nn.Linear(
+            self.projection_size,
+            config.hidden_size,
+            bias=config.add_bias_linear,
+            device=device,
+            **_config_to_kwargs(config)
+        )
 
     def _allocate_memory(self, inference_max_sequence_len, batch_size, device=None, dtype=None):
         if self.multi_query_attention:
