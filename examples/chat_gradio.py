@@ -139,6 +139,8 @@ if __name__ == "__main__":
             trust_remote_code=True,
             inject_fused_mlp=False)
 
+    print(model)
+
     streamer = TextIteratorStreamer(tokenizer, skip_prompt=True)
 
     if torch.__version__ >= "2" and sys.platform != "win32":
