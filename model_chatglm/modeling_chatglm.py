@@ -337,10 +337,12 @@ class SelfAttention(torch.nn.Module):
             self.qkv_hidden_size = (
                     self.projection_size + 2 * self.hidden_size_per_attention_head * config.multi_query_group_num
             )
-        self.query_key_value = nn.Linear(config.hidden_size, self.qkv_hidden_size,
-                                         bias=config.add_bias_linear or config.add_qkv_bias,
-                                         device=device, **_config_to_kwargs(config)
-                                         )
+        self.query_key_value = nn.Linear(
+            config.hidden_size,
+            self.qkv_hidden_size,
+            bias=config.add_bias_linear or config.add_qkv_bias,
+            device=device, **_config_to_kwargs(config)
+        )
 
         self.core_attention = CoreAttention(config, self.layer_number)
 
