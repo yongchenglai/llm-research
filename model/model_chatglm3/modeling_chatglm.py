@@ -556,7 +556,8 @@ class GLMBlock(torch.nn.Module):
         self.mlp = MLP(config, device=device)
 
     def forward(
-            self, hidden_states, attention_mask, rotary_pos_emb, kv_cache=None, use_cache=True,
+            self, hidden_states, attention_mask, rotary_pos_emb,
+            kv_cache=None, use_cache=True,
     ):
         # hidden_states: [s, b, h]
 
