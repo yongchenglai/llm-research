@@ -111,17 +111,23 @@ class RotaryEmbedding(torch.nn.Module):
         super().__init__()
         self.inv_freq = 1.0 / (base ** (torch.arange(0, dim, 2).float().to(device) / dim))
         self.max_seq_len_cached = max_position_embeddings
-        t = torch.arange(self.max_seq_len_cached, device=self.inv_freq.device, dtype=torch.float32)
+        t = torch.arange(self.max_seq_len_cached,
+                         device=self.inv_freq.device,
+                         dtype=torch.float32)
         freqs = torch.outer(t, self.inv_freq)
         emb = torch.cat((freqs, freqs), dim=-1)
         self.cos_cached = emb.cos()[None, None, :, :].to(torch.float32)
         self.sin_cached = emb.sin()[None, None, :, :].to(torch.float32)
+        
     def forward(self, x, seq_len=None):
         # x: [bs, num_attention_heads, seq_len, head_size]
-        # This `if` block is unlikely to be run after we build sin/cos in `__init__`. Keep the logic here just in case.
+        # This `if` block is unlikely to be run after we build sin/cos
+        # in `__init__`. Keep the logic here just in case.
         if seq_len > self.max_seq_len_cached:
             self.max_seq_len_cached = seq_len
-            t = torch.arange(self.max_seq_len_cached, device=self.inv_freq.device, dtype=torch.float32)
+            t = torch.arange(self.max_seq_len_cached,
+                             device=self.inv_freq.device,
+                             dtype=torch.float32)
             freqs = torch.outer(t, self.inv_freq)
             emb = torch.cat((freqs, freqs), dim=-1)
             self.cos_cached = emb.cos()[None, None, :, :].to(torch.float32).to(x.device)
