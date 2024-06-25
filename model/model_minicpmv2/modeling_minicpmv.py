@@ -77,8 +77,8 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
         dtype = self.vpm.pos_embed.data.dtype
         for pixel_value in pixel_values:
             H, W = pixel_value.shape[-2:]
-            tgt_size = (
-            math.ceil(H / self.vpm.patch_embed.patch_size[0]), math.ceil(W / self.vpm.patch_embed.patch_size[0]))
+            tgt_size = (math.ceil(H / self.vpm.patch_embed.patch_size[0]),
+                        math.ceil(W / self.vpm.patch_embed.patch_size[0]))
             vision_embedding = self.vpm.forward_features(pixel_value.unsqueeze(0).type(dtype))
             if hasattr(self.vpm, 'num_prefix_tokens') and self.vpm.num_prefix_tokens > 0:
                 vision_embedding = vision_embedding[:, self.vpm.num_prefix_tokens:]
