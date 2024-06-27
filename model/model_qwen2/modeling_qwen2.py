@@ -269,7 +269,8 @@ class Qwen2Attention(nn.Module):
     ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
         if "padding_mask" in kwargs:
             warnings.warn(
-                "Passing `padding_mask` is deprecated and will be removed in v4.37. Please make sure use `attention_mask` instead.`"
+                "Passing `padding_mask` is deprecated and will be removed in v4.37. "
+                "Please make sure use `attention_mask` instead.`"
             )
         bsz, q_len, _ = hidden_states.size()
 
