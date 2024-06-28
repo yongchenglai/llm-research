@@ -1,0 +1,45 @@
+# Dockerfile-gpu
+FROM pytorch/pytorch:2.1.2-cuda12.1-cudnn8-devel
+
+RUN apt-get update -y --allow-unauthenticated
+RUN apt install -y git vim git-lfs
+
+#设置工作目录
+WORKDIR /workspace
+
+COPY examples/chat_gradio.py /workspace
+
+RUN pip install --no-cache-dir \
+    -i https://pypi.tuna.tsinghua.edu.cn/simple \
+    --trusted-host pypi.tuna.tsinghua.edu.cn \
+    bitsandbytes==0.42.0 \
+    accelerate==0.27.2 \
+    numpy==1.26.4 \
+    gekko==1.0.6 \
+    pandas \
+    scipy \
+    sentencepiece==0.2.0 \
+    datasets \
+    evaluate \
+    pytest \
+    peft==0.8.2 \
+    transformers==4.39.0 \
+    deepspeed==0.14.0 \
+    scikit-learn \
+    torchvision \
+    torchdata \
+    torchaudio \
+    tensorboard \
+    gradio \
+    packaging
+
+RUN pip install --no-cache-dir flash_attn
+
+RUN chmod u+x /workspace/chat_gradio.py
+
+#开启7860端口
+EXPOSE 7860
+
+#设置启动命令
+#ENTRYPOINT ["python", "chat_gradio.py", \
+#            "--model_name_or_path=/workspace/models"]
