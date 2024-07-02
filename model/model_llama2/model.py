@@ -321,8 +321,10 @@ class FeedForward(nn.Module):
         Args:
             dim (int): Input dimension.
             hidden_dim (int): Hidden dimension of the feedforward layer.
-            multiple_of (int): Value to ensure hidden dimension is a multiple of this value.
-            ffn_dim_multiplier (float, optional): Custom multiplier for hidden dimension. Defaults to None.
+            multiple_of (int): Value to ensure hidden dimension is
+                               a multiple of this value.
+            ffn_dim_multiplier (float, optional): Custom multiplier for
+                               hidden dimension. Defaults to None.
 
         Attributes:
             w1 (ColumnParallelLinear): Linear transformation for the first layer.
