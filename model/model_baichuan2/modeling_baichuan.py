@@ -187,15 +187,24 @@ class Attention(nn.Module):
 
         if (self.head_dim * self.num_heads) != self.hidden_size:
             raise ValueError(
-                f"hidden_size must be divisible by num_heads (got `hidden_size`: {self.hidden_size}"
+                f"hidden_size must be divisible by num_heads "
+                f"(got `hidden_size`: {self.hidden_size}"
                 f" and `num_heads`: {self.num_heads})."
             )
-        self.W_pack = nn.Linear(self.hidden_size, 3 * self.hidden_size, bias=False)
-        self.o_proj = nn.Linear(self.num_heads * self.head_dim, self.hidden_size, bias=False)
-        self.rotary_emb = RotaryEmbedding(self.head_dim, max_position_embeddings=self.max_position_embeddings)
+        self.W_pack = nn.Linear(self.hidden_size,
+                                3 * self.hidden_size,
+                                bias=False)
+        self.o_proj = nn.Linear(self.num_heads * self.head_dim,
+                                self.hidden_size,
+                                bias=False)
+        self.rotary_emb = RotaryEmbedding(
+            self.head_dim,
+            max_position_embeddings=self.max_position_embeddings)
 
     def _shape(self, tensor: torch.Tensor, seq_len: int, bsz: int):
-        return tensor.view(bsz, seq_len, self.num_heads, self.head_dim).transpose(1, 2).contiguous()
+        return tensor.view(bsz, seq_len,
+                           self.num_heads,
+                           self.head_dim).transpose(1, 2).contiguous()
 
     def forward(
             self,
@@ -209,16 +218,24 @@ class Attention(nn.Module):
         bsz, q_len, _ = hidden_states.size()
 
         proj = self.W_pack(hidden_states)
-        proj = proj.unflatten(-1, (3, self.hidden_size)).unsqueeze(0).transpose(0, -2).squeeze(-2)
-        query_states = proj[0].view(bsz, q_len, self.num_heads, self.head_dim).transpose(1, 2)
-        key_states = proj[1].view(bsz, q_len, self.num_heads, self.head_dim).transpose(1, 2)
-        value_states = proj[2].view(bsz, q_len, self.num_heads, self.head_dim).transpose(1, 2)
+        proj = proj.unflatten(
+            -1, (3, self.hidden_size)).unsqueeze(0).transpose(0, -2).squeeze(-2)
+        query_states = proj[0].view(bsz, q_len,
+                                    self.num_heads,
+                                    self.head_dim).transpose(1, 2)
+        key_states = proj[1].view(bsz, q_len,
+                                  self.num_heads,
+                                  self.head_dim).transpose(1, 2)
+        value_states = proj[2].view(bsz, q_len,
+                                    self.num_heads,
+                                    self.head_dim).transpose(1, 2)
 
         kv_seq_len = key_states.shape[-2]
         if past_key_value is not None:
             kv_seq_len += past_key_value[0].shape[-2]
         cos, sin = self.rotary_emb(value_states, seq_len=kv_seq_len)
-        query_states, key_states = apply_rotary_pos_emb(query_states, key_states, cos, sin, position_ids)
+        query_states, key_states = apply_rotary_pos_emb(
+            query_states, key_states, cos, sin, position_ids)
         # [bsz, nh, t, hd]
 
         if past_key_value is not None:
@@ -233,11 +250,15 @@ class Attention(nn.Module):
             key_states = key_states.transpose(1, 2)
             value_states = value_states.transpose(1, 2)
             attn_output = xops.memory_efficient_attention(
-                query_states, key_states, value_states, attn_bias=xops.LowerTriangularMask()
+                query_states, key_states, value_states,
+                attn_bias=xops.LowerTriangularMask()
             )
         else:
-            with torch.backends.cuda.sdp_kernel(enable_flash=True, enable_math=True, enable_mem_efficient=True):
-                attn_output = F.scaled_dot_product_attention(query_states, key_states, value_states, attn_mask = attention_mask)
+            with torch.backends.cuda.sdp_kernel(enable_flash=True,
+                                                enable_math=True,
+                                                enable_mem_efficient=True):
+                attn_output = F.scaled_dot_product_attention(
+                    query_states, key_states, value_states, attn_mask=attention_mask)
             attn_output = attn_output.transpose(1, 2)
         attn_output = attn_output.reshape(bsz, q_len, self.hidden_size)
         attn_output = self.o_proj(attn_output)
