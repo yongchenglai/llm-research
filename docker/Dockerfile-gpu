@@ -31,7 +31,12 @@ RUN pip install --no-cache-dir \
     torchaudio \
     tensorboard \
     gradio \
-    packaging
+    packaging \
+    tqdm \
+    rouge \
+    jieba \
+    fuzzywuzzy \
+    einops
 
 RUN pip install --no-cache-dir flash_attn
 
