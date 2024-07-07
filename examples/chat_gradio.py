@@ -2,7 +2,7 @@
 import gradio as gr
 import time
 from transformers import AutoTokenizer, \
-    AutoModelForCausalLM, TextIteratorStreamer
+    AutoModelForCausalLM, TextIteratorStreamer, BitsAndBytesConfig
 from threading import Thread
 import torch, sys, os
 import json
@@ -118,12 +118,14 @@ if __name__ == "__main__":
         use_fast=False)
     tokenizer.pad_token = tokenizer.eos_token
 
+    quantization_config = BitsAndBytesConfig(load_in_4bit=True)
+
     if args.is_4bit == False:
         model = AutoModelForCausalLM.from_pretrained(
             args.model_name_or_path,
             device_map='cuda:0' if torch.cuda.is_available() else "auto",
             torch_dtype=torch.float16,
-            load_in_8bit=True,
+            quantization_config=quantization_config,
             trust_remote_code=True,
             attn_implementation="flash_attention_2")
         model.eval()
