@@ -7,7 +7,7 @@ RUN apt install -y git vim git-lfs
 #设置工作目录
 WORKDIR /workspace
 
-COPY examples/chat_gradio.py /workspace
+COPY examples/llama_chat_gradio.py /workspace
 
 RUN pip install --no-cache-dir \
     -i https://pypi.tuna.tsinghua.edu.cn/simple \
@@ -40,11 +40,11 @@ RUN pip install --no-cache-dir \
 
 RUN pip install --no-cache-dir flash_attn
 
-RUN chmod u+x /workspace/chat_gradio.py
+RUN chmod u+x /workspace/llama_chat_gradio.py
 
 #开启7860端口
 EXPOSE 7860
 
 #设置启动命令
-#ENTRYPOINT ["python", "chat_gradio.py", \
+#ENTRYPOINT ["python", "llama_chat_gradio.py", \
 #            "--model_name_or_path=/workspace/models"]
