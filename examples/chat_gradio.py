@@ -97,20 +97,14 @@ with gr.Blocks() as demo:
         bot, [chatbot, slider_temp, slider_top_p, slider_context_times], chatbot
     )
     re_generate.click(bot, [chatbot, slider_temp,
-                      slider_top_p, slider_context_times], chatbot )
+                      slider_top_p, slider_context_times], chatbot)
     clear.click(lambda: [], None, chatbot, queue=False)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--model_name_or_path",
-        type=str,
-        help='mode name or path')
-    parser.add_argument(
-        "--is_4bit",
-        action='store_true',
-        help='use 4bit model')
+    parser.add_argument("--model_name_or_path", type=str, help='mode name or path')
+    parser.add_argument("--is_4bit", action='store_true', help='use 4bit model')
     args = parser.parse_args()
 
     tokenizer = AutoTokenizer.from_pretrained(
