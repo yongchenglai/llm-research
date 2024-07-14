@@ -4,7 +4,7 @@ from typing import Dict, List, Any, Optional
 import torch
 import sys
 import os
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, BitsAndBytesConfig
 
 
 class Llama2(LLM):
@@ -18,6 +18,14 @@ class Llama2(LLM):
         super().__init__()
         self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, use_fast=False)
         self.tokenizer.pad_token = self.tokenizer.eos_token
+
+        quantization_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_compute_dtype=torch.bfloat16,
+        )
+
         if bit4 == False:
             from transformers import AutoModelForCausalLM
             device_map = "cuda:0" if torch.cuda.is_available() else "auto"
@@ -26,8 +34,9 @@ class Llama2(LLM):
                 device_map=device_map,
                 torch_dtype=torch.float16,
                 load_in_8bit=True,
-                trust_remote_code=True,
-                use_flash_attention_2=True)
+                quantization_config=quantization_config,
+                attn_implementation="flash_attention_2",
+                trust_remote_code=True)
             self.model.eval()
         else:
             from auto_gptq import AutoGPTQForCausalLM
