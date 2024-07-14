@@ -119,14 +119,15 @@ if __name__ == "__main__":
         bnb_4bit_compute_dtype=torch.bfloat16,
     )
 
+
     if args.is_4bit == False:
         model = AutoModelForCausalLM.from_pretrained(
             args.model_name_or_path,
             device_map='cuda:0' if torch.cuda.is_available() else "auto",
             torch_dtype=torch.bfloat16,
             quantization_config=quantization_config,
-            trust_remote_code=True,
-            attn_implementation="flash_attention_2")
+            #attn_implementation="flash_attention_2",
+            trust_remote_code=True)
         model.eval()
 
     else:
