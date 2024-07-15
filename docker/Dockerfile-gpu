@@ -39,7 +39,8 @@ RUN pip install --no-cache-dir \
     jieba \
     fuzzywuzzy \
     einops \
-    tiktoken
+    tiktoken \
+    xformers
 
 RUN pip install --no-cache-dir flash_attn
 
