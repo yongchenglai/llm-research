@@ -20,6 +20,7 @@ import os
 import gradio as gr
 import torch
 from threading import Thread
+import argparse
 
 from typing import Union, Annotated
 from pathlib import Path
@@ -32,15 +33,13 @@ from transformers import (
     PreTrainedTokenizerFast,
     StoppingCriteria,
     StoppingCriteriaList,
-    TextIteratorStreamer
+    TextIteratorStreamer,
+    BitsAndBytesConfig
 )
+
 
 ModelType = Union[PreTrainedModel, PeftModelForCausalLM]
 TokenizerType = Union[PreTrainedTokenizer, PreTrainedTokenizerFast]
-
-MODEL_PATH = os.environ.get('MODEL_PATH', 'THUDM/chatglm3-6b-base')
-TOKENIZER_PATH = os.environ.get("TOKENIZER_PATH", MODEL_PATH)
-
 
 def _resolve_path(path: Union[str, Path]) -> Path:
     return Path(path).expanduser().resolve()
@@ -51,12 +50,22 @@ def load_model_and_tokenizer(
         trust_remote_code: bool = True
 ) -> tuple[ModelType, TokenizerType]:
     model_dir = _resolve_path(model_dir)
+
+    quantization_config = BitsAndBytesConfig(
+        load_in_4bit=True,
+        bnb_4bit_quant_type="nf4",
+        bnb_4bit_use_double_quant=True,
+        bnb_4bit_compute_dtype=torch.bfloat16,
+    )
+
     if (model_dir / 'adapter_config.json').exists():
         model = AutoPeftModelForCausalLM.from_pretrained(
             model_dir,
             trust_remote_code=trust_remote_code,
-            device_map='auto'
-        )
+            device_map='cuda:0' if torch.cuda.is_available() else "auto",
+            torch_dtype=torch.bfloat16,
+            quantization_config=quantization_config,
+            attn_implementation="flash_attention_2")
         tokenizer_dir = model.peft_config['default'].base_model_name_or_path
     else:
         model = AutoModelForCausalLM.from_pretrained(
@@ -71,11 +80,6 @@ def load_model_and_tokenizer(
         trust_remote_code=trust_remote_code
     )
     return model, tokenizer
-
-
-model, tokenizer = load_model_and_tokenizer(
-    MODEL_PATH,
-    trust_remote_code=True)
 
 
 class StopOnTokens(StoppingCriteria):
@@ -138,11 +142,13 @@ def predict(history, max_length, top_p, temperature):
         add_generation_prompt=True,
         tokenize=True,
         return_tensors="pt").to(next(model.parameters()).device)
+
     streamer = TextIteratorStreamer(
         tokenizer,
         timeout=60,
         skip_prompt=True,
         skip_special_tokens=True)
+
     generate_kwargs = {
         "input_ids": model_inputs,
         "streamer": streamer,
@@ -153,6 +159,7 @@ def predict(history, max_length, top_p, temperature):
         "stopping_criteria": StoppingCriteriaList([stop]),
         "repetition_penalty": 1.2,
     }
+
     t = Thread(target=model.generate, kwargs=generate_kwargs)
     t.start()
 
@@ -193,9 +200,19 @@ with gr.Blocks() as demo:
     )
     emptyBtn.click(lambda: None, None, chatbot, queue=False)
 
-demo.queue()
-demo.launch(
-    server_name="0.0.0.0",
-    server_port=7860,
-    inbrowser=True,
-    share=False)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model_name_or_path", type=str, help='mode name or path')
+    args = parser.parse_args()
+
+    model, tokenizer = load_model_and_tokenizer(
+        args.model_name_or_path,
+        trust_remote_code=True)
+    print(model)
+
+    demo.queue().launch(
+       server_name="0.0.0.0",
+       server_port=7860,
+       inbrowser=True,
+       share=False)
