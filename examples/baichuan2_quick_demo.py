@@ -12,10 +12,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     quantization_config = BitsAndBytesConfig(
-        load_in_8bit=True,
-        #bnb_4bit_quant_type="nf4",
-        #bnb_4bit_use_double_quant=True,
-        #bnb_4bit_compute_dtype=torch.bfloat16,
+        load_in_4bit=True,
+        bnb_4bit_quant_type="nf4",
+        bnb_4bit_use_double_quant=True,
+        bnb_4bit_compute_dtype=torch.bfloat16,
     )
 
     tokenizer = AutoTokenizer.from_pretrained(
@@ -27,8 +27,7 @@ if __name__ == "__main__":
        args.model_name_or_path,
        device_map="auto",
        torch_dtype=torch.bfloat16,
-       load_in_4bit=True,
-       # quantization_config=quantization_config,
+       quantization_config=quantization_config,
        trust_remote_code=True)
 
     model.generation_config = GenerationConfig.from_pretrained(
