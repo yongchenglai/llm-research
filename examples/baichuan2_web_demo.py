@@ -25,7 +25,7 @@ def init_model(model_dir):
         device_map="auto",
         trust_remote_code=True,
         quantization_config=quantization_config,
-        attn_implementation="flash_attention_2",
+        #attn_implementation="flash_attention_2",
     )
     model.generation_config = GenerationConfig.from_pretrained(
         model_dir,
