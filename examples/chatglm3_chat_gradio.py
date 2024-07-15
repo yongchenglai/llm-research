@@ -61,11 +61,11 @@ def load_model_and_tokenizer(
     if (model_dir / 'adapter_config.json').exists():
         model = AutoPeftModelForCausalLM.from_pretrained(
             model_dir,
-            trust_remote_code=trust_remote_code,
             device_map='cuda:0' if torch.cuda.is_available() else "auto",
             torch_dtype=torch.bfloat16,
             quantization_config=quantization_config,
-            attn_implementation="flash_attention_2")
+            attn_implementation="flash_attention_2",
+            trust_remote_code=trust_remote_code)
         tokenizer_dir = model.peft_config['default'].base_model_name_or_path
     else:
         model = AutoModelForCausalLM.from_pretrained(
