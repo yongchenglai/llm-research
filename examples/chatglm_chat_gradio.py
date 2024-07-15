@@ -109,7 +109,7 @@ if __name__ == "__main__":
 
     tokenizer = AutoTokenizer.from_pretrained(
         args.model_name_or_path,
-        use_fast=False)
+        trust_remote_code=True)
     tokenizer.pad_token = tokenizer.eos_token
 
     quantization_config = BitsAndBytesConfig(
@@ -121,7 +121,8 @@ if __name__ == "__main__":
 
 
     if args.is_4bit == False:
-        model = AutoModelForCausalLM.from_pretrained(
+        # model = AutoModelForCausalLM.from_pretrained(
+        model = AutoModel.from_pretrained(
             args.model_name_or_path,
             device_map='cuda:0' if torch.cuda.is_available() else "auto",
             torch_dtype=torch.bfloat16,
