@@ -37,7 +37,8 @@ RUN pip install --no-cache-dir \
     rouge \
     jieba \
     fuzzywuzzy \
-    einops
+    einops \
+    tiktoken
 
 RUN pip install --no-cache-dir flash_attn
 
