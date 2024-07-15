@@ -16,5 +16,7 @@ if __name__ == "__main__":
     text = "Replace me by any text you'd like."
     encoded_input = tokenizer(text, return_tensors='pt')
     output = model(**encoded_input)
+    # text = tokenizer.decode(output[0])
+    # print(output)
 
 
