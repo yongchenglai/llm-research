@@ -40,7 +40,8 @@ RUN pip install --no-cache-dir \
     fuzzywuzzy \
     einops \
     tiktoken \
-    xformers
+    xformers \
+    streamlit
 
 RUN pip install --no-cache-dir flash_attn
 
