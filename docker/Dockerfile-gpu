@@ -9,6 +9,7 @@ WORKDIR /workspace
 
 COPY examples/llama_chat_gradio.py /workspace
 COPY examples/chatglm_chat_gradio.py /workspace
+COPY examples/chatglm3_chat_gradio.py /workspace
 
 RUN pip install --no-cache-dir \
     -i https://pypi.tuna.tsinghua.edu.cn/simple \
@@ -44,6 +45,7 @@ RUN pip install --no-cache-dir flash_attn
 
 RUN chmod u+x /workspace/llama_chat_gradio.py
 RUN chmod u+x /workspace/chatglm_chat_gradio.py
+RUN chmod u+x /workspace/chatglm3_chat_gradio.py
 
 #开启7860端口
 EXPOSE 7860
