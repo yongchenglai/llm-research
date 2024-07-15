@@ -27,7 +27,7 @@ if __name__ == "__main__":
        args.model_name_or_path,
        device_map="auto",
        torch_dtype=torch.bfloat16,
-        quantization_config=quantization_config,
+       quantization_config=quantization_config,
        trust_remote_code=True)
 
     model.generation_config = GenerationConfig.from_pretrained(
