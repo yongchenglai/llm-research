@@ -27,9 +27,7 @@ def init_model(model_dir):
         quantization_config=quantization_config,
         #attn_implementation="flash_attention_2",
     )
-    model.generation_config = GenerationConfig.from_pretrained(
-        model_dir,
-    )
+    model.generation_config = GenerationConfig.from_pretrained(model_dir)
     tokenizer = AutoTokenizer.from_pretrained(
         model_dir,
         use_fast=False,
