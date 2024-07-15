@@ -71,8 +71,10 @@ def load_model_and_tokenizer(
         model = AutoModelForCausalLM.from_pretrained(
             model_dir,
             trust_remote_code=trust_remote_code,
-            device_map='auto'
-        )
+            device_map='cuda:0' if torch.cuda.is_available() else "auto",
+            torch_dtype=torch.bfloat16,
+            quantization_config=quantization_config,
+            attn_implementation="flash_attention_2")
         tokenizer_dir = model_dir
 
     tokenizer = AutoTokenizer.from_pretrained(
