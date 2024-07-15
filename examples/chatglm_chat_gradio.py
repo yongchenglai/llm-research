@@ -110,7 +110,7 @@ if __name__ == "__main__":
     tokenizer = AutoTokenizer.from_pretrained(
         args.model_name_or_path,
         trust_remote_code=True)
-    tokenizer.pad_token = tokenizer.eos_token
+    # tokenizer.pad_token = tokenizer.eos_token
 
     quantization_config = BitsAndBytesConfig(
         load_in_4bit=True,
@@ -127,7 +127,7 @@ if __name__ == "__main__":
             device_map='cuda:0' if torch.cuda.is_available() else "auto",
             torch_dtype=torch.bfloat16,
             quantization_config=quantization_config,
-            attn_implementation="flash_attention_2",
+            # attn_implementation="flash_attention_2",
             trust_remote_code=True)
         model.eval()
 
