@@ -8,6 +8,7 @@ RUN apt install -y git vim git-lfs
 WORKDIR /workspace
 
 COPY examples/llama_chat_gradio.py /workspace
+COPY examples/chatglm_chat_gradio.py /workspace
 
 RUN pip install --no-cache-dir \
     -i https://pypi.tuna.tsinghua.edu.cn/simple \
