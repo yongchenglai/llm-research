@@ -1,4 +1,4 @@
-# llama_chat_gradio.py
+# chatglm_chat_gradio.py
 import gradio as gr
 import time
 from transformers import AutoTokenizer, \
