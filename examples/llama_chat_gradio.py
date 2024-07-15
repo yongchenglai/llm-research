@@ -109,6 +109,7 @@ if __name__ == "__main__":
 
     tokenizer = AutoTokenizer.from_pretrained(
         args.model_name_or_path,
+        trust_remote_code=True,
         use_fast=False)
     tokenizer.pad_token = tokenizer.eos_token
 
