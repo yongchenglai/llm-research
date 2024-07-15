@@ -1,5 +1,5 @@
-# bert_demo.py
-# bert_demo.py --model_name_or_path="google-bert/bert-base-uncased"
+# bert_quick_demo.py
+# bert_quick_demo.py --model_name_or_path="google-bert/bert-base-uncased"
 from transformers import BertTokenizer, BertModel
 import argparse
 
