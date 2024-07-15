@@ -15,7 +15,7 @@ Note: The script includes a modification to the Chatbot's postprocess method to 
 ensuring that the chat interface displays formatted text correctly.
 
 """
-
+# chatglm3_chat_gradio.py
 import os
 import gradio as gr
 import torch
