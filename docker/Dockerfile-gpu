@@ -43,7 +43,7 @@ RUN pip install --no-cache-dir \
     xformers \
     streamlit
 
-RUN pip install --no-cache-dir flash_attn
+RUN pip install --no-cache-dir flash_attn --no-build-isolation
 
 RUN chmod u+x /workspace/llama_chat_gradio.py
 RUN chmod u+x /workspace/chatglm_chat_gradio.py
