@@ -113,8 +113,11 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
                         single_pixel_values = single_pixel_values.unsqueeze(0)
                         B, L, _ = single_pixel_values.shape
                         single_pixel_values = single_pixel_values.permute(0, 2, 1).reshape(B, 3, -1, L)
-                        single_vision_embedding = self.vpm(single_pixel_values.type(dtype)).last_hidden_state
-                        single_vision_embedding = self.resampler(single_vision_embedding, single_tgt_size.unsqueeze(0))
+                        single_vision_embedding = self.vpm(
+                            single_pixel_values.type(dtype)).last_hidden_state
+                        single_vision_embedding = self.resampler(
+                            single_vision_embedding,
+                            single_tgt_size.unsqueeze(0))
                         
                         vision_embedding.append(single_vision_embedding)
                     vision_embedding = torch.vstack(vision_embedding)
@@ -133,8 +136,11 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
                         (1, 3, 224, 224),
                         device=device, dtype=dtype
                     )
-                    tgt_sizes = torch.Tensor([[(224 // self.config.patch_size), math.ceil(224 / self.config.patch_size)]]).type(torch.int32)
-                    dummy_feature = self.resampler(self.vpm(dummy_image).last_hidden_state, tgt_sizes)
+                    tgt_sizes = torch.Tensor([[
+                        (224 // self.config.patch_size),
+                        math.ceil(224 / self.config.patch_size)]]).type(torch.int32)
+                    dummy_feature = self.resampler(
+                        self.vpm(dummy_image).last_hidden_state, tgt_sizes)
                 else:
                     dummy_feature = []
                 for _ in range(len(pixel_values_list)):
