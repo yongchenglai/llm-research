@@ -442,7 +442,9 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
                             slice_image = self.transform(slice_image)
                             H, W = slice_image.shape[1:]
                             images.append(self.reshape_by_patch(slice_image))
-                            tgt_sizes.append(torch.Tensor([H // self.config.patch_size, W // self.config.patch_size]).type(torch.int32))
+                            tgt_sizes.append(torch.Tensor([
+                                H // self.config.patch_size, 
+                                W // self.config.patch_size]).type(torch.int32))
                     else:
                         images.append(self.transform(image))
                         cur_msgs.append(
