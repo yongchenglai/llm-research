@@ -42,13 +42,13 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
 
         return model
 
-    def init_resampler(self, embed_dim, vision_dim,):
+    def init_resampler(self, embed_dim, vision_dim):
         return Resampler(
             num_queries=self.config.query_num,
             embed_dim=embed_dim,
             num_heads=embed_dim // 128,
             kv_dim=vision_dim,
-            adaptive=True,
+            adaptive=True
         )
 
     def init_transform(self):
@@ -60,17 +60,17 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
                 ),
             ]
         )
-    
+
     def get_input_embeddings(self):
         return self.llm.get_input_embeddings()
 
     def set_input_embeddings(self, value):
         self.llm.embed_tokens = value
-        
+
     def get_vllm_embedding(self, data):
         if 'vision_hidden_states' not in data:
-            dtype = self.llm.model.embed_tokens.weight.dtype
-            device = self.llm.model.embed_tokens.weight.device
+            dtype = self.vpm.embeddings.position_embedding.weight.dtype
+            device = self.vpm.embeddings.position_embedding.weight.device
             tgt_sizes = data['tgt_sizes']
             pixel_values_list = data['pixel_values']
             vision_hidden_states = []
@@ -107,7 +107,6 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
                         single_pixel_values = single_pixel_values.permute(0, 2, 1).reshape(B, 3, -1, L)
                         single_vision_embedding = self.vpm(single_pixel_values.type(dtype)).last_hidden_state
                         single_vision_embedding = self.resampler(single_vision_embedding, single_tgt_size.unsqueeze(0))
-                        
                         vision_embedding.append(single_vision_embedding)
                     vision_embedding = torch.vstack(vision_embedding)
 
@@ -153,13 +152,14 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
                     image_indices = torch.stack(
                         [torch.arange(r[0], r[1], dtype=torch.long) for r in cur_image_bound]
                     ).to(vllm_embedding.device)
+
                     cur_vllm_emb.scatter_(0, image_indices.view(-1, 1).repeat(1, cur_vllm_emb.shape[-1]),
                                           cur_vs_hs.view(-1, cur_vs_hs.shape[-1]))
                 elif self.training:
                     cur_vllm_emb += cur_vs_hs[0].mean() * 0
 
         return vllm_embedding, vision_hidden_states
-        
+
     def forward(self, data, **kwargs):
         vllm_embedding, vision_hidden_states = self.get_vllm_embedding(data)
         position_ids = data["position_ids"]
