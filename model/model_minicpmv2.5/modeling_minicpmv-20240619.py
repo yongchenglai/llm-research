@@ -56,7 +56,8 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
             [
                 transforms.ToTensor(),
                 transforms.Normalize(
-                    mean=IMAGENET_INCEPTION_MEAN, std=IMAGENET_INCEPTION_STD
+                    mean=IMAGENET_INCEPTION_MEAN,
+                    std=IMAGENET_INCEPTION_STD
                 ),
             ]
         )
