@@ -222,8 +222,7 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
         input_tensors = []
         for input_ids in input_id_list:
             input_tensors.append(
-                self._convert_to_tensors(tokenizer, input_ids,
-                                         max_inp_length)
+                self._convert_to_tensors(tokenizer, input_ids, max_inp_length)
             )
         padded = {}
         for key in pad_keys:
