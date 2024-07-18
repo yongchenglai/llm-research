@@ -7,7 +7,8 @@ from threading import Thread
 from copy import deepcopy
 from PIL import Image
 from torchvision import transforms
-from transformers import LlamaTokenizer, LlamaPreTrainedModel, LlamaForCausalLM, AutoModel, PreTrainedTokenizerFast, TextIteratorStreamer
+from transformers import LlamaTokenizer, LlamaPreTrainedModel, \
+    LlamaForCausalLM, AutoModel, PreTrainedTokenizerFast, TextIteratorStreamer
 from transformers.models.idefics2.modeling_idefics2 import Idefics2VisionTransformer
 
 from .configuration_minicpm import MiniCPMVConfig
