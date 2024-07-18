@@ -186,15 +186,16 @@ class MultiheadAttention(nn.MultiheadAttention):
                                   bias=bias, device=device, dtype=dtype)
 
     def forward(
-                self,
-                query: Tensor,
-                key: Tensor,
-                value: Tensor,
-                key_padding_mask: Optional[Tensor] = None,
-                need_weights: bool = True,
-                attn_mask: Optional[Tensor] = None,
-                average_attn_weights: bool = True,
-                is_causal : bool = False) -> Tuple[Tensor, Optional[Tensor]]:
+        self,
+        query: Tensor,
+        key: Tensor,
+        value: Tensor,
+        key_padding_mask: Optional[Tensor] = None,
+        need_weights: bool = True,
+        attn_mask: Optional[Tensor] = None,
+        average_attn_weights: bool = True,
+        is_causal: bool = False
+    ) -> Tuple[Tensor, Optional[Tensor]]:
         why_not_fast_path = ''
         if ((attn_mask is not None and torch.is_floating_point(attn_mask))
            or (key_padding_mask is not None) and torch.is_floating_point(key_padding_mask)):
