@@ -102,7 +102,9 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
                     for i in range(B):
                         patch_attn_mask[i, :tgt_sizes[i][0] * tgt_sizes[i][1]] = True
 
-                    vision_embedding = self.vpm(all_pixel_values.type(dtype), patch_attention_mask=patch_attn_mask).last_hidden_state
+                    vision_embedding = self.vpm(
+                        all_pixel_values.type(dtype),
+                        patch_attention_mask=patch_attn_mask).last_hidden_state
                     vision_embedding = self.resampler(vision_embedding, tgt_sizes)
                 else:
                     # get vision_embedding foreach
@@ -111,8 +113,11 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
                         single_pixel_values = single_pixel_values.unsqueeze(0)
                         B, L, _ = single_pixel_values.shape
                         single_pixel_values = single_pixel_values.permute(0, 2, 1).reshape(B, 3, -1, L)
-                        single_vision_embedding = self.vpm(single_pixel_values.type(dtype)).last_hidden_state
-                        single_vision_embedding = self.resampler(single_vision_embedding, single_tgt_size.unsqueeze(0))
+                        single_vision_embedding = self.vpm(
+                            single_pixel_values.type(dtype)).last_hidden_state
+                        single_vision_embedding = self.resampler(
+                            single_vision_embedding,
+                            single_tgt_size.unsqueeze(0))
                         vision_embedding.append(single_vision_embedding)
                     vision_embedding = torch.vstack(vision_embedding)
 
