@@ -123,8 +123,8 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
                         single_vision_embedding = self.resampler(
                             single_vision_embedding,
                             single_tgt_size.unsqueeze(0))
-                        
                         vision_embedding.append(single_vision_embedding)
+
                     vision_embedding = torch.vstack(vision_embedding)
 
                 start = 0
