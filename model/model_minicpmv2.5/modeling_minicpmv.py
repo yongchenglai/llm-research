@@ -502,7 +502,8 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
         if stream:
             def stream_gen():
                 for text in res:
-                    text = text.replace(tokenizer.eot_token, '').replace(tokenizer.eos_token, '')
+                    text = text.replace(tokenizer.eot_token, '').\
+                        replace(tokenizer.eos_token, '')
                     yield text
             return stream_gen()
 
@@ -608,7 +609,8 @@ def pad(orig_items, key, max_length=None, padding_value=0, padding_side="left"):
 
 
 def slice_image(
-    image, max_slice_nums=9, scale_resolution=448, patch_size=14, never_split=False
+    image, max_slice_nums=9, scale_resolution=448,
+    patch_size=14, never_split=False
 ):
     original_size = image.size
     original_width, original_height = original_size
