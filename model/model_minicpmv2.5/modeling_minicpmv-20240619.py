@@ -257,7 +257,8 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
         }
         generation_kwargs.update(kwargs)
 
-        thread = Thread(target=self.llm.generate, kwargs=generation_kwargs)
+        thread = Thread(target=self.llm.generate,
+                        kwargs=generation_kwargs)
         thread.start()
     
         return streamer

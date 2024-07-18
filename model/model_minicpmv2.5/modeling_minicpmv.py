@@ -232,7 +232,8 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
             )
         padded = {}
         for key in pad_keys:
-            padded[key] = pad(input_tensors, key, padding_side="left").to(self.device)
+            padded[key] = pad(input_tensors, key,
+                              padding_side="left").to(self.device)
         padded["image_bound"] = [i["image_bound"] for i in input_tensors]
         return padded
 
@@ -263,7 +264,8 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
         }
         generation_kwargs.update(kwargs)
 
-        thread = Thread(target=self.llm.generate, kwargs=generation_kwargs)
+        thread = Thread(target=self.llm.generate,
+                        kwargs=generation_kwargs)
         thread.start()
     
         return streamer
