@@ -443,6 +443,7 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
 
 
             msg['content'] = '\n'.join(cur_msgs)
+
         if tgt_sizes:
             tgt_sizes = torch.vstack(tgt_sizes)
 
