@@ -1,20 +1,17 @@
 import math
+from typing import List, Optional
 import json
 import timm
 import torch
 import torchvision
-import deepspeed
 from PIL import Image
 from timm.data import IMAGENET_INCEPTION_MEAN, IMAGENET_INCEPTION_STD
 from torchvision import transforms
 from transformers import LlamaTokenizer
-from transformers.integrations import is_deepspeed_zero3_enabled
+
 from .configuration_minicpm import MiniCPMVConfig
 from .modeling_minicpm import MiniCPMForCausalLM, MiniCPMPreTrainedModel
 from .resampler import Resampler
-from functools import partial
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union
-from peft.utils.other import ModulesToSaveWrapper
 
 
 class MiniCPMVPreTrainedModel(MiniCPMPreTrainedModel):
@@ -75,29 +72,17 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
     def set_input_embeddings(self, value):
         self.llm.embed_tokens = value
 
-    def vpm_forward_features(self, pixel_value):
-        if isinstance(self.vpm, ModulesToSaveWrapper):
-            if self.vpm.disable_adapters or (self.vpm.active_adapter not in self.vpm.modules_to_save):
-                return self.vpm.original_module.forward_features(pixel_value)
-            return self.vpm.modules_to_save[self.vpm.active_adapter].forward_features(pixel_value)
-        else:    
-            return self.vpm.forward_features(pixel_value)
-            
     def get_vision_embedding(self, pixel_values):
         res = []
-        dtype = self.llm.lm_head.weight.dtype
-        def process_each_pixel(pixel_value, dtype, config, vpm, resampler):
-            H, W = pixel_value.shape[-2:]
-            target_size = (math.ceil(H / config.patch_size), math.ceil(W / config.patch_size))
-            vision_embedding = self.vpm_forward_features(pixel_value.unsqueeze(0).type(dtype))
-            
-            if hasattr(vpm, 'num_prefix_tokens') and vpm.num_prefix_tokens > 0:
-                vision_embedding = vision_embedding[:, vpm.num_prefix_tokens:]
-            return resampler(vision_embedding, target_size)
-
+        dtype = self.vpm.pos_embed.data.dtype
         for pixel_value in pixel_values:
-            result = process_each_pixel(pixel_value, dtype, self.config, self.vpm, self.resampler)
-            res.append(result)
+            H, W = pixel_value.shape[-2:]
+            tgt_size = (
+            math.ceil(H / self.vpm.patch_embed.patch_size[0]), math.ceil(W / self.vpm.patch_embed.patch_size[0]))
+            vision_embedding = self.vpm.forward_features(pixel_value.unsqueeze(0).type(dtype))
+            if hasattr(self.vpm, 'num_prefix_tokens') and self.vpm.num_prefix_tokens > 0:
+                vision_embedding = vision_embedding[:, self.vpm.num_prefix_tokens:]
+            res.append(self.resampler(vision_embedding, tgt_size))
         return torch.vstack(res)
 
     def get_vllm_embedding(self, data):
@@ -108,8 +93,8 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
                 if len(pixel_values) > 0:
                     vision_hidden_states.append(self.get_vision_embedding(pixel_values))
                 elif self.training:
-                    dtype = self.llm.lm_head.weight.dtype
-                    device = self.llm.lm_head.weight.device
+                    dtype = self.vpm.pos_embed.data.dtype
+                    device = self.vpm.pos_embed.data.device
                     dummy_image = torch.zeros(
                         (1, 3, 224, 224), device=device, dtype=dtype
                     )
@@ -388,8 +373,6 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
         context.append({"role": "assistant", "content": answer})
 
         return answer, context, generation_config
-
-    
 
 
 class LlamaTokenizerWrapper(LlamaTokenizer):
