@@ -89,8 +89,10 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
                 if self.config.batch_vision_input:
                     max_patches = torch.max(tgt_sizes[:, 0] * tgt_sizes[:, 1])
 
-                    all_pixel_values = torch.nn.utils.rnn.pad_sequence(all_pixel_values, batch_first=True,
-                                                                       padding_value=0.0)
+                    all_pixel_values = torch.nn.utils.rnn.pad_sequence(
+                        all_pixel_values,
+                        batch_first=True,
+                        padding_value=0.0)
                     B, L, _ = all_pixel_values.shape
                     all_pixel_values = all_pixel_values.permute(0, 2, 1).reshape(B, 3, -1, L)
 
