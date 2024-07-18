@@ -47,8 +47,8 @@ from transformers.utils import (
     replace_return_docstrings,
 )
 
-from .configuration_llama import LlamaConfig
-
+#from .configuration_llama import LlamaConfig
+from transformers import LlamaConfig
 
 if is_flash_attn_2_available():
     from flash_attn import flash_attn_func, flash_attn_varlen_func
