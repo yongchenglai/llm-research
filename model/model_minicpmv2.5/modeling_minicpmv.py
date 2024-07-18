@@ -435,9 +435,8 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
                 if isinstance(c, Image.Image):
                     image = c
                     if self.config.slice_mode:  # "slice_mode": true,
-                        slice_images, image_placeholder = self.get_slice_image_placeholder(
-                            image, tokenizer
-                        )
+                        slice_images, image_placeholder = \
+                            self.get_slice_image_placeholder(image, tokenizer)
                         cur_msgs.append(image_placeholder)
                         for slice_image in slice_images:
                             slice_image = self.transform(slice_image)
