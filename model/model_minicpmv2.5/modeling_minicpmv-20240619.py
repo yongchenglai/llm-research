@@ -168,8 +168,9 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
                         [torch.arange(r[0], r[1], dtype=torch.long) for r in cur_image_bound]
                     ).to(vllm_embedding.device)
 
-                    cur_vllm_emb.scatter_(0, image_indices.view(-1, 1).repeat(1, cur_vllm_emb.shape[-1]),
-                                          cur_vs_hs.view(-1, cur_vs_hs.shape[-1]))
+                    cur_vllm_emb.scatter_(
+                        0, image_indices.view(-1, 1).repeat(1, cur_vllm_emb.shape[-1]),
+                        cur_vs_hs.view(-1, cur_vs_hs.shape[-1]))
                 elif self.training:
                     cur_vllm_emb += cur_vs_hs[0].mean() * 0
 
