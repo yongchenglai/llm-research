@@ -135,8 +135,12 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
                         (1, 3, 224, 224),
                         device=device, dtype=dtype
                     )
-                    tgt_sizes = torch.Tensor([[(224 // self.config.patch_size), math.ceil(224 / self.config.patch_size)]]).type(torch.int32)
-                    dummy_feature = self.resampler(self.vpm(dummy_image).last_hidden_state, tgt_sizes)
+                    tgt_sizes = torch.Tensor([[
+                        (224 // self.config.patch_size),
+                        math.ceil(224 / self.config.patch_size)]]).type(torch.int32)
+                    dummy_feature = self.resampler(
+                        self.vpm(dummy_image).last_hidden_state,
+                        tgt_sizes)
                 else:
                     dummy_feature = []
                 for _ in range(len(pixel_values_list)):
