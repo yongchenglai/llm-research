@@ -379,9 +379,11 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
             ) = self.get_vllm_embedding(model_inputs)
 
             if stream:
-                result = self._decode_stream(model_inputs["inputs_embeds"], tokenizer, **kwargs)
+                result = self._decode_stream(model_inputs["inputs_embeds"],
+                                             tokenizer, **kwargs)
             else:
-                result = self._decode(model_inputs["inputs_embeds"], tokenizer, **kwargs)
+                result = self._decode(model_inputs["inputs_embeds"],
+                                      tokenizer, **kwargs)
 
         if return_vision_hidden_states:
             return result, vision_hidden_states
