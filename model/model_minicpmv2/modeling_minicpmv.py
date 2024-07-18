@@ -108,6 +108,8 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
                 if len(pixel_values) > 0:
                     vision_hidden_states.append(self.get_vision_embedding(pixel_values))
                 elif self.training:
+                    # dtype = self.vpm.pos_embed.data.dtype
+                    # device = self.vpm.pos_embed.data.device
                     dtype = self.llm.lm_head.weight.dtype
                     device = self.llm.lm_head.weight.device
                     dummy_image = torch.zeros(
