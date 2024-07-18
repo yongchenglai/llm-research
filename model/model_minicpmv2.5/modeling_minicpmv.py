@@ -421,6 +421,8 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
         for i, msg in enumerate(copy_msgs):
             role = msg["role"]
             content = msg["content"]
+            print(role)
+            print(content)
             assert role in ["user", "assistant"]
             if i == 0:
                 assert role == "user", "The role of first msg should be user"
