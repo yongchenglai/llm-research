@@ -194,7 +194,7 @@ class MultiheadAttention(nn.MultiheadAttention):
         need_weights: bool = True,
         attn_mask: Optional[Tensor] = None,
         average_attn_weights: bool = True,
-        is_causal: bool = False
+        is_causal: bool = False,
     ) -> Tuple[Tensor, Optional[Tensor]]:
         why_not_fast_path = ''
         if ((attn_mask is not None and torch.is_floating_point(attn_mask))
