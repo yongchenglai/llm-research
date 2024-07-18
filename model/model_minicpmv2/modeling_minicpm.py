@@ -276,18 +276,19 @@ def apply_rotary_pos_emb(q, k, cos, sin, position_ids, unsqueeze_dim=1):
     Returns:
         `tuple(torch.Tensor)` comprising of the query and key tensors rotated using the Rotary Position Embedding.
     """
-    # cos = cos[position_ids].unsqueeze(unsqueeze_dim)
-    # sin = sin[position_ids].unsqueeze(unsqueeze_dim)
-    # q_embed = (q * cos) + (rotate_half(q) * sin)
-    # k_embed = (k * cos) + (rotate_half(k) * sin)
-    orig_dtype = k.dtype
-    cos = cos[position_ids].unsqueeze(unsqueeze_dim)  # [bs, 1, seq_len, dim]
-    sin = sin[position_ids].unsqueeze(unsqueeze_dim)  # [bs, 1, seq_len, dim]
-    q_fp32 = q.to(dtype=torch.float32, device=q.device)
-    k_fp32 = k.to(dtype=torch.float32, device=k.device)
-    q_embed = (q_fp32 * cos) + (rotate_half(q_fp32) * sin)
-    k_embed = (k_fp32 * cos) + (rotate_half(k_fp32) * sin)
-    return q_embed.to(dtype=orig_dtype), k_embed.to(dtype=orig_dtype)
+    cos = cos[position_ids].unsqueeze(unsqueeze_dim)
+    sin = sin[position_ids].unsqueeze(unsqueeze_dim)
+    q_embed = (q * cos) + (rotate_half(q) * sin)
+    k_embed = (k * cos) + (rotate_half(k) * sin)
+    return q_embed, k_embed
+    # orig_dtype = k.dtype
+    # cos = cos[position_ids].unsqueeze(unsqueeze_dim)  # [bs, 1, seq_len, dim]
+    # sin = sin[position_ids].unsqueeze(unsqueeze_dim)  # [bs, 1, seq_len, dim]
+    # q_fp32 = q.to(dtype=torch.float32, device=q.device)
+    # k_fp32 = k.to(dtype=torch.float32, device=k.device)
+    # q_embed = (q_fp32 * cos) + (rotate_half(q_fp32) * sin)
+    # k_embed = (k_fp32 * cos) + (rotate_half(k_fp32) * sin)
+    # return q_embed.to(dtype=orig_dtype), k_embed.to(dtype=orig_dtype)
 
 
 class MiniCPMMLP(nn.Module):
