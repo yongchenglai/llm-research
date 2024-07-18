@@ -355,7 +355,8 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
             img_list = [[] for i in range(bs)]
         assert bs == len(img_list)
 
-        model_inputs = self._process_list(tokenizer, input_id_list, max_inp_length)
+        model_inputs = self._process_list(tokenizer, input_id_list,
+                                          max_inp_length)
 
         if vision_hidden_states is None:
             pixel_values = []
