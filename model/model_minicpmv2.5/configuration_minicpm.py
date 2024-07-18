@@ -44,27 +44,18 @@ class MiniCPMVSliceConfig(PretrainedConfig):
         self.scale_resolution = scale_resolution
 
     @classmethod
-    def from_pretrained(
-        cls,
-        pretrained_model_name_or_path: Union[str, os.PathLike],
-        **kwargs,
-    ) -> "PretrainedConfig":
+    def from_pretrained(cls, pretrained_model_name_or_path: Union[str, os.PathLike], **kwargs) -> "PretrainedConfig":
         cls._set_token_in_kwargs(kwargs)
 
-        config_dict, kwargs = cls.get_config_dict(
-            pretrained_model_name_or_path, **kwargs)
+        config_dict, kwargs = cls.get_config_dict(pretrained_model_name_or_path, **kwargs)
 
         if config_dict.get("model_type") == "minicpmv":
             config_dict = config_dict["slice_config"]
 
-        if "model_type" in config_dict \
-                and hasattr(cls, "model_type") \
-                and config_dict["model_type"] != cls.model_type:
+        if "model_type" in config_dict and hasattr(cls, "model_type") and config_dict["model_type"] != cls.model_type:
             logger.warning(
-                f"You are using a model of type {config_dict['model_type']} "
-                f"to instantiate a model of type "
-                f"{cls.model_type}. This is not supported for all configurations "
-                f"of models and can yield errors."
+                f"You are using a model of type {config_dict['model_type']} to instantiate a model of type "
+                f"{cls.model_type}. This is not supported for all configurations of models and can yield errors."
             )
 
         return cls.from_dict(config_dict, **kwargs)
