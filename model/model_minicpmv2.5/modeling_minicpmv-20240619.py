@@ -79,7 +79,8 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
             img_cnt = []
             for pixel_values in pixel_values_list:
                 img_cnt.append(len(pixel_values))
-                all_pixel_values.extend([i.flatten(end_dim=1).permute(1, 0) for i in pixel_values])
+                all_pixel_values.extend([i.flatten(end_dim=1).permute(1, 0)
+                                         for i in pixel_values])
 
             # exist image
             if all_pixel_values:
