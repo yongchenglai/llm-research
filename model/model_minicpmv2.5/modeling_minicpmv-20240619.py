@@ -451,7 +451,8 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
             sys_msg = {'role': 'system', 'content': system_prompt}
             copy_msgs = [sys_msg] + copy_msgs
 
-        input_ids = tokenizer.apply_chat_template(copy_msgs, tokenize=True, add_generation_prompt=False)
+        input_ids = tokenizer.apply_chat_template(
+            copy_msgs, tokenize=True, add_generation_prompt=False)
 
         if sampling:
             generation_config = {
