@@ -96,7 +96,9 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
                     B, L, _ = all_pixel_values.shape
                     all_pixel_values = all_pixel_values.permute(0, 2, 1).reshape(B, 3, -1, L)
 
-                    patch_attn_mask = torch.zeros((B, 1, max_patches), dtype=torch.bool, device=device)
+                    patch_attn_mask = torch.zeros((B, 1, max_patches),
+                                                  dtype=torch.bool,
+                                                  device=device)
                     for i in range(B):
                         patch_attn_mask[i, :tgt_sizes[i][0] * tgt_sizes[i][1]] = True
 
