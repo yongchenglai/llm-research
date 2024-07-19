@@ -50,6 +50,7 @@ def load_model_and_tokenizer(
         trust_remote_code: bool = True
 ) -> tuple[ModelType, TokenizerType]:
     model_dir = _resolve_path(model_dir)
+    print(model_dir)
 
     quantization_config = BitsAndBytesConfig(
         load_in_4bit=True,
