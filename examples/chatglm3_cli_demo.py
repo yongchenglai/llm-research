@@ -5,7 +5,6 @@ import platform
 from transformers import AutoTokenizer, AutoModel, BitsAndBytesConfig
 import argparse
 
-
 # MODEL_PATH = os.environ.get('MODEL_PATH', 'THUDM/chatglm3-6b')
 # TOKENIZER_PATH = os.environ.get("TOKENIZER_PATH", MODEL_PATH)
 
@@ -47,10 +46,10 @@ def main():
 
     model = AutoModel.from_pretrained(
         args.model_name_or_path,
-        device_map='cuda:0' if torch.cuda.is_available() else "auto",
-        torch_dtype=torch.bfloat16,
-        quantization_config=quantization_config,
-        #attn_implementation="flash_attention_2",
+        device_map="auto",
+        # torch_dtype=torch.bfloat16,
+        # quantization_config=quantization_config,
+        # attn_implementation="flash_attention_2",
         trust_remote_code=True)
 
     model.quantize(bits=4, device="cuda").cuda()
