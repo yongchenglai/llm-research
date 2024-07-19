@@ -6,8 +6,8 @@ from transformers import AutoTokenizer, AutoModel, BitsAndBytesConfig
 import argparse
 
 
-MODEL_PATH = os.environ.get('MODEL_PATH', 'THUDM/chatglm3-6b')
-TOKENIZER_PATH = os.environ.get("TOKENIZER_PATH", MODEL_PATH)
+# MODEL_PATH = os.environ.get('MODEL_PATH', 'THUDM/chatglm3-6b')
+# TOKENIZER_PATH = os.environ.get("TOKENIZER_PATH", MODEL_PATH)
 
 # add .quantize(bits=4, device="cuda").cuda() before .eval() to use int4 model
 # must use cuda to load int4 model
@@ -53,6 +53,7 @@ def main():
         #attn_implementation="flash_attention_2",
         trust_remote_code=True)
 
+    model.quantize(bits=4, device="cuda").cuda()
     model.eval()
     print(model)
 
