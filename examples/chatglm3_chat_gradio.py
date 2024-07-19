@@ -70,7 +70,6 @@ def load_model_and_tokenizer(
     else:
         model = AutoModelForCausalLM.from_pretrained(
             model_dir,
-
             device_map='cuda:0' if torch.cuda.is_available() else "auto",
             torch_dtype=torch.bfloat16,
             quantization_config=quantization_config,
