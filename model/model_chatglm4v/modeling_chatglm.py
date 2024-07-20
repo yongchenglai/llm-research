@@ -1196,8 +1196,8 @@ class ChatGLMForConditionalGeneration(ChatGLMPreTrainedModel):
             for i in range(len(input_ids)):
                 input_id = input_ids[i].tolist()
                 if not is_empty(images):
-                    boi_token_pos, eoi_token_pos = input_id.index(self.config.boi_token_id), input_id.index(
-                        self.config.eoi_token_id)
+                    boi_token_pos, eoi_token_pos = input_id.index(self.config.boi_token_id), \
+                        input_id.index(self.config.eoi_token_id)
                 assert eoi_token_pos - boi_token_pos == 2
                 new_attention_masks.append(torch.cat(
                     (attention_mask[i, :boi_token_pos + 1], attention_mask.new_ones(num_patches),
