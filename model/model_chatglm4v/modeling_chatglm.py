@@ -423,11 +423,13 @@ class FlashAttention2(CoreAttention):
 
         key_layer = index_first_axis(
             key_layer.reshape(batch_size * kv_seq_len,
-                              num_key_value_heads, head_dim), indices_k
+                              num_key_value_heads, head_dim),
+            indices_k
         )
         value_layer = index_first_axis(
             value_layer.reshape(batch_size * kv_seq_len,
-                                num_key_value_heads, head_dim), indices_k
+                                num_key_value_heads, head_dim),
+            indices_k
         )
 
         if query_length == kv_seq_len:
