@@ -140,11 +140,11 @@ if __name__ == "__main__":
 
     model = AutoModel.from_pretrained(
         args.model_name_or_path,
-        torch_dtype=torch.float16,
+        torch_dtype=torch.bfloat16,
         device_map="auto",
         trust_remote_code=True,
         quantization_config=quantization_config,
-        attn_implementation="flash_attention_2",
+        # attn_implementation="flash_attention_2",
     )
 
     model.eval()
