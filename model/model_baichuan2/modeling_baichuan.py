@@ -565,7 +565,7 @@ class BaichuanForCausalLM(BaichuanPreTrainedModel):
             except ImportError:
                 raise ImportError(f"Needs QLinear to run quantize.")
             quantize_offline(self, 4)
-        
+
         # Initialize weights and apply final processing
         self.post_init()
 
