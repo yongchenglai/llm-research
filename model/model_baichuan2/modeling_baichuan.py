@@ -556,6 +556,7 @@ class BaichuanForCausalLM(BaichuanPreTrainedModel):
         self.model = BaichuanModel(config)
 
         self.lm_head = NormHead(config.hidden_size, config.vocab_size, bias=False)
+
         if hasattr(config, "quantization_config") and \
                 isinstance(config.quantization_config, dict) and \
                 config.quantization_config.get('load_in_4bit', False):
@@ -564,6 +565,7 @@ class BaichuanForCausalLM(BaichuanPreTrainedModel):
             except ImportError:
                 raise ImportError(f"Needs QLinear to run quantize.")
             quantize_offline(self, 4)
+        
         # Initialize weights and apply final processing
         self.post_init()
 
