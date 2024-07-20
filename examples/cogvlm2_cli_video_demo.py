@@ -17,6 +17,7 @@ def load_video(video_path, strategy='chat'):
         decord_vr = VideoReader(io.BytesIO(mp4_stream), ctx=cpu(0))
     else:
         decord_vr = VideoReader(video_path, ctx=cpu(0))
+
     frame_id_list = None
     total_frames = len(decord_vr)
     if strategy == 'base':
