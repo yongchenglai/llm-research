@@ -31,7 +31,10 @@ VISION_TOKEN_TYPE = 1
 
 # Copied from transformers.models.bart.modeling_bart._make_causal_mask
 def _make_causal_mask(
-        input_ids_shape: torch.Size, dtype: torch.dtype, device: torch.device, past_key_values_length: int = 0
+    input_ids_shape: torch.Size,
+    dtype: torch.dtype,
+    device: torch.device,
+    past_key_values_length: int = 0
 ):
     """
     Make causal mask used for bi-directional self-attention.
@@ -43,12 +46,18 @@ def _make_causal_mask(
     mask = mask.to(dtype)
 
     if past_key_values_length > 0:
-        mask = torch.cat([torch.zeros(tgt_len, past_key_values_length, dtype=dtype, device=device), mask], dim=-1)
-    return mask[None, None, :, :].expand(bsz, 1, tgt_len, tgt_len + past_key_values_length)
+        mask = torch.cat([torch.zeros(tgt_len,
+                                      past_key_values_length,
+                                      dtype=dtype,
+                                      device=device), mask], dim=-1)
+    return mask[None, None, :, :].expand(bsz, 1, tgt_len,
+                                         tgt_len + past_key_values_length)
 
 
 # Copied from transformers.models.bart.modeling_bart._expand_mask
-def _expand_mask(mask: torch.Tensor, dtype: torch.dtype, tgt_len: Optional[int] = None):
+def _expand_mask(mask: torch.Tensor,
+                 dtype: torch.dtype,
+                 tgt_len: Optional[int] = None):
     """
     Expands attention_mask from `[bsz, seq_len]` to `[bsz, 1, tgt_seq_len, src_seq_len]`.
     """
@@ -59,7 +68,8 @@ def _expand_mask(mask: torch.Tensor, dtype: torch.dtype, tgt_len: Optional[int] 
 
     inverted_mask = 1.0 - expanded_mask
 
-    return inverted_mask.masked_fill(inverted_mask.to(torch.bool), torch.finfo(dtype).min)
+    return inverted_mask.masked_fill(inverted_mask.to(torch.bool),
+                                     torch.finfo(dtype).min)
 
 
 class RMSNorm(nn.Module):
@@ -81,9 +91,15 @@ class MLP(nn.Module):
         super().__init__()
         self.hidden_size = config.hidden_size
         self.intermediate_size = config.intermediate_size
-        self.gate_proj = nn.Linear(self.hidden_size, self.intermediate_size, bias=False)
-        self.up_proj = nn.Linear(self.hidden_size, self.intermediate_size, bias=False)
-        self.down_proj = nn.Linear(self.intermediate_size, self.hidden_size, bias=False)
+        self.gate_proj = nn.Linear(self.hidden_size,
+                                   self.intermediate_size,
+                                   bias=False)
+        self.up_proj = nn.Linear(self.hidden_size,
+                                 self.intermediate_size,
+                                 bias=False)
+        self.down_proj = nn.Linear(self.intermediate_size,
+                                   self.hidden_size,
+                                   bias=False)
         self.act_fn = ACT2FN[config.hidden_act]
 
     def forward(self, x):
@@ -104,8 +120,12 @@ class VisionExpertMLP(nn.Module):
         self.language_mlp = MLP(config)
         self.vision_mlp = MLP(config)
 
-    def forward(self, hidden_states: "torch.Tensor(B, L, D)", token_type_ids: "torch.LongTensor(B, L)"):
-        output = torch.empty(hidden_states.shape, dtype=hidden_states.dtype, device=hidden_states.device)
+    def forward(self,
+                hidden_states: "torch.Tensor(B, L, D)",
+                token_type_ids: "torch.LongTensor(B, L)"):
+        output = torch.empty(hidden_states.shape,
+                             dtype=hidden_states.dtype,
+                             device=hidden_states.device)
         vision_token_mask, language_token_mask = get_expert_mask(token_type_ids)
         output[vision_token_mask] = self.vision_mlp(hidden_states[vision_token_mask])
         output[language_token_mask] = self.language_mlp(hidden_states[language_token_mask])
@@ -122,12 +142,15 @@ def attention_fn(
         attention_dropout: nn.Module = None
 ):
     attention_mask_bool = (attention_mask == 0)
-    is_low_triangle = (attention_mask_bool == torch.ones_like(attention_mask_bool, dtype=torch.float).tril()).all()
+    is_low_triangle = (attention_mask_bool == torch.ones_like(
+        attention_mask_bool, dtype=torch.float).tril()).all()
     is_full = (attention_mask_bool > 0).all()
     if not (int(torch.__version__.split('.')[0]) >= 2):
         warnings.warn("It's recommended to use torch2.0 or higher.")
-    if int(torch.__version__.split('.')[0]) >= 2 and scaling_attention_score and (is_full or is_low_triangle):
-        dropout_p = 0. if attention_dropout is None or not attention_dropout.training else attention_dropout.p
+    if int(torch.__version__.split('.')[0]) >= 2 and \
+            scaling_attention_score and (is_full or is_low_triangle):
+        dropout_p = 0. if attention_dropout is None or \
+                          not attention_dropout.training else attention_dropout.p
         return torch.nn.functional.scaled_dot_product_attention(
             query_layer, key_layer, value_layer,
             attn_mask=None,
@@ -139,7 +162,10 @@ def attention_fn(
             query_layer = query_layer / math.sqrt(query_layer.shape[-1])
         attention_scores = torch.matmul(query_layer, key_layer.transpose(-1, -2))
         attention_scores = attention_scores + attention_mask
-        attention_scores = nn.functional.softmax(attention_scores, dim=-1, dtype=torch.float32).to(query_layer.dtype)
+        attention_scores = nn.functional.softmax(
+            attention_scores,
+            dim=-1,
+            dtype=torch.float32).to(query_layer.dtype)
         if attention_dropout is not None:
             attention_scores = attention_dropout(attention_scores)
         context_layer = torch.matmul(attention_scores, value_layer)
@@ -154,15 +180,23 @@ class VisionExpertAttention(nn.Module):
         self.num_attention_heads = config.num_attention_heads
         self.num_multi_query_heads = config.num_multi_query_heads
         self.hidden_size_per_attention_head = self.hidden_size // self.num_attention_heads
-        self.stride = [self.num_attention_heads, self.num_multi_query_heads, self.num_multi_query_heads]
+        self.stride = [self.num_attention_heads,
+                       self.num_multi_query_heads,
+                       self.num_multi_query_heads]
         self.qkv_size = self.hidden_size + self.hidden_size_per_attention_head * self.num_multi_query_heads * 2
         self.head_dim = self.hidden_size // self.num_attention_heads
         self.max_position_embeddings = config.max_position_embeddings
-        self.rotary_emb = FastRotaryEmbedding(dim=self.head_dim, pos_idx_in_fp32=False, base=500000)
-        self.vision_expert_query_key_value = nn.Linear(self.hidden_size, self.qkv_size, bias=True)
-        self.vision_expert_dense = nn.Linear(self.hidden_size, self.hidden_size, bias=False)
-        self.language_expert_query_key_value = nn.Linear(self.hidden_size, self.qkv_size, bias=False)
-        self.language_expert_dense = nn.Linear(self.hidden_size, self.hidden_size, bias=False)
+        self.rotary_emb = FastRotaryEmbedding(dim=self.head_dim,
+                                              pos_idx_in_fp32=False,
+                                              base=500000)
+        self.vision_expert_query_key_value = nn.Linear(self.hidden_size,
+                                                       self.qkv_size, bias=True)
+        self.vision_expert_dense = nn.Linear(self.hidden_size,
+                                             self.hidden_size, bias=False)
+        self.language_expert_query_key_value = nn.Linear(self.hidden_size,
+                                                         self.qkv_size, bias=False)
+        self.language_expert_dense = nn.Linear(self.hidden_size,
+                                               self.hidden_size, bias=False)
 
     def _transpose_for_scores(self, tensor):
         """Transpose a 3D tensor [B, L, H*HD] into a 4D tensor with size [B H L HD]."""
