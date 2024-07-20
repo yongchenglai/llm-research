@@ -190,13 +190,17 @@ class VisionExpertAttention(nn.Module):
                                               pos_idx_in_fp32=False,
                                               base=500000)
         self.vision_expert_query_key_value = nn.Linear(self.hidden_size,
-                                                       self.qkv_size, bias=True)
+                                                       self.qkv_size,
+                                                       bias=True)
         self.vision_expert_dense = nn.Linear(self.hidden_size,
-                                             self.hidden_size, bias=False)
+                                             self.hidden_size,
+                                             bias=False)
         self.language_expert_query_key_value = nn.Linear(self.hidden_size,
-                                                         self.qkv_size, bias=False)
+                                                         self.qkv_size,
+                                                         bias=False)
         self.language_expert_dense = nn.Linear(self.hidden_size,
-                                               self.hidden_size, bias=False)
+                                               self.hidden_size,
+                                               bias=False)
 
     def _transpose_for_scores(self, tensor):
         """Transpose a 3D tensor [B, L, H*HD] into a 4D tensor with size [B H L HD]."""
@@ -221,7 +225,9 @@ class VisionExpertAttention(nn.Module):
 
         shape = list(hidden_states.shape)
         shape[-1] = self.qkv_size
-        mixed_raw_layer = torch.empty(shape, dtype=hidden_states.dtype, device=hidden_states.device)
+        mixed_raw_layer = torch.empty(shape,
+                                      dtype=hidden_states.dtype,
+                                      device=hidden_states.device)
         mixed_raw_layer[vision_token_mask] = self.vision_expert_query_key_value(hidden_states[vision_token_mask])
         mixed_raw_layer[language_token_mask] = self.language_expert_query_key_value(hidden_states[language_token_mask])
 
