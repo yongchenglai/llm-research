@@ -443,12 +443,19 @@ class CogVLMModel(CogVLMPreTrainedModel):
                 inputs_embeds = self.embed_tokens(input_ids)
                 images_features = self.encode_images(images)
                 images_features = rearrange(images_features, 'b n d -> (b n) d')
-                images_features = images_features.to(dtype=inputs_embeds.dtype, device=inputs_embeds.device)
-                inputs_embeds = inputs_embeds.index_put([token_type_ids == VISION_TOKEN_TYPE], images_features)
+                images_features = images_features.to(dtype=inputs_embeds.dtype,
+                                                     device=inputs_embeds.device)
+                inputs_embeds = inputs_embeds.index_put(
+                    [token_type_ids == VISION_TOKEN_TYPE],
+                    images_features)
             else:  # single-modality
                 if token_type_ids is None:
-                    token_type_ids = torch.ones_like(input_ids, dtype=torch.long, device=input_ids.device) * LANGUAGE_TOKEN_TYPE
-                assert not (token_type_ids == VISION_TOKEN_TYPE).any(), f"{(token_type_ids == VISION_TOKEN_TYPE).sum()}"
+                    token_type_ids = torch.ones_like(
+                        input_ids,
+                        dtype=torch.long,
+                        device=input_ids.device) * LANGUAGE_TOKEN_TYPE
+                assert not (token_type_ids == VISION_TOKEN_TYPE).any(), \
+                    f"{(token_type_ids == VISION_TOKEN_TYPE).sum()}"
                 inputs_embeds = self.embed_tokens(input_ids)
 
             if position_ids is None:
