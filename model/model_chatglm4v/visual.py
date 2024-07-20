@@ -15,6 +15,7 @@ def standard_attention(
 ):
     if scaling_attention_score:
         query_layer = query_layer / math.sqrt(query_layer.shape[-1])
+
     attention_scores = torch.matmul(query_layer, key_layer.transpose(-1, -2))
 
     attention_probs = F.softmax(attention_scores, dim=-1)
