@@ -3,7 +3,8 @@ import io
 import numpy as np
 import torch
 from decord import cpu, VideoReader, bridge
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import BitsAndBytesConfig
 import argparse
 
 
