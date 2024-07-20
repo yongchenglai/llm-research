@@ -6,6 +6,7 @@ from transformers.activations import ACT2FN
 import math
 from torch.nn import LayerNorm
 
+
 def standard_attention(
     query_layer,
     key_layer,
@@ -20,6 +21,7 @@ def standard_attention(
 
     context_layer = torch.matmul(attention_probs, value_layer)
     return context_layer
+
 
 def attention_fn_default(
     query_layer,
@@ -42,6 +44,7 @@ def attention_fn_default(
             query_layer, key_layer, value_layer,
             scaling_attention_score=scaling_attention_score
         )
+
 
 class PatchEmbedding(nn.Module):
     def __init__(self, config):
