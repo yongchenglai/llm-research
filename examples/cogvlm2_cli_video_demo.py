@@ -60,11 +60,12 @@ def main():
                         help='Enable 4-bit or 8-bit precision loading', default=0)
     args = parser.parse_args()
 
-    if 'int4' in args.model_name_or_path:
+    model_path = args.model_name_or_path
+    if 'int4' in model_path:
         args.quant = 4
 
     tokenizer = AutoTokenizer.from_pretrained(
-        args.model_name_or_path,
+        model_path,
         trust_remote_code=True,
         # padding_side="left"
     )
@@ -79,8 +80,9 @@ def main():
     # Load the model
     if args.quant == 4:
         model = AutoModelForCausalLM.from_pretrained(
-            args.model_name_or_path,
+            model_path,
             torch_dtype=TORCH_TYPE,
+            device_map="auto",
             trust_remote_code=True,
             quantization_config=BitsAndBytesConfig(
                 load_in_4bit=True,
@@ -92,8 +94,9 @@ def main():
         ).eval()
     elif args.quant == 8:
         model = AutoModelForCausalLM.from_pretrained(
-            args.model_name_or_path,
+            model_path,
             torch_dtype=TORCH_TYPE,
+            device_map="auto",
             trust_remote_code=True,
             quantization_config=BitsAndBytesConfig(
                 load_in_8bit=True,
@@ -103,17 +106,20 @@ def main():
         ).eval()
     else:
         model = AutoModelForCausalLM.from_pretrained(
-            args.model_name_or_path,
+            model_path,
             torch_dtype=TORCH_TYPE,
             trust_remote_code=True
         ).eval().to(DEVICE)
 
+    print(model)
+
     while True:
-        strategy = 'base' if 'cogvlm2-video-llama3-base' in MODEL_PATH else 'chat'
+        strategy = 'base' if 'cogvlm2-video-llama3-base' in model_path else 'chat'
         print(f"using with {strategy} model")
         video_path = input("video path >>>>> ")
         if video_path == '':
-            print('You did not enter video path, the following will be a plain text conversation.')
+            print('You did not enter video path, '
+                  'the following will be a plain text conversation.')
             video = None
         else:
             video = load_video(video_path, strategy=strategy)
