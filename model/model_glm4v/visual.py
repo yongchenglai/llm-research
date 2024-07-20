@@ -28,13 +28,17 @@ def attention_fn_default(query_layer, key_layer, value_layer, scaling_attention_
         return attn_output
     else:
         return standard_attention(
-            query_layer, key_layer, value_layer, scaling_attention_score=scaling_attention_score
+            query_layer, key_layer, value_layer,
+            scaling_attention_score=scaling_attention_score
         )
 
 class PatchEmbedding(nn.Module):
     def __init__(self, config):
         super().__init__()
-        self.proj = nn.Conv2d(config.in_channels, config.hidden_size, kernel_size=config.patch_size, stride=config.patch_size)
+        self.proj = nn.Conv2d(config.in_channels,
+                              config.hidden_size,
+                              kernel_size=config.patch_size,
+                              stride=config.patch_size)
         self.cls_embedding = nn.Parameter(torch.zeros(1, config.hidden_size))
         self.position_embedding = nn.Embedding(config.num_positions, config.hidden_size)
 
