@@ -52,7 +52,7 @@ def load_video(video_path, strategy='chat'):
     return video_data
 
 
-def main():
+if __name__ == "__main__":
 
     # MODEL_PATH = "THUDM/cogvlm2-video-llama3-chat"
     parser = argparse.ArgumentParser(description="CogVLM2-Video CLI Demo")
@@ -161,6 +161,5 @@ def main():
             history.append((query, response))
 
 
-if __name__ == "__main__":
-    main()
+
 
