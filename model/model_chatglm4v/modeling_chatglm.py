@@ -376,6 +376,7 @@ class FlashAttention2(CoreAttention):
             # for RoCm is bumped to 2.1. For details,
             # please see the comment in LlamaFlashAttention2 __init__.
             causal = self.is_causal and query_length != 1
+        
         dropout = self.config.attention_dropout if self.training else 0.0
         # Contains at least one padding token in the sequence
         if attention_mask is not None:
