@@ -897,12 +897,16 @@ class ChatGLMPreTrainedModel(PreTrainedModel):
 
     def get_position_ids(self, input_ids, device):
         batch_size, seq_length = input_ids.shape
-        position_ids = torch.arange(seq_length, dtype=torch.long, device=device).unsqueeze(0).repeat(batch_size, 1)
+        position_ids = torch.arange(seq_length,
+                                    dtype=torch.long,
+                                    device=device).unsqueeze(0).repeat(batch_size, 1)
         return position_ids
 
     def get_multimodal_position_ids(self, input_ids, device):
         batch_size, seq_length = input_ids.shape
-        position_ids = torch.arange(seq_length, dtype=torch.long, device=device).unsqueeze(0).repeat(batch_size, 1)
+        position_ids = torch.arange(seq_length,
+                                    dtype=torch.long,
+                                    device=device).unsqueeze(0).repeat(batch_size, 1)
 
 class Embedding(torch.nn.Module):
     """Language model embeddings."""
