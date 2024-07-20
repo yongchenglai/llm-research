@@ -95,7 +95,7 @@ def chatbot(image_path=None, image_url=None, assistant_prompt=""):
 with gr.Blocks() as demo:
     demo.title = "GLM-4V-9B Image Recognition Demo"
     demo.description = """
-    This demo uses the GLM-4V-9B model to got image infomation.
+    This demo uses the GLM-4V-9B model to got image information.
     """
     with gr.Row():
         with gr.Column():
