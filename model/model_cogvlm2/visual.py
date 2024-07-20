@@ -8,9 +8,13 @@ from transformers.activations import ACT2FN
 class PatchEmbedding(nn.Module):
     def __init__(self, config):
         super().__init__()
-        self.proj = nn.Conv2d(config.in_channels, config.hidden_size, kernel_size=config.patch_size, stride=config.patch_size)
+        self.proj = nn.Conv2d(config.in_channels,
+                              config.hidden_size,
+                              kernel_size=config.patch_size,
+                              stride=config.patch_size)
         self.cls_embedding = nn.Parameter(torch.zeros(1, config.hidden_size))
-        self.position_embedding = nn.Embedding(config.num_positions, config.hidden_size)
+        self.position_embedding = nn.Embedding(config.num_positions,
+                                               config.hidden_size)
 
     def forward(self, images: "tensor(B, C, H, W)") -> "tensor(B, L, D)":
         x = self.proj(images)
@@ -27,7 +31,8 @@ class Attention(nn.Module):
         self.num_heads = config.num_heads
         head_dim = config.hidden_size // config.num_heads
         self.scale = head_dim ** -0.5
-        self.query_key_value = nn.Linear(config.hidden_size, config.hidden_size * 3)
+        self.query_key_value = nn.Linear(config.hidden_size,
+                                         config.hidden_size * 3)
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
         self.output_dropout = torch.nn.Dropout(config.dropout_prob)
 
@@ -69,10 +74,12 @@ class MLP(nn.Module):
 class TransformerLayer(nn.Module):
     def __init__(self, config):
         super().__init__()
-        self.input_layernorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
+        self.input_layernorm = nn.LayerNorm(config.hidden_size,
+                                            eps=config.layer_norm_eps)
         self.attention = Attention(config)
         self.mlp = MLP(config)
-        self.post_attention_layernorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
+        self.post_attention_layernorm = nn.LayerNorm(config.hidden_size,
+                                                     eps=config.layer_norm_eps)
 
     def forward(self, hidden_states):
         attention_input = hidden_states
@@ -87,7 +94,8 @@ class TransformerLayer(nn.Module):
 class Transformer(nn.Module):
     def __init__(self, config):
         super().__init__()
-        self.layers = nn.ModuleList([TransformerLayer(config) for _ in range(config.num_hidden_layers)])
+        self.layers = nn.ModuleList(
+            [TransformerLayer(config) for _ in range(config.num_hidden_layers)])
 
     def forward(self, hidden_states):
         for layer_module in self.layers:
@@ -98,13 +106,21 @@ class Transformer(nn.Module):
 class GLU(nn.Module):
     def __init__(self, config, in_features):
         super().__init__()
-        self.linear_proj = nn.Linear(in_features, config.hidden_size, bias=False)
+        self.linear_proj = nn.Linear(in_features,
+                                     config.hidden_size,
+                                     bias=False)
         self.norm1 = nn.LayerNorm(config.hidden_size)
         self.act1 = nn.GELU()
         self.act2 = nn.functional.silu
-        self.dense_h_to_4h = nn.Linear(config.hidden_size, config.intermediate_size, bias=False)
-        self.gate_proj = nn.Linear(config.hidden_size, config.intermediate_size, bias=False)
-        self.dense_4h_to_h = nn.Linear(config.intermediate_size, config.hidden_size, bias=False)
+        self.dense_h_to_4h = nn.Linear(config.hidden_size,
+                                       config.intermediate_size,
+                                       bias=False)
+        self.gate_proj = nn.Linear(config.hidden_size,
+                                   config.intermediate_size,
+                                   bias=False)
+        self.dense_4h_to_h = nn.Linear(config.intermediate_size,
+                                       config.hidden_size,
+                                       bias=False)
 
     def forward(self, x):
         x = self.linear_proj(x)
@@ -121,7 +137,10 @@ class EVA2CLIPModel(nn.Module):
         self.patch_embedding = PatchEmbedding(vision_config)
         self.transformer = Transformer(vision_config)
         self.linear_proj = GLU(config, in_features=vision_config.hidden_size)
-        self.conv = nn.Conv2d(in_channels=vision_config.hidden_size, out_channels=vision_config.hidden_size, kernel_size=2, stride=2)
+        self.conv = nn.Conv2d(in_channels=vision_config.hidden_size,
+                              out_channels=vision_config.hidden_size,
+                              kernel_size=2,
+                              stride=2)
         self.boi = nn.Parameter(torch.zeros(1, 1, config.hidden_size))
         self.eoi = nn.Parameter(torch.zeros(1, 1, config.hidden_size))
 
