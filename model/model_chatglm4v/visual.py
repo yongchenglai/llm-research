@@ -6,7 +6,12 @@ from transformers.activations import ACT2FN
 import math
 from torch.nn import LayerNorm
 
-def standard_attention(query_layer, key_layer, value_layer, scaling_attention_score=True):
+def standard_attention(
+    query_layer,
+    key_layer,
+    value_layer,
+    scaling_attention_score=True,
+):
     if scaling_attention_score:
         query_layer = query_layer / math.sqrt(query_layer.shape[-1])
     attention_scores = torch.matmul(query_layer, key_layer.transpose(-1, -2))
@@ -16,9 +21,15 @@ def standard_attention(query_layer, key_layer, value_layer, scaling_attention_sc
     context_layer = torch.matmul(attention_probs, value_layer)
     return context_layer
 
-def attention_fn_default(query_layer, key_layer, value_layer, scaling_attention_score=True):
+def attention_fn_default(
+    query_layer,
+    key_layer,
+    value_layer,
+    scaling_attention_score=True,
+):
     if int(torch.__version__.split('.')[0]) >= 2 and scaling_attention_score:
-        # Pytorch 2.0 attention uses very much memory if attention_mask is float, and has NaN bug if attention_mask is None.
+        # Pytorch 2.0 attention uses very much memory
+        # if attention_mask is float, and has NaN bug if attention_mask is None.
         attn_output = torch.nn.functional.scaled_dot_product_attention(
             query_layer, key_layer, value_layer, 
             attn_mask=None,
