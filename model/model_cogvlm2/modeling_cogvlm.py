@@ -286,8 +286,10 @@ class CogVLMDecoderLayer(nn.Module):
         self.hidden_size = config.hidden_size
         self.self_attn = VisionExpertAttention(config=config)
         self.mlp = VisionExpertMLP(config)
-        self.input_layernorm = RMSNorm(config.hidden_size, eps=config.rms_norm_eps)
-        self.post_attention_layernorm = RMSNorm(config.hidden_size, eps=config.rms_norm_eps)
+        self.input_layernorm = RMSNorm(config.hidden_size,
+                                       eps=config.rms_norm_eps)
+        self.post_attention_layernorm = RMSNorm(config.hidden_size,
+                                                eps=config.rms_norm_eps)
 
     def forward(
             self,
@@ -360,7 +362,10 @@ def is_empty(images_list: Optional[List[List[torch.Tensor]]]):
     return True
 
 
-def build_position_ids(x: "torch.BoolTensor(B, L)", attention_mask: Optional["torch.BoolTensor(B, L)"] = None) -> "torch.LongTensor(B, L)":
+def build_position_ids(
+        x: "torch.BoolTensor(B, L)",
+        attention_mask: Optional["torch.BoolTensor(B, L)"] = None,
+) -> "torch.LongTensor(B, L)":
     if attention_mask is not None:
         tmp = x.clone()
         tmp[~(attention_mask.bool())] = -1
