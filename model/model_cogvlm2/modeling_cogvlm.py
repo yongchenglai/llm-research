@@ -243,7 +243,11 @@ class VisionExpertAttention(nn.Module):
         if past_key_value is not None:
             kv_seq_len += past_key_value[0].shape[-2]
 
-        query_states, key_states = self.rotary_emb(query_states, key_states, position_ids=position_ids, max_seqlen=position_ids.max() + 1)
+        query_states, key_states = self.rotary_emb(
+            query_states,
+            key_states,
+            position_ids=position_ids,
+            max_seqlen=position_ids.max() + 1)
 
         if past_key_value is not None:
             key_states = torch.cat([past_key_value[0], key_states], dim=2)
