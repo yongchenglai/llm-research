@@ -99,10 +99,12 @@ class MLP(nn.Module):
 class TransformerLayer(nn.Module):
     def __init__(self, config):
         super().__init__()
-        self.input_layernorm = LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
+        self.input_layernorm = LayerNorm(config.hidden_size,
+                                         eps=config.layer_norm_eps)
         self.attention = Attention(config)
         self.mlp = MLP(config)
-        self.post_attention_layernorm = LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
+        self.post_attention_layernorm = LayerNorm(config.hidden_size,
+                                                  eps=config.layer_norm_eps)
 
     def forward(self, hidden_states):
         attention_input = hidden_states
@@ -117,7 +119,8 @@ class TransformerLayer(nn.Module):
 class Transformer(nn.Module):
     def __init__(self, config):
         super().__init__()
-        self.layers = nn.ModuleList([TransformerLayer(config) for _ in range(config.num_hidden_layers)])
+        self.layers = nn.ModuleList(
+            [TransformerLayer(config) for _ in range(config.num_hidden_layers)])
 
     def forward(self, hidden_states):
         for layer_module in self.layers:
