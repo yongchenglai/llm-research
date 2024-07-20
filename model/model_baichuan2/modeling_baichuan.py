@@ -802,8 +802,13 @@ class BaichuanForCausalLM(BaichuanPreTrainedModel):
             raise ImportError(f"Needs QLinear to run quantize.")
         return quantize_online(self, bits)
 
-    def chat(self, tokenizer, messages: List[dict], stream=False,
-             generation_config: Optional[GenerationConfig]=None):
+    def chat(
+        self,
+        tokenizer,
+        messages: List[dict],
+        stream=False,
+        generation_config: Optional[GenerationConfig]=None,
+    ):
         generation_config = generation_config or self.generation_config
         input_ids = build_chat_input(self, tokenizer, messages, generation_config.max_new_tokens)
         if stream:
