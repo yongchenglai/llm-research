@@ -7,6 +7,13 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 import argparse
 
 
+DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+TORCH_TYPE = torch.bfloat16 \
+    if torch.cuda.is_available() and \
+    torch.cuda.get_device_capability()[0] >= 8 \
+    else torch.float16
+
+
 def load_video(video_path, strategy='chat'):
     bridge.set_bridge('torch')
     with open(video_path, 'rb') as f:
@@ -47,12 +54,6 @@ def load_video(video_path, strategy='chat'):
 def main():
 
     # MODEL_PATH = "THUDM/cogvlm2-video-llama3-chat"
-    DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
-    TORCH_TYPE = torch.bfloat16 \
-        if torch.cuda.is_available() and \
-           torch.cuda.get_device_capability()[0] >= 8 \
-        else torch.float16
-
     parser = argparse.ArgumentParser(description="CogVLM2-Video CLI Demo")
     parser.add_argument("--model_name_or_path", type=str, help='mode name or path')
     parser.add_argument('--quant', type=int, choices=[4, 8],
@@ -69,8 +70,8 @@ def main():
     )
 
     if torch.cuda.is_available() and \
-            torch.cuda.get_device_properties(0).total_memory < 48 * 1024 ** 3 and \
-            not args.quant:
+        torch.cuda.get_device_properties(0).total_memory < 48 * 1024 ** 3 and \
+        not args.quant:
         print("GPU memory is less than 48GB. Please use cli_demo_multi_gpus.py "
               "or pass `--quant 4` or `--quant 8`.")
         exit()
