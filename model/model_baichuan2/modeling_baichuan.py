@@ -809,7 +809,8 @@ class BaichuanForCausalLM(BaichuanPreTrainedModel):
         if stream:
             streamer = TextIterStreamer(tokenizer, skip_prompt=True, skip_special_tokens=True)
             Thread(target=self.generate, kwargs=dict(
-                inputs=input_ids, streamer=streamer,
+                inputs=input_ids,
+                streamer=streamer,
                 generation_config=generation_config,
             )).start()
             return streamer
