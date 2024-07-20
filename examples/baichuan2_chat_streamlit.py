@@ -34,6 +34,9 @@ def init_model(model_dir):
         use_fast=False,
         trust_remote_code=True
     )
+    model.eval()
+    print(model)
+
     return model, tokenizer
 
 
@@ -62,7 +65,6 @@ def main():
     args = parser.parse_args()
 
     model, tokenizer = init_model(args.model_name_or_path)
-    print(model)
 
     messages = init_chat_history()
 
