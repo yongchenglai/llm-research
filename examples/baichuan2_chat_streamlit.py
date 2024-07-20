@@ -1,4 +1,4 @@
-# baichuan2_web_demo.py
+# baichuan2_chat_streamlit.py
 import json
 import torch
 import streamlit as st
@@ -62,6 +62,7 @@ def main():
     args = parser.parse_args()
 
     model, tokenizer = init_model(args.model_name_or_path)
+    print(model)
 
     messages = init_chat_history()
 
