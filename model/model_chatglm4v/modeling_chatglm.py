@@ -776,13 +776,17 @@ class GLMTransformer(torch.nn.Module):
         def build_layer(layer_number):
             return GLMBlock(config, layer_number, device=device)
 
-        self.layers = torch.nn.ModuleList([build_layer(i + 1) for i in range(self.num_layers)])
+        self.layers = torch.nn.ModuleList(
+            [build_layer(i + 1) for i in range(self.num_layers)])
 
         if self.post_layer_norm:
             LayerNormFunc = RMSNorm if config.rmsnorm else LayerNorm
             # Final layer norm before output.
-            self.final_layernorm = LayerNormFunc(config.hidden_size, eps=config.layernorm_epsilon, device=device,
-                                                 dtype=config.torch_dtype)
+            self.final_layernorm = LayerNormFunc(
+                config.hidden_size,
+                eps=config.layernorm_epsilon,
+                device=device,
+                dtype=config.torch_dtype)
 
         self.gradient_checkpointing = False
 
