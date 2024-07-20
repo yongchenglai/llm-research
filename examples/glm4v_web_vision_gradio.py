@@ -144,7 +144,7 @@ if __name__ == "__main__":
         device_map="auto",
         trust_remote_code=True,
         quantization_config=quantization_config,
-        # attn_implementation="flash_attention_2",
+        attn_implementation="flash_attention_2",
     )
 
     model.eval()
