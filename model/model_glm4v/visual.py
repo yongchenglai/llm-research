@@ -147,7 +147,9 @@ class EVA2CLIPModel(nn.Module):
         self.patch_embedding = PatchEmbedding(vision_config)
         self.transformer = Transformer(vision_config)
         self.linear_proj = GLU(config, in_features=config.hidden_size)
-        self.conv = nn.Conv2d(in_channels=vision_config.hidden_size, out_channels=config.hidden_size, kernel_size=2, stride=2)
+        self.conv = nn.Conv2d(in_channels=vision_config.hidden_size,
+                              out_channels=config.hidden_size,
+                              kernel_size=2, stride=2)
         self.boi = nn.Parameter(torch.zeros(1, 1, config.hidden_size))
         self.eoi = nn.Parameter(torch.zeros(1, 1, config.hidden_size))
         self.scaling_factor = vision_config.scaling_factor
