@@ -390,9 +390,13 @@ class CogVLMModel(CogVLMPreTrainedModel):
         super().__init__(config)
         self.padding_idx = 128002
         self.vocab_size = config.vocab_size
-        self.embed_tokens = nn.Embedding(config.vocab_size, config.hidden_size, self.padding_idx)
-        self.layers = nn.ModuleList([CogVLMDecoderLayer(config) for _ in range(config.num_hidden_layers)])
-        self.norm = RMSNorm(config.hidden_size, eps=config.rms_norm_eps)
+        self.embed_tokens = nn.Embedding(config.vocab_size,
+                                         config.hidden_size,
+                                         self.padding_idx)
+        self.layers = nn.ModuleList(
+            [CogVLMDecoderLayer(config) for _ in range(config.num_hidden_layers)])
+        self.norm = RMSNorm(config.hidden_size,
+                            eps=config.rms_norm_eps)
 
         self.vision = EVA2CLIPModel(config)
 
