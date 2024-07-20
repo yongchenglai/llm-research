@@ -1,3 +1,4 @@
+# configuration_cogvlm.py
 from typing import Literal
 from transformers import PretrainedConfig
 
