@@ -678,28 +678,40 @@ class GLMBlock(torch.nn.Module):
         super(GLMBlock, self).__init__()
         self.layer_number = layer_number
 
-        self.apply_residual_connection_post_layernorm = config.apply_residual_connection_post_layernorm
+        self.apply_residual_connection_post_layernorm = \
+            config.apply_residual_connection_post_layernorm
 
         self.fp32_residual_connection = config.fp32_residual_connection
 
         LayerNormFunc = RMSNorm if config.rmsnorm else LayerNorm
         # Layernorm on the input data.
-        self.input_layernorm = LayerNormFunc(config.hidden_size, eps=config.layernorm_epsilon, device=device,
-                                             dtype=config.torch_dtype)
+        self.input_layernorm = LayerNormFunc(
+            config.hidden_size,
+            eps=config.layernorm_epsilon,
+            device=device,
+            dtype=config.torch_dtype)
 
         # Self attention.
         self.self_attention = SelfAttention(config, layer_number, device=device)
         self.hidden_dropout = config.hidden_dropout
 
         # Layernorm on the attention output
-        self.post_attention_layernorm = LayerNormFunc(config.hidden_size, eps=config.layernorm_epsilon, device=device,
-                                                      dtype=config.torch_dtype)
+        self.post_attention_layernorm = LayerNormFunc(
+            config.hidden_size,
+            eps=config.layernorm_epsilon,
+            device=device,
+            dtype=config.torch_dtype)
 
         # MLP
         self.mlp = MLP(config, device=device)
 
     def forward(
-            self, hidden_states, attention_mask, rotary_pos_emb, kv_cache=None, use_cache=True,
+        self,
+        hidden_states,
+        attention_mask,
+        rotary_pos_emb,
+        kv_cache=None,
+        use_cache=True,
     ):
         # hidden_states: [s, b, h]
 
@@ -720,7 +732,10 @@ class GLMBlock(torch.nn.Module):
         else:
             residual = hidden_states
 
-        layernorm_input = torch.nn.functional.dropout(attention_output, p=self.hidden_dropout, training=self.training)
+        layernorm_input = torch.nn.functional.dropout(
+            attention_output,
+            p=self.hidden_dropout,
+            training=self.training)
         layernorm_input = residual + layernorm_input
 
         # Layer norm post the self attention.
@@ -735,7 +750,11 @@ class GLMBlock(torch.nn.Module):
         else:
             residual = layernorm_input
 
-        output = torch.nn.functional.dropout(mlp_output, p=self.hidden_dropout, training=self.training)
+        output = torch.nn.functional.dropout(
+            mlp_output,
+            p=self.hidden_dropout,
+            training=self.training)
+
         output = residual + output
 
         return output, kv_cache
