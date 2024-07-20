@@ -55,7 +55,8 @@ class PatchEmbedding(nn.Module):
                               kernel_size=config.patch_size,
                               stride=config.patch_size)
         self.cls_embedding = nn.Parameter(torch.zeros(1, config.hidden_size))
-        self.position_embedding = nn.Embedding(config.num_positions, config.hidden_size)
+        self.position_embedding = nn.Embedding(config.num_positions,
+                                               config.hidden_size)
 
     def forward(self, images: "tensor(B, C, H, W)") -> "tensor(B, L, D)":
         x = self.proj(images)
