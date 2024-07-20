@@ -1,3 +1,4 @@
+# visual.py
 import torch
 from torch import nn
 from argparse import Namespace
