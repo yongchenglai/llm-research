@@ -135,9 +135,15 @@ class GLU(nn.Module):
         self.norm1 = nn.LayerNorm(config.hidden_size)
         self.act1 = nn.GELU()
         self.act2 = nn.functional.silu
-        self.dense_h_to_4h = nn.Linear(config.hidden_size, config.ffn_hidden_size, bias=False)
-        self.gate_proj = nn.Linear(config.hidden_size, config.ffn_hidden_size, bias=False)
-        self.dense_4h_to_h = nn.Linear(config.ffn_hidden_size, config.hidden_size, bias=False)
+        self.dense_h_to_4h = nn.Linear(config.hidden_size,
+                                       config.ffn_hidden_size,
+                                       bias=False)
+        self.gate_proj = nn.Linear(config.hidden_size,
+                                   config.ffn_hidden_size,
+                                   bias=False)
+        self.dense_4h_to_h = nn.Linear(config.ffn_hidden_size,
+                                       config.hidden_size,
+                                       bias=False)
 
     def forward(self, x):
         x = self.linear_proj(x)
