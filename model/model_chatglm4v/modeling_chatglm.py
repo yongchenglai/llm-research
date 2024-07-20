@@ -372,7 +372,9 @@ class FlashAttention2(CoreAttention):
         if not self._flash_attn_uses_top_left_mask:
             causal = self.is_causal
         else:
-            # TODO: Remove the `query_length != 1` check once Flash Attention for RoCm is bumped to 2.1. For details, please see the comment in LlamaFlashAttention2 __init__.
+            # TODO: Remove the `query_length != 1` check once Flash Attention
+            # for RoCm is bumped to 2.1. For details,
+            # please see the comment in LlamaFlashAttention2 __init__.
             causal = self.is_causal and query_length != 1
         dropout = self.config.attention_dropout if self.training else 0.0
         # Contains at least one padding token in the sequence
