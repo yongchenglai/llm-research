@@ -42,7 +42,8 @@ RUN pip install --no-cache-dir \
     tiktoken \
     xformers \
     streamlit \
-    cpm_kernels
+    cpm_kernels \
+    decord
 
 RUN pip install --no-cache-dir flash_attn --no-build-isolation
 
