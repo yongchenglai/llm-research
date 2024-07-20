@@ -1,5 +1,7 @@
 """
-This script creates a Gradio demo with a Transformers backend for the glm-4v-9b model, allowing users to interact with the model through a Gradio web UI.
+This script creates a Gradio demo with a Transformers backend
+for the glm-4v-9b model, allowing users to interact with
+the model through a Gradio web UI.
 
 Usage:
 - Run the script to start the Gradio server.
