@@ -2,14 +2,14 @@
 import json
 import torch
 import streamlit as st
-import streamlit.config
+#import streamlit.config
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 from transformers.generation.utils import GenerationConfig
 import argparse
 
 
-streamlit.config.set_option("server.port", 7860)
-streamlit.config.set_option("server.address", "0.0.0.0")
+#streamlit.config.set_option("server.port", 7860)
+#streamlit.config.set_option("server.address", "0.0.0.0")
 
 st.set_page_config(page_title="Baichuan 2")
 st.title("Baichuan 2")
