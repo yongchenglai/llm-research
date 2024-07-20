@@ -150,7 +150,7 @@ if __name__ == "__main__":
     model.eval()
     print(model)
 
-    demo.queue.launch(
+    demo.launch(
         server_name="0.0.0.0",
         server_port=7860,
         inbrowser=True,
