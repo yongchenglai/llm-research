@@ -219,7 +219,9 @@ class VisionExpertAttention(nn.Module):
             past_key_value: Optional[Tuple[torch.Tensor]] = None,
             output_attentions: bool = False,
             use_cache: bool = False,
-    ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
+    ) -> Tuple[torch.Tensor,
+               Optional[torch.Tensor],
+               Optional[Tuple[torch.Tensor]]]:
         bsz, q_len, _ = hidden_states.size()
         vision_token_mask, language_token_mask = get_expert_mask(token_type_ids)
 
@@ -228,12 +230,17 @@ class VisionExpertAttention(nn.Module):
         mixed_raw_layer = torch.empty(shape,
                                       dtype=hidden_states.dtype,
                                       device=hidden_states.device)
-        mixed_raw_layer[vision_token_mask] = self.vision_expert_query_key_value(hidden_states[vision_token_mask])
-        mixed_raw_layer[language_token_mask] = self.language_expert_query_key_value(hidden_states[language_token_mask])
+        mixed_raw_layer[vision_token_mask] = self.vision_expert_query_key_value(
+            hidden_states[vision_token_mask])
+        mixed_raw_layer[language_token_mask] = self.language_expert_query_key_value(
+            hidden_states[language_token_mask])
 
-        # query_states, key_states, value_states = torch.split(mixed_raw_layer, self.hidden_size, dim=-1)
+        # query_states, key_states, value_states = torch.split(
+        # mixed_raw_layer, self.hidden_size, dim=-1)
         factor = mixed_raw_layer.size()[-1] // sum(self.stride)
-        query_states, key_states, value_states = torch.split(mixed_raw_layer, [factor * x for x in self.stride], dim=-1)
+        query_states, key_states, value_states = torch.split(
+            mixed_raw_layer,
+            [factor * x for x in self.stride], dim=-1)
 
         query_states = self._transpose_for_scores(query_states)  # B, H, L, HD
         key_states = self._transpose_for_scores(key_states)  # B, H, L, HD
@@ -255,24 +262,38 @@ class VisionExpertAttention(nn.Module):
 
         past_key_value = (key_states, value_states) if use_cache else None
 
-        key_states = key_states.unsqueeze(2).expand(-1, -1, self.num_attention_heads // self.num_multi_query_heads, -1, -1).contiguous().view(
-            bsz, self.num_attention_heads, *key_states.shape[2:])
-        value_states = value_states.unsqueeze(2).expand(-1, -1, self.num_attention_heads // self.num_multi_query_heads, -1,
-                                                        -1).contiguous().view(bsz, self.num_attention_heads, *value_states.shape[2:])
+        key_states = key_states.unsqueeze(2).\
+            expand(-1, -1, self.num_attention_heads // self.num_multi_query_heads, -1, -1).\
+            contiguous().view(bsz, self.num_attention_heads, *key_states.shape[2:])
+
+        value_states = value_states.unsqueeze(2).\
+            expand(-1, -1, self.num_attention_heads // self.num_multi_query_heads, -1,-1).\
+            contiguous().view(bsz, self.num_attention_heads, *value_states.shape[2:])
 
         context_layer = attention_fn(
-            query_layer=query_states, key_layer=key_states, value_layer=value_states, attention_mask=attention_mask,
-            scaling_attention_score=True, attention_dropout=None)
+            query_layer=query_states,
+            key_layer=key_states,
+            value_layer=value_states,
+            attention_mask=attention_mask,
+            scaling_attention_score=True,
+            attention_dropout=None)
+
         if context_layer.size() != (bsz, self.num_attention_heads, q_len, self.head_dim):
             raise ValueError(
-                f"`attn_output` should be of size {(bsz, self.num_attention_heads, q_len, self.head_dim)}, but is"
+                f"`attn_output` should be of size "
+                f"{(bsz, self.num_attention_heads, q_len, self.head_dim)}, but is"
                 f" {context_layer.size()}"
             )
-        context_layer = context_layer.transpose(1, 2).contiguous().reshape(bsz, q_len, self.hidden_size)
+        context_layer = context_layer.transpose(1, 2).contiguous().reshape(
+            bsz, q_len, self.hidden_size)
 
-        attn_output = torch.empty(context_layer.shape, dtype=hidden_states.dtype, device=hidden_states.device)
-        attn_output[vision_token_mask] = self.vision_expert_dense(context_layer[vision_token_mask])
-        attn_output[language_token_mask] = self.language_expert_dense(context_layer[language_token_mask])
+        attn_output = torch.empty(context_layer.shape,
+                                  dtype=hidden_states.dtype,
+                                  device=hidden_states.device)
+        attn_output[vision_token_mask] = self.vision_expert_dense(
+            context_layer[vision_token_mask])
+        attn_output[language_token_mask] = self.language_expert_dense(
+            context_layer[language_token_mask])
 
         if output_attentions:
             warnings.warn("output_attentions is not implemented.")
