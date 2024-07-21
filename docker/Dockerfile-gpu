@@ -43,7 +43,8 @@ RUN pip install --no-cache-dir \
     xformers \
     streamlit \
     cpm_kernels \
-    decord>=0.6.0
+    decord>=0.6.0 \
+    chainlit
 
 RUN pip install --no-cache-dir flash_attn --no-build-isolation
 
