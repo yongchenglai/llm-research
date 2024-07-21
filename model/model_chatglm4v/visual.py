@@ -73,14 +73,16 @@ class Attention(nn.Module):
         self.num_heads = config.num_heads
         head_dim = config.hidden_size // config.num_heads
         self.scale = head_dim ** -0.5
-        self.query_key_value = nn.Linear(config.hidden_size, config.hidden_size * 3)
+        self.query_key_value = nn.Linear(config.hidden_size,
+                                         config.hidden_size * 3)
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
         self.output_dropout = torch.nn.Dropout(config.dropout_prob)
 
     def forward(self, x: "tensor(B, L, D)") -> "tensor(B, L, D)":
         B, L, _ = x.shape
         qkv = self.query_key_value(x)
-        qkv = qkv.reshape(B, L, 3, self.num_heads, -1).permute(2, 0, 3, 1, 4)  # 3, B, H, L, D
+        # 3, B, H, L, D
+        qkv = qkv.reshape(B, L, 3, self.num_heads, -1).permute(2, 0, 3, 1, 4)
         q, k, v = qkv[0], qkv[1], qkv[2]
         
         out = attention_fn_default(
