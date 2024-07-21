@@ -83,7 +83,7 @@ if __name__ == "__main__":
         model = AutoModelForCausalLM.from_pretrained(
             model_path,
             torch_dtype=TORCH_TYPE,
-            device_map="auto",
+            # device_map="auto",
             trust_remote_code=True,
             quantization_config=BitsAndBytesConfig(
                 load_in_4bit=True,
@@ -97,7 +97,7 @@ if __name__ == "__main__":
         model = AutoModelForCausalLM.from_pretrained(
             model_path,
             torch_dtype=TORCH_TYPE,
-            device_map="auto",
+            # device_map="auto",
             trust_remote_code=True,
             quantization_config=BitsAndBytesConfig(
                 load_in_8bit=True,
