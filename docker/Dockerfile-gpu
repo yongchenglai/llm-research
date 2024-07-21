@@ -29,6 +29,7 @@ RUN pip install --no-cache-dir \
     deepspeed==0.14.0 \
     scikit-learn \
     torchvision \
+    pytorchvideo \
     torchdata \
     torchaudio \
     tensorboard \
