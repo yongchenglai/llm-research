@@ -117,9 +117,11 @@ class VisionExpertMLP(nn.Module):
         self.language_mlp = MLP(config)
         self.vision_mlp = MLP(config)
 
-    def forward(self,
-                hidden_states: "torch.Tensor(B, L, D)",
-                token_type_ids: "torch.LongTensor(B, L)"):
+    def forward(
+        self,
+        hidden_states: "torch.Tensor(B, L, D)",
+        token_type_ids: "torch.LongTensor(B, L)",
+    ):
         output = torch.empty(hidden_states.shape,
                              dtype=hidden_states.dtype,
                              device=hidden_states.device)
@@ -290,14 +292,14 @@ class CogVLMDecoderLayer(nn.Module):
                                                 eps=config.rms_norm_eps)
 
     def forward(
-            self,
-            hidden_states: torch.Tensor,
-            token_type_ids: torch.LongTensor,
-            position_ids: torch.LongTensor,
-            attention_mask: Optional[torch.Tensor] = None,
-            past_key_value: Optional[Tuple[torch.Tensor]] = None,
-            output_attentions: Optional[bool] = False,
-            use_cache: Optional[bool] = False,
+        self,
+        hidden_states: torch.Tensor,
+        token_type_ids: torch.LongTensor,
+        position_ids: torch.LongTensor,
+        attention_mask: Optional[torch.Tensor] = None,
+        past_key_value: Optional[Tuple[torch.Tensor]] = None,
+        output_attentions: Optional[bool] = False,
+        use_cache: Optional[bool] = False,
     ) -> Tuple[torch.FloatTensor,
                Optional[Tuple[torch.FloatTensor, torch.FloatTensor]]]:
         residual = hidden_states
