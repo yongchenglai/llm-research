@@ -25,58 +25,59 @@ TORCH_TYPE = torch.bfloat16 \
     else torch.float16
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    # MODEL_PATH = 'THUDM/cogvlm2-llama3-chat-19B'
-    parser = argparse.ArgumentParser(description="CogVLM2-Video CLI Demo")
-    parser.add_argument("--model_name_or_path", type=str, help='mode name or path')
-    parser.add_argument('--quant', type=int, choices=[4, 8],
+# MODEL_PATH = 'THUDM/cogvlm2-llama3-chat-19B'
+
+parser = argparse.ArgumentParser(description="CogVLM2-Video CLI Demo")
+parser.add_argument("--model_name_or_path", type=str, help='mode name or path')
+parser.add_argument('--quant', type=int, choices=[4, 8],
                         help='Enable 4-bit or 8-bit precision loading', default=0)
-    args = parser.parse_args()
-    model_path = args.model_name_or_path
+args = parser.parse_args()
+model_path = args.model_name_or_path
 
-    tokenizer = AutoTokenizer.from_pretrained(
+tokenizer = AutoTokenizer.from_pretrained(
+    model_path,
+    trust_remote_code=True)
+
+quant = int(os.environ.get('QUANT', 0))
+if 'int4' in model_path:
+    args.quant = 4
+print(f'Quant = {quant}')
+
+# Load the model
+if args.quant == 4:
+    model = AutoModelForCausalLM.from_pretrained(
         model_path,
-        trust_remote_code=True)
+        torch_dtype=TORCH_TYPE,
+        trust_remote_code=True,
+        quantization_config=BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_compute_dtype=TORCH_TYPE,
+        ),
+        low_cpu_mem_usage=True,
+    ).eval()
+elif args.quant == 8:
+    model = AutoModelForCausalLM.from_pretrained(
+        model_path,
+        torch_dtype=TORCH_TYPE,
+        trust_remote_code=True,
+        quantization_config=BitsAndBytesConfig(
+            load_in_8bit=True,
+            bnb_4bit_compute_dtype=TORCH_TYPE,
+        ),
+        low_cpu_mem_usage=True
+    ).eval()
+else:
+    model = AutoModelForCausalLM.from_pretrained(
+        model_path,
+        torch_dtype=TORCH_TYPE,
+        trust_remote_code=True
+    ).eval().to(DEVICE)
 
-    quant = int(os.environ.get('QUANT', 0))
-    if 'int4' in model_path:
-        args.quant = 4
-    print(f'Quant = {quant}')
-
-    # Load the model
-    if args.quant == 4:
-        model = AutoModelForCausalLM.from_pretrained(
-            model_path,
-            torch_dtype=TORCH_TYPE,
-            trust_remote_code=True,
-            quantization_config=BitsAndBytesConfig(
-                load_in_4bit=True,
-                bnb_4bit_quant_type="nf4",
-                bnb_4bit_use_double_quant=True,
-                bnb_4bit_compute_dtype=TORCH_TYPE,
-            ),
-            low_cpu_mem_usage=True,
-        ).eval()
-    elif args.quant == 8:
-        model = AutoModelForCausalLM.from_pretrained(
-            model_path,
-            torch_dtype=TORCH_TYPE,
-            trust_remote_code=True,
-            quantization_config=BitsAndBytesConfig(
-                load_in_8bit=True,
-                bnb_4bit_compute_dtype=TORCH_TYPE,
-            ),
-            low_cpu_mem_usage=True
-        ).eval()
-    else:
-        model = AutoModelForCausalLM.from_pretrained(
-            model_path,
-            torch_dtype=TORCH_TYPE,
-            trust_remote_code=True
-        ).eval().to(DEVICE)
-
-    print(model)
+print(model)
 
 
 
