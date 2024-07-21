@@ -1,3 +1,4 @@
+# model/model_cogvlm2-video/visual.py
 import torch
 from torch import nn
 from argparse import Namespace
@@ -5,7 +6,13 @@ import torch.nn.functional as F
 from transformers.activations import ACT2FN
 import math
 
-def standard_attention(query_layer, key_layer, value_layer, scaling_attention_score=True):
+
+def standard_attention(
+    query_layer,
+    key_layer,
+    value_layer,
+    scaling_attention_score=True,
+):
     if scaling_attention_score:
         query_layer = query_layer / math.sqrt(query_layer.shape[-1])
     attention_scores = torch.matmul(query_layer, key_layer.transpose(-1, -2))
@@ -15,16 +22,29 @@ def standard_attention(query_layer, key_layer, value_layer, scaling_attention_sc
     context_layer = torch.matmul(attention_probs, value_layer)
     return context_layer
 
-def attention_fn_default(query_layer, key_layer, value_layer, scaling_attention_score=True):
+
+def attention_fn_default(
+    query_layer,
+    key_layer,
+    value_layer,
+    scaling_attention_score=True,
+):
     # expand head dim to query dim, if necessary
     # only useful for multi-query attention
     batch_size, num_query_heads = query_layer.shape[:2] # [b, np, s, hn]
-    num_kv_heads = key_layer.shape[1] # [b, np, s, hn]
-    key_layer = key_layer.unsqueeze(2).expand(-1, -1, num_query_heads//num_kv_heads, -1, -1).contiguous().view(batch_size, num_query_heads, *key_layer.shape[2:])
-    value_layer = value_layer.unsqueeze(2).expand(-1, -1, num_query_heads//num_kv_heads, -1, -1).contiguous().view(batch_size, num_query_heads, *value_layer.shape[2:])
+    num_kv_heads = key_layer.shape[1]  # [b, np, s, hn]
+
+    key_layer = key_layer.unsqueeze(2).\
+        expand(-1, -1, num_query_heads//num_kv_heads, -1, -1).contiguous().\
+        view(batch_size, num_query_heads, *key_layer.shape[2:])
+
+    value_layer = value_layer.unsqueeze(2).\
+        expand(-1, -1, num_query_heads//num_kv_heads, -1, -1).contiguous().\
+        view(batch_size, num_query_heads, *value_layer.shape[2:])
 
     if int(torch.__version__.split('.')[0]) >= 2 and scaling_attention_score:
-        # Pytorch 2.0 attention uses very much memory if attention_mask is float, and has NaN bug if attention_mask is None.
+        # Pytorch 2.0 attention uses very much memory
+        # if attention_mask is float, and has NaN bug if attention_mask is None.
         attn_output = torch.nn.functional.scaled_dot_product_attention(
             query_layer, key_layer, value_layer, 
             attn_mask=None,
@@ -34,8 +54,10 @@ def attention_fn_default(query_layer, key_layer, value_layer, scaling_attention_
         return attn_output
     else:
         return standard_attention(
-            query_layer, key_layer, value_layer, scaling_attention_score=scaling_attention_score
+            query_layer, key_layer, value_layer,
+            scaling_attention_score=scaling_attention_score
         )
+
 
 class PatchEmbedding(nn.Module):
     def __init__(self, config):
@@ -74,9 +96,7 @@ class Attention(nn.Module):
         qkv = qkv.reshape(B, L, 3, self.num_heads, -1).permute(2, 0, 3, 1, 4)
         q, k, v = qkv[0], qkv[1], qkv[2]
 
-        out = attention_fn_default(
-            q, k, v
-        ) #  24 x 3 x 
+        out = attention_fn_default(q, k, v)  #  24 x 3 x
         out = out.transpose(2, 1)
         # breakpoint()
         # output = self.dense(out.reshape(B, L, -1))
@@ -109,15 +129,18 @@ class MLP(nn.Module):
 class TransformerLayer(nn.Module):
     def __init__(self, config):
         super().__init__()
-        self.input_layernorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
+        self.input_layernorm = nn.LayerNorm(config.hidden_size,
+                                            eps=config.layer_norm_eps)
         self.attention = Attention(config)
         self.mlp = MLP(config)
-        self.post_attention_layernorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
+        self.post_attention_layernorm = nn.LayerNorm(config.hidden_size,
+                                                     eps=config.layer_norm_eps)
 
     def forward(self, hidden_states):
         attention_input = hidden_states
         attention_output = self.input_layernorm(self.attention(attention_input))
         hidden_states = attention_input + attention_output
+
         mlp_input = hidden_states
         mlp_output = self.post_attention_layernorm(self.mlp(mlp_input))
         output = mlp_input + mlp_output
@@ -127,7 +150,8 @@ class TransformerLayer(nn.Module):
 class Transformer(nn.Module):
     def __init__(self, config):
         super().__init__()
-        self.layers = nn.ModuleList([TransformerLayer(config) for _ in range(config.num_hidden_layers)])
+        self.layers = nn.ModuleList(
+            [TransformerLayer(config) for _ in range(config.num_hidden_layers)])
 
     def forward(self, hidden_states):
         for layer_module in self.layers:
@@ -138,13 +162,21 @@ class Transformer(nn.Module):
 class GLU(nn.Module):
     def __init__(self, config, in_features):
         super().__init__()
-        self.linear_proj = nn.Linear(in_features, config.hidden_size, bias=False)
+        self.linear_proj = nn.Linear(in_features,
+                                     config.hidden_size,
+                                     bias=False)
         self.norm1 = nn.LayerNorm(config.hidden_size)
         self.act1 = nn.GELU()
         self.act2 = nn.functional.silu
-        self.dense_h_to_4h = nn.Linear(config.hidden_size, config.intermediate_size, bias=False)
-        self.gate_proj = nn.Linear(config.hidden_size, config.intermediate_size, bias=False)
-        self.dense_4h_to_h = nn.Linear(config.intermediate_size, config.hidden_size, bias=False)
+        self.dense_h_to_4h = nn.Linear(config.hidden_size,
+                                       config.intermediate_size,
+                                       bias=False)
+        self.gate_proj = nn.Linear(config.hidden_size,
+                                   config.intermediate_size,
+                                   bias=False)
+        self.dense_4h_to_h = nn.Linear(config.intermediate_size,
+                                       config.hidden_size,
+                                       bias=False)
 
     def forward(self, x):
         x = self.linear_proj(x)
@@ -161,7 +193,9 @@ class EVA2CLIPModel(nn.Module):
         self.patch_embedding = PatchEmbedding(vision_config)
         self.transformer = Transformer(vision_config)
         self.linear_proj = GLU(config, in_features=vision_config.hidden_size)
-        self.conv = nn.Conv2d(in_channels=vision_config.hidden_size, out_channels=vision_config.hidden_size, kernel_size=2, stride=2)
+        self.conv = nn.Conv2d(in_channels=vision_config.hidden_size,
+                              out_channels=vision_config.hidden_size,
+                              kernel_size=2, stride=2)
         self.boi = nn.Parameter(torch.zeros(1, 1, config.hidden_size))
         self.eoi = nn.Parameter(torch.zeros(1, 1, config.hidden_size))
 
