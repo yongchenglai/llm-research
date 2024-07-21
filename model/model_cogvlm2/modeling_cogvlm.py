@@ -180,7 +180,8 @@ class VisionExpertAttention(nn.Module):
         self.stride = [self.num_attention_heads,
                        self.num_multi_query_heads,
                        self.num_multi_query_heads]
-        self.qkv_size = self.hidden_size + self.hidden_size_per_attention_head * self.num_multi_query_heads * 2
+        self.qkv_size = self.hidden_size + \
+            self.hidden_size_per_attention_head * self.num_multi_query_heads * 2
         self.head_dim = self.hidden_size // self.num_attention_heads
         self.max_position_embeddings = config.max_position_embeddings
         self.rotary_emb = FastRotaryEmbedding(dim=self.head_dim,
