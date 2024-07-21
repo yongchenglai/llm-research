@@ -14,7 +14,7 @@ COPY examples/chatglm3_chat_gradio.py /workspace
 RUN pip install --no-cache-dir \
     -i https://pypi.tuna.tsinghua.edu.cn/simple \
     --trusted-host pypi.tuna.tsinghua.edu.cn \
-    bitsandbytes==0.42.0 \
+    bitsandbytes==0.43.1 \
     accelerate==0.30.1 \
     numpy==1.26.4 \
     gekko==1.0.6 \
@@ -43,7 +43,7 @@ RUN pip install --no-cache-dir \
     xformers \
     streamlit \
     cpm_kernels \
-    decord
+    decord>=0.6.0
 
 RUN pip install --no-cache-dir flash_attn --no-build-isolation
 
