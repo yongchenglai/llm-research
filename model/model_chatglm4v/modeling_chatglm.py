@@ -242,21 +242,25 @@ class CoreAttention(torch.nn.Module):
         pytorch_major_version = int(torch.__version__.split('.')[0])
         if pytorch_major_version >= 2:
             if attention_mask is None and query_layer.shape[2] == key_layer.shape[2]:
-                context_layer = torch.nn.functional.scaled_dot_product_attention(query_layer, key_layer, value_layer,
-                                                                                 is_causal=True)
+                context_layer = torch.nn.functional.scaled_dot_product_attention(
+                    query_layer, key_layer, value_layer, is_causal=True)
             else:
                 if attention_mask is not None:
                     attention_mask = ~attention_mask
-                context_layer = torch.nn.functional.scaled_dot_product_attention(query_layer, key_layer, value_layer,
-                                                                                 attention_mask)
+                context_layer = torch.nn.functional.scaled_dot_product_attention(
+                    query_layer, key_layer, value_layer, attention_mask)
             context_layer = context_layer.transpose(1, 2).contiguous()
-            new_context_layer_shape = context_layer.size()[:-2] + (self.hidden_size_per_partition,)
+            new_context_layer_shape = context_layer.size()[:-2] + \
+                                      (self.hidden_size_per_partition,)
             context_layer = context_layer.reshape(*new_context_layer_shape)
         else:
             # Raw attention scores
 
             # [b, np, sq, sk]
-            output_size = (query_layer.size(0), query_layer.size(1), query_layer.size(2), key_layer.size(2))
+            output_size = (query_layer.size(0),
+                           query_layer.size(1),
+                           query_layer.size(2),
+                           key_layer.size(2))
 
             # [b, np, sq, hn] -> [b * np, sq, hn]
             query_layer = query_layer.view(output_size[0] * output_size[1], output_size[2], -1)
