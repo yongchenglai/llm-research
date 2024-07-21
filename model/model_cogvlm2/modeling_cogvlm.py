@@ -101,9 +101,12 @@ class MLP(nn.Module):
         return down_proj
 
 
-def get_expert_mask(token_type_ids: "torch.LongTensor(B, L)") -> "[torch.BoolTensor(B, L), torch.BoolTensor(B, L)]":
+def get_expert_mask(
+        token_type_ids: "torch.LongTensor(B, L)",
+) -> "[torch.BoolTensor(B, L), torch.BoolTensor(B, L)]":
     vision_token_mask = torch.zeros_like(token_type_ids, dtype=torch.bool)
-    vision_token_mask[:, :-1] = (token_type_ids[:, :-1] == VISION_TOKEN_TYPE) & (token_type_ids[:, 1:] == VISION_TOKEN_TYPE)
+    vision_token_mask[:, :-1] = (token_type_ids[:, :-1] == VISION_TOKEN_TYPE) & \
+                                (token_type_ids[:, 1:] == VISION_TOKEN_TYPE)
     language_token_mask = ~vision_token_mask
     return vision_token_mask, language_token_mask
 
