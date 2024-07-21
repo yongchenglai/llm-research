@@ -86,9 +86,7 @@ class Attention(nn.Module):
         qkv = qkv.reshape(B, L, 3, self.num_heads, -1).permute(2, 0, 3, 1, 4)
         q, k, v = qkv[0], qkv[1], qkv[2]
         
-        out = attention_fn_default(
-            q, k, v
-        )
+        out = attention_fn_default(q, k, v)
         output = self.dense(out.transpose(1, 2).reshape(B, L, -1))
         output = self.output_dropout(output)
         return output
