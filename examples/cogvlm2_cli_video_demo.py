@@ -73,7 +73,7 @@ if __name__ == "__main__":
 
     if torch.cuda.is_available() and \
         torch.cuda.get_device_properties(0).total_memory < 48 * 1024 ** 3 and \
-        not args.quant:
+            not args.quant:
         print("GPU memory is less than 48GB. Please use cli_demo_multi_gpus.py "
               "or pass `--quant 4` or `--quant 8`.")
         exit()
@@ -93,6 +93,7 @@ if __name__ == "__main__":
             ),
             low_cpu_mem_usage=True
         ).eval()
+
     elif args.quant == 8:
         model = AutoModelForCausalLM.from_pretrained(
             model_path,
@@ -105,6 +106,7 @@ if __name__ == "__main__":
             ),
             low_cpu_mem_usage=True
         ).eval()
+
     else:
         model = AutoModelForCausalLM.from_pretrained(
             model_path,
