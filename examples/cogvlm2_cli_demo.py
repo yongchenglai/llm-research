@@ -19,7 +19,7 @@ if __name__ == "__main__":
     DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
     TORCH_TYPE = torch.bfloat16 \
         if torch.cuda.is_available() and \
-           torch.cuda.get_device_capability()[0] >= 8 \
+        torch.cuda.get_device_capability()[0] >= 8 \
         else torch.float16
 
     # Argument parser
