@@ -40,7 +40,8 @@ class Attention(nn.Module):
     def forward(self, x: "tensor(B, L, D)") -> "tensor(B, L, D)":
         B, L, _ = x.shape
         qkv = self.query_key_value(x)
-        qkv = qkv.reshape(B, L, 3, self.num_heads, -1).permute(2, 0, 1, 3, 4)  # 3, B, L, H, D
+        # 3, B, L, H, D
+        qkv = qkv.reshape(B, L, 3, self.num_heads, -1).permute(2, 0, 1, 3, 4)
         q, k, v = qkv[0], qkv[1], qkv[2]
 
         out = xops.memory_efficient_attention(
