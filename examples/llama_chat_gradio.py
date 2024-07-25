@@ -104,6 +104,10 @@ with gr.Blocks() as demo:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_name_or_path", type=str, help='mode name or path')
+    parser.add_argument("--torch_dtype", type=str, default="bfloat16",
+                        choices=["float32", "bfloat16", "float16"])
+    parser.add_argument("--server_name", type=str, default="0.0.0.0")
+    parser.add_argument("--server_port", type=int, default=7860)
     parser.add_argument("--is_4bit", action='store_true', help='use 4bit model')
     args = parser.parse_args()
 
@@ -117,7 +121,7 @@ if __name__ == "__main__":
         load_in_4bit=True,
         bnb_4bit_quant_type="nf4",
         bnb_4bit_use_double_quant=True,
-        bnb_4bit_compute_dtype=torch.bfloat16,
+        bnb_4bit_compute_dtype=args.torch_dtype,
     )
 
 
@@ -125,7 +129,7 @@ if __name__ == "__main__":
         model = AutoModelForCausalLM.from_pretrained(
             args.model_name_or_path,
             device_map='cuda:0' if torch.cuda.is_available() else "auto",
-            torch_dtype=torch.bfloat16,
+            torch_dtype=args.torch_dtype,
             quantization_config=quantization_config,
             attn_implementation="flash_attention_2",
             trust_remote_code=True)
@@ -152,6 +156,8 @@ if __name__ == "__main__":
     demo.queue().launch(
         share=False,
         debug=True,
-        server_name="0.0.0.0")
+        server_name=args.server_name,
+        server_port=args.server_port,
+    )
 
 
