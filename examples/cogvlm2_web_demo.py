@@ -32,7 +32,7 @@ TORCH_TYPE = torch.bfloat16 \
 parser = argparse.ArgumentParser(description="CogVLM2-Video CLI Demo")
 parser.add_argument("--model_name_or_path", type=str, help='mode name or path')
 parser.add_argument('--quant', type=int, choices=[4, 8],
-                        help='Enable 4-bit or 8-bit precision loading', default=0)
+                    help='Enable 4-bit or 8-bit precision loading', default=0)
 args = parser.parse_args()
 model_path = args.model_name_or_path
 
