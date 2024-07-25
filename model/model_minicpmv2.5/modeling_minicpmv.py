@@ -657,7 +657,8 @@ def slice_image(
                 min_error = error
 
         refine_size = get_refine_size(
-            original_size, best_grid, scale_resolution, patch_size, allow_upscale=True
+            original_size, best_grid, scale_resolution,
+            patch_size, allow_upscale=True
         )
 
         refine_image = image.resize(refine_size, Image.Resampling.BICUBIC)
@@ -670,7 +671,8 @@ def ensure_divide(length, patch_size):
     return max(round(length / patch_size) * patch_size, patch_size)
 
 
-def find_best_resize(original_size, scale_resolution, patch_size, allow_upscale=False):
+def find_best_resize(original_size, scale_resolution,
+                     patch_size, allow_upscale=False):
     width, height = original_size
     if (width * height > scale_resolution * scale_resolution) or allow_upscale:
         r = width / height
@@ -682,7 +684,8 @@ def find_best_resize(original_size, scale_resolution, patch_size, allow_upscale=
 
 
 def get_refine_size(
-    original_size, grid, scale_resolution, patch_size, allow_upscale=False
+    original_size, grid, scale_resolution,
+    patch_size, allow_upscale=False
 ):
     width, height = original_size
     grid_x, grid_y = grid
