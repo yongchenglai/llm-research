@@ -55,7 +55,9 @@ class MiniCPMVSliceConfig(PretrainedConfig):
         if config_dict.get("model_type") == "minicpmv":
             config_dict = config_dict["slice_config"]
 
-        if "model_type" in config_dict and hasattr(cls, "model_type") and config_dict["model_type"] != cls.model_type:
+        if "model_type" in config_dict \
+                and hasattr(cls, "model_type") \
+                and config_dict["model_type"] != cls.model_type:
             logger.warning(
                 f"You are using a model of type {config_dict['model_type']} to instantiate a model of type "
                 f"{cls.model_type}. This is not supported for all configurations of models and can yield errors."
