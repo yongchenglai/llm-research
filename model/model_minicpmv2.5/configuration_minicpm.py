@@ -44,7 +44,10 @@ class MiniCPMVSliceConfig(PretrainedConfig):
         self.scale_resolution = scale_resolution
 
     @classmethod
-    def from_pretrained(cls, pretrained_model_name_or_path: Union[str, os.PathLike], **kwargs) -> "PretrainedConfig":
+    def from_pretrained(
+        cls,
+        pretrained_model_name_or_path: Union[str, os.PathLike], **kwargs,
+    ) -> "PretrainedConfig":
         cls._set_token_in_kwargs(kwargs)
 
         config_dict, kwargs = cls.get_config_dict(pretrained_model_name_or_path, **kwargs)
