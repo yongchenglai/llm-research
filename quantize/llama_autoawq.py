@@ -6,12 +6,13 @@ from huggingface_hub import HfApi
 import argparse
 
 
+'''
+python llama_autoawq.py \
+--model_path='./FlagAlpha/Atom-7B-Chat/' \
+--quant_path='./FlagAlpha/Atom-7B-Chat-awq/'
+'''
 if __name__ == "__main__":
-    '''
-    python llama_autoawq.py \
-    --model_path='./FlagAlpha/Atom-7B-Chat/' \
-    --quant_path='./FlagAlpha/Atom-7B-Chat-awq/'
-    '''
+
     parser = argparse.ArgumentParser(description='autoawq')
     parser.add_argument("--model_path", type=str, help='model path')
     parser.add_argument("--quant_path", type=str, help='quant path')
