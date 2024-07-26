@@ -6,7 +6,7 @@ import argparse
 from huggingface_hub import HfApi
 
 '''
-python llama_autoawq.py \
+python awq_quantize.py \
 --model_path='./Qwen/Qwen2-7B-Instruct/' \
 --quant_path='./Qwen/Qwen2-7B-Instruct-AWQ/'
 '''
