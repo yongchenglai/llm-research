@@ -10,7 +10,7 @@ import torch
 import json
 import random
 from datasets import Dataset
-
+import logging
 
 def load_data(data_path, tokenizer, n_samples):
 
@@ -76,6 +76,12 @@ def load_data(data_path, tokenizer, n_samples):
 
 
 if __name__ == "__main__":
+
+    logging.basicConfig(
+        format="%(asctime)s %(levelname)s [%(name)s] %(message)s",
+        level=logging.INFO,
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
 
     parser = argparse.ArgumentParser(description='autoawq')
     parser.add_argument("--pretrained_model_dir", type=str, help='model path')
