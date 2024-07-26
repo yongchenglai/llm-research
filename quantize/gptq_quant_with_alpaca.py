@@ -152,7 +152,7 @@ def main():
     # save quantized model
     # model.save_quantized(args.quantized_model_dir)
     # save quantized model using safetensors
-    model.save_quantized(args.quantized_model_dir, use_safetensors=True)
+    model.save_quantized(save_dir=args.quantized_model_dir, use_safetensors=True)
     tokenizer.save_pretrained(args.quantized_model_dir)
 
     del model
