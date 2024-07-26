@@ -1,4 +1,5 @@
 # awq_quantize.py
+# Quantize Your Own Model with AutoAWQ
 from awq import AutoAWQForCausalLM
 from transformers import AutoTokenizer
 from transformers import AwqConfig, AutoConfig
@@ -28,7 +29,11 @@ if __name__ == "__main__":
     }
 
     # Load model
-    model = AutoAWQForCausalLM.from_pretrained(model_path)
+    model = AutoAWQForCausalLM.from_pretrained(
+        model_path,
+        device_map="auto",
+        safetensors=True)
+    
     tokenizer = AutoTokenizer.from_pretrained(
         model_path,
         trust_remote_code=True)
