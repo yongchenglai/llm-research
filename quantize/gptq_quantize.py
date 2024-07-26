@@ -134,8 +134,8 @@ if __name__ == "__main__":
     print(f"quantization took: {end - start: .4f}s")
 
     # save quantized model
-    model.save_quantized(save_dir=quant_path)
+    # model.save_quantized(save_dir=quant_path)
 
     # save quantized model using safetensors
-    # model.save_quantized(save_dir=quant_path, use_safetensors=True)
+    model.save_quantized(save_dir=quant_path, use_safetensors=True)
 
