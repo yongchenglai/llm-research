@@ -31,12 +31,14 @@ if __name__ == "__main__":
     # Load model
     model = AutoAWQForCausalLM.from_pretrained(
         model_path,
-        device_map="auto",
+        # device_map="auto",
         safetensors=True)
 
     tokenizer = AutoTokenizer.from_pretrained(
         model_path,
         trust_remote_code=True)
+
+    print(model)
 
     # Quantize
     model.quantize(tokenizer, quant_config=quant_config)
