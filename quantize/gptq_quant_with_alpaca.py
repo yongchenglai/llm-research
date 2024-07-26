@@ -1,4 +1,6 @@
 # gptq_quant_with_alpaca.py
+# https://github.com/AutoGPTQ/AutoGPTQ/blob/main/examples/
+# quantization/quant_with_alpaca.py
 import json
 import random
 import time
