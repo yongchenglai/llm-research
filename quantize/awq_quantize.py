@@ -1,4 +1,4 @@
-# qwen2_autoawq.py
+# awq_quantize.py
 from awq import AutoAWQForCausalLM
 from transformers import AutoTokenizer
 from transformers import AwqConfig, AutoConfig
