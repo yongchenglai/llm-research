@@ -8,18 +8,18 @@ from huggingface_hub import HfApi
 
 '''
 python awq_quantize.py \
---model_path='./Qwen/Qwen2-7B-Instruct/' \
---quant_path='./Qwen/Qwen2-7B-Instruct-AWQ/'
+--pretrained_model_dir='./Qwen/Qwen2-7B-Instruct/' \
+--quantized_model_dir='./Qwen/Qwen2-7B-Instruct-AWQ/'
 '''
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='autoawq')
-    parser.add_argument("--model_path", type=str, help='model path')
+    parser.add_argument("--pretrained_model_dir", type=str, help='model path')
     parser.add_argument("--quant_path", type=str, help='quant path')
     args = parser.parse_args()
 
-    model_path = args.model_path
-    quant_path = args.quant_path
+    model_path = args.pretrained_model_dir
+    quant_path = args.quantized_model_dir
 
     quant_config = {
         "zero_point": True,
