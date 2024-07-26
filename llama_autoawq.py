@@ -7,10 +7,11 @@ import argparse
 
 
 if __name__ == "__main__":
-
-    # llama_autoawq.py \
-    # --model_path='./FlagAlpha/Atom-7B-Chat/' \
-    # --quant_path='./FlagAlpha/Atom-7B-Chat-awq/'
+    '''
+    llama_autoawq.py \
+    --model_path='./FlagAlpha/Atom-7B-Chat/' \
+    --quant_path='./FlagAlpha/Atom-7B-Chat-awq/'
+    '''
     parser = argparse.ArgumentParser(description='autoawq')
     parser.add_argument("--model_path", type=str, help='model path')
     parser.add_argument("--quant_path", type=str, help='quant path')
