@@ -8,8 +8,8 @@ import argparse
 
 '''
 python llama_autoawq.py \
---model_path='./FlagAlpha/Atom-7B-Chat/' \
---quant_path='./FlagAlpha/Atom-7B-Chat-awq/'
+--model_path='FlagAlpha/Atom-7B-Chat' \
+--quant_path='FlagAlpha/Atom-7B-Chat-AWQ'
 '''
 if __name__ == "__main__":
 
