@@ -89,20 +89,11 @@ def main():
     parser.add_argument("--fast_tokenizer", action="store_true",
                         help="whether use fast tokenizer")
     parser.add_argument("--use_triton", action="store_true",
-                        help="whether use triton to speedup at inference",
-    )
-    parser.add_argument(
-        "--per_gpu_max_memory",
-        type=int,
-        default=None,
-        help="max memory used to load model per gpu",
-    )
-    parser.add_argument(
-        "--cpu_max_memory",
-        type=int,
-        default=None,
-        help="max memory used to offload model to cpu",
-    )
+                        help="whether use triton to speedup at inference")
+    parser.add_argument("--per_gpu_max_memory", type=int, default=None,
+                        help="max memory used to load model per gpu")
+    parser.add_argument("--cpu_max_memory", type=int, default=None,
+                        help="max memory used to offload model to cpu")
     parser.add_argument(
         "--quant_batch_size",
         type=int,
@@ -132,14 +123,19 @@ def main():
     )
     model = AutoGPTQForCausalLM.from_pretrained(
         args.pretrained_model_dir,
-        quantize_config=BaseQuantizeConfig(bits=args.bits, group_size=args.group_size, desc_act=args.desc_act),
+        quantize_config=BaseQuantizeConfig(
+            bits=args.bits,
+            group_size=args.group_size,
+            desc_act=args.desc_act),
         max_memory=max_memory,
         trust_remote_code=args.trust_remote_code,
     )
 
-    examples = load_data("dataset/alpaca_data_cleaned.json", tokenizer, args.num_samples)
+    examples = load_data("dataset/alpaca_data_cleaned.json",
+                         tokenizer, args.num_samples)
     examples_for_quant = [
-        {"input_ids": example["input_ids"], "attention_mask": example["attention_mask"]} for example in examples
+        {"input_ids": example["input_ids"],
+         "attention_mask": example["attention_mask"]} for example in examples
     ]
 
     start = time.time()
@@ -190,7 +186,8 @@ def main():
         end = time.time()
         print(f"quant: {generated_text}")
         num_new_tokens = len(tokenizer(generated_text)["input_ids"])
-        print(f"generate {num_new_tokens} tokens using {end-start: .4f}s, {num_new_tokens / (end - start)} tokens/s.")
+        print(f"generate {num_new_tokens} tokens using {end-start: .4f}s, "
+              f"{num_new_tokens / (end - start)} tokens/s.")
         print("=" * 42)
 
 
