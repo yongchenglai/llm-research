@@ -5,13 +5,13 @@ from transformers import AwqConfig, AutoConfig
 import argparse
 from huggingface_hub import HfApi
 
-
+'''
+python llama_autoawq.py \
+--model_path='./Qwen/Qwen2-7B-Instruct/' \
+--quant_path='./Qwen/Qwen2-7B-Instruct-AWQ/'
+'''
 if __name__ == "__main__":
-    '''
-    python llama_autoawq.py \
-    --model_path='./Qwen/Qwen2-7B-Instruct/' \
-    --quant_path='./Qwen/Qwen2-7B-Instruct-AWQ/'
-    '''
+
     parser = argparse.ArgumentParser(description='autoawq')
     parser.add_argument("--model_path", type=str, help='model path')
     parser.add_argument("--quant_path", type=str, help='quant path')
