@@ -103,7 +103,8 @@ def main():
     max_memory = {}
     if args.per_gpu_max_memory is not None and args.per_gpu_max_memory > 0:
         if torch.cuda.is_available():
-            max_memory.update({i: f"{args.per_gpu_max_memory}GIB" for i in range(torch.cuda.device_count())})
+            max_memory.update({i: f"{args.per_gpu_max_memory}GIB"
+                               for i in range(torch.cuda.device_count())})
     if args.cpu_max_memory is not None and args.cpu_max_memory > 0 and max_memory:
         max_memory["cpu"] = f"{args.cpu_max_memory}GIB"
     if not max_memory:
