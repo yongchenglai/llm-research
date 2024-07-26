@@ -8,7 +8,7 @@ from huggingface_hub import HfApi
 
 if __name__ == "__main__":
     '''
-    llama_autoawq.py \
+    python llama_autoawq.py \
     --model_path='./Qwen/Qwen2-7B-Instruct/' \
     --quant_path='./Qwen/Qwen2-7B-Instruct-AWQ/'
     '''
