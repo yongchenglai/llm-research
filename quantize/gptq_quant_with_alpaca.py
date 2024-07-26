@@ -150,12 +150,12 @@ def main():
     # if args.save_and_reload:
     print(f"Save the quantized mode.")
     # save quantized model
-    # model.save_quantized(args.quantized_model_dir)
+    model.save_quantized(args.quantized_model_dir)
     # save quantized model using safetensors
-    model.save_quantized(args.quantized_model_dir, use_safetensors=True)
-    tokenizer.save_pretrained(args.quantized_model_dir)
+    # model.save_quantized(args.quantized_model_dir, use_safetensors=True)
+    # tokenizer.save_pretrained(args.quantized_model_dir)
 
-    # del model
+    del model
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
 
@@ -169,7 +169,7 @@ def main():
         inject_fused_attention=True,
         trust_remote_code=args.trust_remote_code,
     )
-    
+
     print(f"Print the quantized mode.")
     print(model)
 
