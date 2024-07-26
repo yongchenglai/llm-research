@@ -144,8 +144,8 @@ def main():
     end = time.time()
     print(f"quantization took: {end - start: .4f}s")
 
-    if not args.quantized_model_dir:
-        args.quantized_model_dir = args.pretrained_model_dir
+    # if not args.quantized_model_dir:
+    #    args.quantized_model_dir = args.pretrained_model_dir
 
     # if args.save_and_reload:
     print(f"Save the quantized mode.")
