@@ -59,23 +59,39 @@ def preprocess(
         # target中的非关键部分(如系统标签和消息内容)用IGNORE_TOKEN_ID填充。
         target += [im_start] + [IGNORE_TOKEN_ID] * (len(system)-3) + [im_end] + nl_tokens
         assert len(input_id) == len(target)
+
+        # 遍历源数据中的每个对话(sentence)
         for j, sentence in enumerate(source):
+            # 提取角色和消息内容，并转换为ID序列
             role = roles[sentence["from"]]
             _input_id = tokenizer(role).input_ids + nl_tokens + \
                 tokenizer(sentence["value"]).input_ids + [im_end] + nl_tokens
+            # 添加到input_id中
             input_id += _input_id
+
+            # 根据角色类型, 生成对应_target的目标ID序列,
+            # _target只提取assistant的对话内容, 忽略user的对话内容。
             if role == '<|im_start|>user':
+                # 若角色为"user", 则目标ID序列仅包含开始标签和结束标签, 用忽略ID填充对话内容。
                 _target = [im_start] + [IGNORE_TOKEN_ID] * (len(_input_id)-3) + [im_end] + nl_tokens
             elif role == '<|im_start|>assistant':
+                # 若角色为"assistant"，则目标ID序列包含开始标签、
+                # 忽略ID填充(仅对角色标签)、对话内容（不包括角色标签和结束标签）、
                 _target = [im_start] + [IGNORE_TOKEN_ID] * len(tokenizer(role).input_ids) + \
                     _input_id[len(tokenizer(role).input_ids)+1:-2] + [im_end] + nl_tokens
             else:
                 raise NotImplementedError
             target += _target
+
         assert len(input_id) == len(target)
+        # 截取并转换为张量：
+        # 截取input_id和target至最大长度max_len
         input_id = torch.tensor(input_id[:max_len], dtype=torch.int)
         target = torch.tensor(target[:max_len], dtype=torch.int)
-        data.append(dict(input_ids=input_id, attention_mask=input_id.ne(tokenizer.pad_token_id)))
+        # 创建一个字典，包含键input_ids(存储输入张量)和attention_mask
+        # (等于输入张量,用于指示非填充位置)。将该字典添加到data列表中
+        data.append(dict(input_ids=input_id,
+                         attention_mask=input_id.ne(tokenizer.pad_token_id)))
 
     return data
 
@@ -108,10 +124,13 @@ if __name__ == "__main__":
         model_file_base_name="model"
     )
 
+    # 使用AutoTokenizer类从给定路径args.model_name_or_path加载预训练的tokenizer
     tokenizer = AutoTokenizer.from_pretrained(
         args.model_name_or_path,
         trust_remote_code=True)
     tokenizer.pad_token_id = tokenizer.eod_id
+
+    # 加载json数据文件, 调用process函数预处理数据, 返回处理后的数据
     data = preprocess(json.load(open(args.data_path)), tokenizer, args.max_len)
 
     model = AutoGPTQForCausalLM.from_pretrained(
@@ -125,7 +144,12 @@ if __name__ == "__main__":
         level=logging.INFO,
         datefmt="%Y-%m-%d %H:%M:%S"
     )
+
+    # 对模型进行量化,不在GPU上缓存示例数据
     model.quantize(data, cache_examples_on_gpu=False)
 
+    # 保存量化后的模型
     model.save_quantized(args.out_path, use_safetensors=True)
+
+    # 将tokenizer保存到输出路径
     tokenizer.save_pretrained(args.out_path)
