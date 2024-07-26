@@ -15,7 +15,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='autoawq')
     parser.add_argument("--pretrained_model_dir", type=str, help='model path')
-    parser.add_argument("--quant_path", type=str, help='quant path')
+    parser.add_argument("--quantized_model_dir", type=str, help='quant path')
     args = parser.parse_args()
 
     model_path = args.pretrained_model_dir
