@@ -169,6 +169,7 @@ def main():
     pipeline_init_kwargs = {"model": model, "tokenizer": tokenizer}
     if not max_memory:
         pipeline_init_kwargs["device"] = "cuda:0"
+    
     pipeline = TextGenerationPipeline(**pipeline_init_kwargs)
     for example in random.sample(examples, k=min(4, len(examples))):
         print(f"prompt: {example['prompt']}")
