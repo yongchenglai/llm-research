@@ -149,11 +149,16 @@ def main():
 
     if args.save_and_reload:
         print(f"Save the quantized mode.")
+        # save quantized model
         model.save_quantized(args.quantized_model_dir)
+        # save quantized model using safetensors
+        model.save_quantized(args.quantized_model_dir,
+                             use_safetensors=True)
         del model
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
 
+        # load quantized model, currently only support cpu or single gpu
         model = AutoGPTQForCausalLM.from_quantized(
             args.quantized_model_dir,
             device="cuda:0",
