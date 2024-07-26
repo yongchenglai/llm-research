@@ -1,4 +1,7 @@
 # gptq_quantize.py
+# https://github.com/AutoGPTQ/AutoGPTQ
+# pip install auto-gptq optimum
+
 from auto_gptq import AutoGPTQForCausalLM, BaseQuantizeConfig
 from transformers import AutoTokenizer
 import argparse
