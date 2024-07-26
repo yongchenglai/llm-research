@@ -169,6 +169,7 @@ def main():
         inject_fused_attention=True,
         trust_remote_code=args.trust_remote_code,
     )
+    
     print(f"Print the quantized mode.")
     print(model)
 
