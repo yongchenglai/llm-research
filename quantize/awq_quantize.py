@@ -33,7 +33,7 @@ if __name__ == "__main__":
         model_path,
         device_map="auto",
         safetensors=True)
-    
+
     tokenizer = AutoTokenizer.from_pretrained(
         model_path,
         trust_remote_code=True)
@@ -54,6 +54,6 @@ if __name__ == "__main__":
     model.model.config.quantization_config = quantization_config
 
     # save model weights
-    model.save_quantized(quant_path)
+    model.save_quantized(quant_path, safetensors=True, shard_size="5GB")
     tokenizer.save_pretrained(quant_path)
 
