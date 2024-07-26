@@ -148,10 +148,12 @@ def main():
         args.quantized_model_dir = args.pretrained_model_dir
 
     if args.save_and_reload:
+        print(f"Save the quantized mode.")
         model.save_quantized(args.quantized_model_dir)
         del model
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
+
         model = AutoGPTQForCausalLM.from_quantized(
             args.quantized_model_dir,
             device="cuda:0",
