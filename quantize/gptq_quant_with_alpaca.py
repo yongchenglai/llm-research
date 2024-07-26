@@ -94,17 +94,10 @@ def main():
                         help="max memory used to load model per gpu")
     parser.add_argument("--cpu_max_memory", type=int, default=None,
                         help="max memory used to offload model to cpu")
-    parser.add_argument(
-        "--quant_batch_size",
-        type=int,
-        default=1,
-        help="examples batch size for quantization",
-    )
-    parser.add_argument(
-        "--trust_remote_code",
-        action="store_true",
-        help="whether to trust remote code when loading model",
-    )
+    parser.add_argument("--quant_batch_size", type=int, default=1,
+                        help="examples batch size for quantization")
+    parser.add_argument("--trust_remote_code", action="store_true",
+                        help="whether to trust remote code when loading model")
     args = parser.parse_args()
 
     max_memory = {}
