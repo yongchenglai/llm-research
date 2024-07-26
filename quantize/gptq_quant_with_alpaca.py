@@ -173,8 +173,9 @@ def main():
             example["prompt"],
             return_full_text=False,
             num_beams=1,
-            max_length=len(example["input_ids"])
-            + 128,  # use this instead of max_new_token to disable UserWarning when integrate with logging
+            # use this instead of max_new_token to
+            # disable UserWarning when integrate with logging
+            max_length=len(example["input_ids"]) + 128,
         )[0]["generated_text"]
         end = time.time()
         print(f"quant: {generated_text}")
