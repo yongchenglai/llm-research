@@ -6,6 +6,8 @@ from huggingface_hub import HfApi
 
 model_path = './FlagAlpha/Atom-7B-Chat/'
 quant_path = './FlagAlpha/Atom-7B-Chat-awq/'
+
+
 quant_config = {
     "zero_point": True,
     "q_group_size": 128,
