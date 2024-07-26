@@ -37,9 +37,19 @@ if __name__ == "__main__":
     # visit https://github.com/AutoGPTQ/AutoGPTQ/blob/main/docs/tutorial/
     # 02-Advanced-Model-Loading-and-Best-Practice.md
     tokenizer = AutoTokenizer.from_pretrained(model_path)
+
+    # load un-quantized model, by default, the model will always be loaded into CPU memory
     model = AutoGPTQForCausalLM.from_pretrained(
         model_path,
         quantize_config)
 
+    # quantize model, the examples should be list of dict
+    # whose keys can only be "input_ids" and "attention_mask"
+    # model.quantize(examples)
 
+    # save quantized model
+    model.save_quantized(quant_path)
+
+    # save quantized model using safetensors
+    model.save_quantized(quant_path, use_safetensors=True)
 
