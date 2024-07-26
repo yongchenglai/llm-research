@@ -147,30 +147,30 @@ def main():
     if not args.quantized_model_dir:
         args.quantized_model_dir = args.pretrained_model_dir
 
-    if args.save_and_reload:
-        print(f"Save the quantized mode.")
-        # save quantized model
-        # model.save_quantized(args.quantized_model_dir)
-        # save quantized model using safetensors
-        model.save_quantized(args.quantized_model_dir, use_safetensors=True)
-        tokenizer.save_pretrained(args.quantized_model_dir)
+    # if args.save_and_reload:
+    print(f"Save the quantized mode.")
+    # save quantized model
+    # model.save_quantized(args.quantized_model_dir)
+    # save quantized model using safetensors
+    model.save_quantized(args.quantized_model_dir, use_safetensors=True)
+    tokenizer.save_pretrained(args.quantized_model_dir)
+    
+    # del model
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
 
-        del model
-        if torch.cuda.is_available():
-            torch.cuda.empty_cache()
-
-        # load quantized model, currently only support cpu or single gpu
-        model = AutoGPTQForCausalLM.from_quantized(
-            args.quantized_model_dir,
-            device="cuda:0",
-            use_triton=args.use_triton,
-            max_memory=max_memory,
-            inject_fused_mlp=True,
-            inject_fused_attention=True,
-            trust_remote_code=args.trust_remote_code,
-        )
-        print(f"Print the quantized mode.")
-        print(model)
+    # load quantized model, currently only support cpu or single gpu
+    model = AutoGPTQForCausalLM.from_quantized(
+        args.quantized_model_dir,
+        device="cuda:0",
+        use_triton=args.use_triton,
+        max_memory=max_memory,
+        inject_fused_mlp=True,
+        inject_fused_attention=True,
+        trust_remote_code=args.trust_remote_code,
+    )
+    print(f"Print the quantized mode.")
+    print(model)
 
     pipeline_init_kwargs = {"model": model, "tokenizer": tokenizer}
     if not max_memory:
