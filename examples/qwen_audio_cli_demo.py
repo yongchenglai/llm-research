@@ -30,6 +30,7 @@ if __name__ == '__main__':
         trust_remote_code=True,
         torch_dtype=torch.bfloat16,
         # attn_implementation="flash_attention_2",
+        # attn_implementation="flash_attention",
         quantization_config=BitsAndBytesConfig(
             load_in_4bit=True,
             bnb_4bit_quant_type="nf4",
