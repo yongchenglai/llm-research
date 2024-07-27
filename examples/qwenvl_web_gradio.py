@@ -255,9 +255,7 @@ def _launch_demo(args, model, tokenizer):
 
 def main():
     args = _get_args()
-
     model, tokenizer = _load_model_tokenizer(args)
-
     _launch_demo(args, model, tokenizer)
 
 
