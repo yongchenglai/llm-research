@@ -82,6 +82,7 @@ apply_rotary_emb_func = None
 rms_norm = None
 flash_attn_unpadded_func = None
 
+
 def _import_flash_attn():
     global apply_rotary_emb_func, rms_norm, flash_attn_unpadded_func
     try:
@@ -118,6 +119,7 @@ def _import_flash_attn():
             "https://github.com/Dao-AILab/flash-attention"
         )
 
+
 def quantize_cache_v(fdata, bits, qmax, qmin):
     # b, s, head, h-dim->b, head, s, h-dim
     qtype = torch.uint8
@@ -140,9 +142,11 @@ def quantize_cache_v(fdata, bits, qmax, qmin):
     qdata = torch.clamp(res_data, qmin, qmax).to(qtype)
     return qdata.contiguous(), scale, zero
 
+
 def dequantize_cache_torch(qdata, scale, zero):
     data = scale * (qdata - zero)
     return data
+
 
 class FlashSelfAttention(torch.nn.Module):
     def __init__(
@@ -167,12 +171,15 @@ class FlashSelfAttention(torch.nn.Module):
         seqlens_in_batch = valid_mask.sum(dim=-1, dtype=torch.int32)
         indices = torch.nonzero(valid_mask.flatten(), as_tuple=False).flatten()
         max_seqlen_in_batch = seqlens_in_batch.max().item()
-        cu_seqlens = F.pad(torch.cumsum(seqlens_in_batch, dim=0, dtype=torch.torch.int32), (1, 0))
+        cu_seqlens = F.pad(torch.cumsum(seqlens_in_batch, dim=0,
+                                        dtype=torch.torch.int32), (1, 0))
         hidden_states = hidden_states[indices]
         return hidden_states, indices, cu_seqlens, max_seqlen_in_batch
 
     def pad_input(self, hidden_states, indices, batch, seqlen):
-        output = torch.zeros(batch * seqlen, *hidden_states.shape[1:], device=hidden_states.device,
+        output = torch.zeros(batch * seqlen,
+                             *hidden_states.shape[1:],
+                             device=hidden_states.device,
                              dtype=hidden_states.dtype)
         output[indices] = hidden_states
         return rearrange(output, '(b s) ... -> b s ...', b=batch)
@@ -217,10 +224,7 @@ class FlashSelfAttention(torch.nn.Module):
             is_causal = seqlen_q == seqlen_k
             dropout_p = 0
 
-        output = flash_attn_unpadded_func(
-            q,
-            k,
-            v,
+        output = flash_attn_unpadded_func(q, k, v,
             cu_seqlens_q,
             cu_seqlens_k,
             seqlen_q,
