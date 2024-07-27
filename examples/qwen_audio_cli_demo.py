@@ -1,6 +1,6 @@
 # qwen_audio_cli_demo.py
-from transformers import AutoModelForCausalLM, AutoTokenizer
-from transformers.generation import GenerationConfig, BitsAndBytesConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+from transformers.generation import GenerationConfig
 import torch
 import argparse
 
