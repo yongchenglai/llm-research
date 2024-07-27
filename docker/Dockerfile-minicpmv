@@ -73,7 +73,8 @@ RUN pip install --no-cache-dir  \
         streamlit \
         gguf \
         GPUtil \
-        tiktoken
+        tiktoken \
+        transformers_stream_generator
 
 WORKDIR /app
 
