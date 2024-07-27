@@ -15,10 +15,12 @@ import os
 import re
 import secrets
 import tempfile
+import torch
 from transformers import (
     # snapshot_download,
     AutoModelForCausalLM,
     AutoTokenizer,
+    BitsAndBytesConfig,
     GenerationConfig
 )
 
@@ -63,19 +65,31 @@ def _load_model_tokenizer(args):
         device_map = "cuda"
 
     model = AutoModelForCausalLM.from_pretrained(
-        args.checkpoint_path,
-        device_map=device_map,
+        args.model_name_or_path,
+        device_map="auto",
         trust_remote_code=True,
-        resume_download=True,
-        revision='master',
-    ).eval()
-    model.generation_config = GenerationConfig.from_pretrained(
-        args.checkpoint_path,
-        trust_remote_code=True,
-        resume_download=True,
-        revision='master',
+        torch_dtype=torch.bfloat16,
+        attn_implementation="flash_attention_2",
+        quantization_config=BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_compute_dtype=torch.bfloat16,
+            # llm_int8_skip_modules=["out_proj", "kv_proj", "lm_head"],
+        ),
+        low_cpu_mem_usage=True,
+        # resume_download=True,
+        # revision='master',
     )
 
+    model.generation_config = GenerationConfig.from_pretrained(
+        args.model_name_or_path,
+        trust_remote_code=True,
+        # resume_download=True,
+        # revision='master',
+    )
+    model.eval()
+    print(model)
     return model, tokenizer
 
 
