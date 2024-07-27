@@ -27,7 +27,6 @@ def _get_args():
                         help="Checkpoint name or path, default to %(default)r")
     parser.add_argument("--cpu-only", action="store_true",
                         help="Run demo with CPU only")
-
     parser.add_argument("--share", action="store_true", default=False,
                         help="Create a publicly shareable link for the interface.")
     parser.add_argument("--inbrowser", action="store_true", default=False,
@@ -219,7 +218,7 @@ def _launch_demo(args, model, tokenizer):
 
     with gr.Blocks() as demo:
         gr.Markdown("""<center><font size=8>Qwen-Audio-Chat Bot</center>""")
-       
+
         chatbot = gr.Chatbot(label='Qwen-Audio-Chat', elem_classes="control-height", height=750)
         query = gr.Textbox(lines=2, label='Input')
         task_history = gr.State([])
