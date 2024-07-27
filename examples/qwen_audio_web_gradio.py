@@ -219,10 +219,11 @@ def _launch_demo(args, model, tokenizer):
     with gr.Blocks() as demo:
         gr.Markdown("""<center><font size=8>Qwen-Audio-Chat Bot</center>""")
 
-        chatbot = gr.Chatbot(label='Qwen-Audio-Chat', elem_classes="control-height", height=750)
+        chatbot = gr.Chatbot(label='Qwen-Audio-Chat',
+                             elem_classes="control-height", height=750)
         query = gr.Textbox(lines=2, label='Input')
         task_history = gr.State([])
-        mic = gr.Audio(source="microphone", type="filepath")
+        mic = gr.Audio(sources="microphone", type="filepath")
 
         with gr.Row():
             empty_bin = gr.Button("🧹 Clear History (清除历史)")
@@ -246,13 +247,6 @@ def _launch_demo(args, model, tokenizer):
                         show_progress=True)
         addfile_btn.upload(add_file, [chatbot, task_history, addfile_btn],
                            [chatbot, task_history], show_progress=True)
-
-        gr.Markdown("""\
-<font size=2>Note: This demo is governed by the original license of Qwen-Audio. \
-We strongly advise users not to knowingly generate or allow others to knowingly generate harmful content, \
-including hate speech, violence, pornography, deception, etc. \
-(注：本演示受Qwen-Audio的许可协议限制。我们强烈建议，用户不应传播及不应允许他人传播以下内容，\
-包括但不限于仇恨言论、暴力、色情、欺诈相关的有害信息。)""")
 
     demo.queue().launch(
         share=args.share,
