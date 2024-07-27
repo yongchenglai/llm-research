@@ -73,7 +73,7 @@ def _load_model_tokenizer(args):
     model.generation_config = GenerationConfig.from_pretrained(
         args.model_name_or_path,
         trust_remote_code=True,
-        #resume_download=True,
+        # resume_download=True,
     )
     model.eval()
     print(model)
