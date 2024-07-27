@@ -34,7 +34,7 @@ def _get_args():
     parser = ArgumentParser("Qwen-VL-Chat Demo")
     parser.add_argument("--model_name_or_path", type=str,
                         default='qwen/Qwen-VL-Chat',
-                        help="Checkpoint name or path, default to %(default)r")
+                        help="model name or path")
     parser.add_argument("--cpu-only", action="store_true",
                         help="Run demo with CPU only")
     parser.add_argument("--share", action="store_true", default=False,
@@ -53,7 +53,7 @@ def _get_args():
 
 def _load_model_tokenizer(args):
     tokenizer = AutoTokenizer.from_pretrained(
-        args.checkpoint_path,
+        args.model_name_or_path,
         trust_remote_code=True,
         resume_download=True,
         revision='master',
