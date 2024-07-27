@@ -389,11 +389,11 @@ class AudioEncoder(nn.Module):
         self.input_positional_embedding = self.positional_embedding[:src_len]
         assert x.shape[1:] == self.input_positional_embedding.shape, \
             f"incorrect audio shape: {x.shape[1:], self.input_positional_embedding.shape}"
-        
+
         x = (x + self.input_positional_embedding).to(x.dtype)
         if padding_mask is not None:
             padding_mask = padding_mask.to(dtype=self.conv1.weight.dtype,
-                     device=self.conv1.weight.device)
+                                           device=self.conv1.weight.device)
             batch_src_len = padding_mask.size(1)
             x = x[:, :batch_src_len, :]
             padding_mask = padding_mask.view(
@@ -406,6 +406,7 @@ class AudioEncoder(nn.Module):
             new_padding_mask = torch.zeros_like(key_padding_mask, dtype=x.dtype)
             padding_mask = new_padding_mask.masked_fill(key_padding_mask, float("-inf"))
 
+        # Encoder layer
         for block in self.blocks:
             x = block(x, mask=padding_mask)
 
@@ -426,14 +427,23 @@ class AudioEncoder(nn.Module):
             bos, eos = None, None
         return x, bos, eos
 
-    def encode(self, input_audios: Tensor, input_audio_lengths: Tensor, audio_span_tokens: List):
+
+    def encode(
+        self,
+        input_audios: Tensor,
+        input_audio_lengths: Tensor,
+        audio_span_tokens: List,
+    ):
         real_input_audio_lens = input_audio_lengths[:, 0].tolist()
         max_len_in_batch = max(real_input_audio_lens)
-        padding_mask = torch.ones([input_audios.size(0), max_len_in_batch]).to(dtype=self.conv1.weight.dtype,
-                                                                               device=self.conv1.weight.device)
+        padding_mask = torch.ones(
+            [input_audios.size(0),
+             max_len_in_batch]).to(dtype=self.conv1.weight.dtype,
+                                   device=self.conv1.weight.device)
+
         for index in range(len(input_audios)):
             padding_mask[index, :input_audio_lengths[index][0].item()] = 0
-        x, bos, eos = self(input_audios, padding_mask,input_audio_lengths)
+        x, bos, eos = self(input_audios, padding_mask, input_audio_lengths)
         output_audios = []
         for i in range(len(audio_span_tokens)):
             audio_span = audio_span_tokens[i]
