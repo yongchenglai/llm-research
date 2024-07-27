@@ -581,6 +581,7 @@ class QWenMLP(nn.Module):
         output = self.c_proj(intermediate_parallel)
         return output
 
+
 class QWenBlock(nn.Module):
     def __init__(self, config):
         super().__init__()
