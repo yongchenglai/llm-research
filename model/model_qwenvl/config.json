@@ -1,5 +1,5 @@
 {
-  "_name_or_path": "./",
+  "_name_or_path": "Qwen/Qwen-VL-Chat",
   "architectures": [
     "QWenLMHeadModel"
   ],
