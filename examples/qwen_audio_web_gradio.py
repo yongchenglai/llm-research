@@ -5,7 +5,7 @@
 
 """A simple web interactive chat demo based on gradio."""
 # qwen_audio_web_gradio.py
-from argparse import ArgumentParser
+import argparse
 from pathlib import Path
 
 import copy
@@ -21,7 +21,7 @@ from pydub import AudioSegment
 
 
 def _get_args():
-    parser = ArgumentParser("Qwen-Audio-Chat Demo")
+    parser = argparse.ArgumentParser("Qwen-Audio-Chat Demo")
     parser.add_argument("--model_name_or_path", type=str,
                         default='Qwen/Qwen-Audio-Chat',
                         help="Checkpoint name or path, default to %(default)r")
