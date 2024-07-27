@@ -387,7 +387,9 @@ class AudioEncoder(nn.Module):
 
 
         self.input_positional_embedding = self.positional_embedding[:src_len]
-        assert x.shape[1:] == self.input_positional_embedding.shape, f"incorrect audio shape: {x.shape[1:], self.input_positional_embedding.shape}"
+        assert x.shape[1:] == self.input_positional_embedding.shape, \
+            f"incorrect audio shape: {x.shape[1:], self.input_positional_embedding.shape}"
+        
         x = (x + self.input_positional_embedding).to(x.dtype)
         if padding_mask is not None:
             padding_mask = padding_mask.to(dtype=self.conv1.weight.dtype,
