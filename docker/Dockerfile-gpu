@@ -25,7 +25,7 @@ RUN pip install --no-cache-dir \
     evaluate \
     pytest \
     peft==0.10.0 \
-    transformers==4.42.3 \
+    transformers==4.43.3 \
     deepspeed==0.14.0 \
     scikit-learn \
     torchvision \
