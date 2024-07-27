@@ -224,8 +224,6 @@ class LayerNorm(nn.LayerNorm):
         return super().forward(x).type(x.dtype)
 
 
-
-
 class Linear(nn.Linear):
     def forward(self, x: Tensor) -> Tensor:
         return F.linear(
@@ -328,7 +326,8 @@ class ResidualAttentionBlock(nn.Module):
     ):
         x = x + self.attn(self.attn_ln(x), mask=mask, kv_cache=kv_cache)[0]
         if self.cross_attn:
-            x = x + self.cross_attn(self.cross_attn_ln(x), xa, kv_cache=kv_cache)[0]
+            x = x + self.cross_attn(self.cross_attn_ln(x), xa,
+                                    kv_cache=kv_cache)[0]
         x = x + self.mlp(self.mlp_ln(x))
         return x
 
@@ -360,15 +359,22 @@ class AudioEncoder(nn.Module):
             self.avg_pooler = nn.AvgPool1d(2, stride=2)
         else:
             self.avg_pooler = None
+
         self.proj = nn.Linear(n_state, output_dim)
         if add_audio_bos_eos_token:
             self.audio_bos_eos_token = nn.Embedding(2, output_dim)
         else:
             self.audio_bos_eos_token = None
+
         self.output_dim = output_dim
         self.n_head = n_head
 
-    def forward(self, x: Tensor, padding_mask: Tensor=None, audio_lengths: Tensor=None):
+    def forward(
+        self,
+        x: Tensor,
+        padding_mask: Tensor=None,
+        audio_lengths: Tensor=None,
+    ):
         """
         x : torch.Tensor, shape = (batch_size, n_mels, n_ctx)
             the mel spectrogram of the audio
