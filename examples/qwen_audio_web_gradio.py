@@ -232,10 +232,8 @@ def _launch_demo(args, model, tokenizer):
             addfile_btn = gr.UploadButton("📁 Upload (上传文件)",
                                           file_types=["audio"])
 
-        mic.change(add_mic, [chatbot, task_history, mic],
-                   [chatbot, task_history])
-        submit_btn.click(add_text,
-                         [chatbot, task_history, query],
+        mic.change(add_mic, [chatbot, task_history, mic], [chatbot, task_history])
+        submit_btn.click(add_text, [chatbot, task_history, query],
                          [chatbot, task_history]).then(
             predict, [chatbot, task_history], [chatbot],
             show_progress=True
