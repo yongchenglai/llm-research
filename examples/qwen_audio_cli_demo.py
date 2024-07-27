@@ -13,7 +13,10 @@ if __name__ == '__main__':
     parser.add_argument("--model_name_or_path", type=str,
                         default='Qwen/Qwen-Audio-Chat',
                         help="Checkpoint name or path, default to %(default)r")
-
+    parser.add_argument("--audio", type=str,
+                        default='/models/audio/1272-128104-0000.flac')
+    parser.add_argument("--text", type=str,
+                        default='what is that sound?',)
     args = parser.parse_args()
 
     tokenizer = AutoTokenizer.from_pretrained(
@@ -42,11 +45,11 @@ if __name__ == '__main__':
         trust_remote_code=True,
     )
     model.eval()
-    print(model)
+    # print(model)
 
     query = tokenizer.from_list_format([
-        {'audio': '/models/audio/1272-128104-0000.flac'},
-        {'text': 'what is that sound?'},
+        {'audio': args.audio},
+        {'text': args.text},
     ])
 
     response, history = model.chat(tokenizer, query=query, history=None)
