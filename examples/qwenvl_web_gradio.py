@@ -29,7 +29,7 @@ PUNCTUATION = "！？。＂＃＄％＆＇（）＊＋，－／：；＜＝＞�
 
 
 def _get_args():
-    parser = ArgumentParser()
+    parser = ArgumentParser("Qwen-VL-Chat Demo")
     parser.add_argument("--model_name_or_path", type=str,
                         default='qwen/Qwen-VL-Chat',
                         help="Checkpoint name or path, default to %(default)r")
