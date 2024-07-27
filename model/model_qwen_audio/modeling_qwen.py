@@ -224,7 +224,8 @@ class FlashSelfAttention(torch.nn.Module):
             is_causal = seqlen_q == seqlen_k
             dropout_p = 0
 
-        output = flash_attn_unpadded_func(q, k, v,
+        output = flash_attn_unpadded_func(
+            q, k, v,
             cu_seqlens_q,
             cu_seqlens_k,
             seqlen_q,
