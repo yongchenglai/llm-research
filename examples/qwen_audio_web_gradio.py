@@ -32,7 +32,7 @@ def _get_args():
     parser.add_argument("--inbrowser", action="store_true", default=False,
                         help="Automatically launch the interface "
                              "in a new tab on the default browser.")
-    parser.add_argument("--server-port", type=int, default=8000,
+    parser.add_argument("--server-port", type=int, default=7860,
                         help="Demo server port.")
     parser.add_argument("--server-name", type=str, default="127.0.0.1",
                         help="Demo server name.")
