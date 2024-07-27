@@ -253,7 +253,7 @@ def _launch_demo(args, model, tokenizer):
         inbrowser=args.inbrowser,
         server_port=args.server_port,
         server_name=args.server_name,
-        file_directories=["/tmp/"]
+        # file_directories=["/tmp/"]
     )
 
 
