@@ -72,7 +72,8 @@ RUN pip install --no-cache-dir  \
         gradio_client \
         streamlit \
         gguf \
-        GPUtil
+        GPUtil \
+        tiktoken
 
 WORKDIR /app
 
