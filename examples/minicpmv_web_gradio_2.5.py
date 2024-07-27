@@ -362,7 +362,7 @@ if __name__ == "__main__":
 
     # launch
     demo.launch(
-        share=False,
+        share=True,
         debug=True,
         show_api=False,
         server_port=args.server_port,
