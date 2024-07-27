@@ -52,4 +52,7 @@ extra_flags = []
 
 cache_autogptq_cuda_256_sources = ["./cache_autogptq_cuda_256.cpp",
            "./cache_autogptq_cuda_kernel_256.cu"]
-cache_autogptq_cuda_256 = _cpp_extention_load_helper("cache_autogptq_cuda_256", cache_autogptq_cuda_256_sources, extra_flags)
+cache_autogptq_cuda_256 = _cpp_extention_load_helper(
+    "cache_autogptq_cuda_256",
+    cache_autogptq_cuda_256_sources,
+    extra_flags)
