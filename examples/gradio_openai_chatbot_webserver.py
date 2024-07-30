@@ -1,5 +1,6 @@
 # gradio_openai_chatbot_webserver.py
 """
+chmod 755 gradio_openai_chatbot_webserver.py
 python gradio_openai_chatbot_webserver.py \
 --model-url="http://192.168.31.160:8090/v1" \
 --model="qwen2-7b" \
