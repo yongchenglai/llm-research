@@ -4,8 +4,8 @@ python gradio_openai_chatbot_webserver.py \
 --model-url="http://192.168.31.160:8090/v1" \
 --model="qwen2-7b" \
 --api-key="token-abc123" \
---host="0.0.0.0" \
---port=7860
+--server_host="0.0.0.0" \
+--server_port=7860
 """
 import gradio as gr
 import argparse
@@ -23,8 +23,8 @@ parser.add_argument('--temp', type=float, default=0.8,
                     help='Temperature for text generation')
 parser.add_argument('--stop-token-ids',type=str, default='',
                     help='Comma-separated stop token IDs')
-parser.add_argument("--host", type=str, default='0.0.0.0')
-parser.add_argument("--port", type=int, default=7860)
+parser.add_argument("--server_host", type=str, default='0.0.0.0')
+parser.add_argument("--server_port", type=int, default=7860)
 
 # Parse the arguments
 args = parser.parse_args()
@@ -76,6 +76,6 @@ def predict(message, history):
 
 # Create and launch a chat interface with Gradio
 gr.ChatInterface(predict).queue().launch(
-    server_name=args.host,
-    server_port=args.port,
+    server_name=args.server_host,
+    server_port=args.server_port,
     share=True)
