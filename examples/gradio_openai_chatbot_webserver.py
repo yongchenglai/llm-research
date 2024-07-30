@@ -1,4 +1,12 @@
 # gradio_openai_chatbot_webserver.py
+"""
+python gradio_openai_chatbot_webserver.py \
+--model-url="http://192.168.31.160:8090/v1" \
+--model="qwen2-7b" \
+--api-key="token-abc123" \
+--host="0.0.0.0" \
+--port=7860
+"""
 import gradio as gr
 import argparse
 from openai import OpenAI
@@ -67,6 +75,7 @@ def predict(message, history):
 
 
 # Create and launch a chat interface with Gradio
-gr.ChatInterface(predict).queue().launch(server_name=args.host,
-                                         server_port=args.port,
-                                         share=True)
+gr.ChatInterface(predict).queue().launch(
+    server_name=args.host,
+    server_port=args.port,
+    share=True)
