@@ -5,39 +5,12 @@ python gradio_openai_chatbot_webserver.py \
 --model="qwen2-7b" \
 --api-key="token-abc123" \
 --server_host="0.0.0.0" \
---server_port=7860
+--server_port=7860 \
+--share
 """
 import gradio as gr
 import argparse
 from openai import OpenAI
-
-# Argument parser setup
-parser = argparse.ArgumentParser(
-    description='Chatbot Interface with Customizable Parameters')
-parser.add_argument('--model-url', type=str, default='http://localhost:8000/v1',
-                    help='Model URL')
-parser.add_argument('-m', '--model', type=str, required=True,
-                    help='Model name for the chatbot')
-parser.add_argument('--api-key', type=str, default="EMPTY", help='openai_api_key')
-parser.add_argument('--temp', type=float, default=0.8,
-                    help='Temperature for text generation')
-parser.add_argument('--stop-token-ids',type=str, default='',
-                    help='Comma-separated stop token IDs')
-parser.add_argument("--server_host", type=str, default='0.0.0.0')
-parser.add_argument("--server_port", type=int, default=7860)
-
-# Parse the arguments
-args = parser.parse_args()
-
-# Set OpenAI's API key and API base to use vLLM's API server.
-openai_api_key = args.api_key
-openai_api_base = args.model_url
-
-# Create an OpenAI client to interact with the API server
-client = OpenAI(
-    api_key=openai_api_key,
-    base_url=openai_api_base,
-)
 
 
 def predict(message, history):
@@ -74,8 +47,42 @@ def predict(message, history):
         yield partial_message
 
 
-# Create and launch a chat interface with Gradio
-gr.ChatInterface(predict).queue().launch(
-    server_name=args.server_host,
-    server_port=args.server_port,
-    share=True)
+if __name__ == '__main__':
+    # Argument parser setup
+    parser = argparse.ArgumentParser(
+        description='Chatbot Interface with Customizable Parameters')
+    parser.add_argument('--model-url', type=str, default='http://localhost:8000/v1',
+                        help='Model URL')
+    parser.add_argument('-m', '--model', type=str, required=True,
+                        help='Model name for the chatbot')
+    parser.add_argument('--api-key', type=str, default="EMPTY", help='openai_api_key')
+    parser.add_argument('--temp', type=float, default=0.8,
+                        help='Temperature for text generation')
+    parser.add_argument('--stop-token-ids', type=str, default='',
+                        help='Comma-separated stop token IDs')
+    parser.add_argument("--share", action="store_true", default=False,
+                        help="Create a publicly shareable link for the interface.")
+    parser.add_argument("--server_host", type=str, default='0.0.0.0')
+    parser.add_argument("--server_port", type=int, default=7860)
+
+    # Parse the arguments
+    args = parser.parse_args()
+
+    # Set OpenAI's API key and API base to use vLLM's API server.
+    openai_api_key = args.api_key
+    openai_api_base = args.model_url
+
+    # Create an OpenAI client to interact with the API server
+    client = OpenAI(
+        api_key=openai_api_key,
+        base_url=openai_api_base,
+    )
+
+    # Create and launch a chat interface with Gradio
+    gr.ChatInterface(predict).queue().launch(
+        server_name=args.server_host,
+        server_port=args.server_port,
+        debug=True,
+        share=args.share)
+
+
