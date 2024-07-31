@@ -17,7 +17,7 @@ WORKDIR /app
 COPY examples/gradio_openai_chatbot_webserver.py /app
 RUN chmod u+x /app/gradio_openai_chatbot_webserver.py
 
-RUN pip install --no-cache-dir gradio  openai
+RUN pip install --no-cache-dir gradio gradio_client openai
 
 #开启7860端口
 EXPOSE 7860
