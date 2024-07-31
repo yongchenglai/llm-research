@@ -81,9 +81,11 @@ if __name__ == '__main__':
 
     # Create and launch a chat interface with Gradio
     gr.ChatInterface(predict).queue().launch(
+        debug=True,
+        share=args.share,
+        show_api=False,
         server_name=args.server_host,
         server_port=args.server_port,
-        debug=True,
-        share=args.share)
+    )
 
 
