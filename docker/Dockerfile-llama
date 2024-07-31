@@ -59,3 +59,7 @@ EXPOSE 7860
 #设置启动命令
 #ENTRYPOINT ["python", "llama_chat_gradio.py", \
 #            "--model_name_or_path=/workspace/models"]
+RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
+    mv frpc_linux_amd64 frpc_linux_amd64_v0.2 && \
+    mv frpc_linux_amd64_v0.2 /opt/conda/lib/python3.10/site-packages/gradio/ && \
+    chmod 755 /opt/conda/lib/python3.10/site-packages/gradio/frpc_linux_amd64_v0.2
