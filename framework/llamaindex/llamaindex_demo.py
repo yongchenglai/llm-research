@@ -152,15 +152,19 @@ if __name__ == '__main__':
     embedding_model_dict = {
         "text2vec": "your text2vec model path",
     }
+
     llm = Qwen()
-    embeddings = HuggingFaceEmbeddings(model_name=embedding_model_dict[EMBEDDING_MODEL],model_kwargs={'device': EMBEDDING_DEVICE})
+    embeddings = HuggingFaceEmbeddings(
+        model_name=embedding_model_dict[EMBEDDING_MODEL],
+        model_kwargs={'device': EMBEDDING_DEVICE})
 
     docs = load_file(filepath)
 
     docsearch = FAISSWrapper.from_documents(docs, embeddings)
 
     prompt = PromptTemplate(
-        template=PROMPT_TEMPLATE, input_variables=["context_str", "question"]
+        template=PROMPT_TEMPLATE,
+        input_variables=["context_str", "question"]
     )
 
     chain_type_kwargs = {"prompt": prompt, "document_variable_name": "context_str"}
