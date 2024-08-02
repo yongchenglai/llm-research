@@ -17,8 +17,7 @@ from openai import OpenAI
 def predict(message, history):
     # Convert chat history to OpenAI format
     history_openai_format = [{
-        "role": "system",
-        "content": "You are a great ai assistant."
+        "role": "system", "content": "You are a great ai assistant."
     }]
     for human, assistant in history:
         history_openai_format.append({"role": "user", "content": human})
