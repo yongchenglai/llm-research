@@ -142,11 +142,12 @@ def _launch_demo(args, model, tokenizer):
         ts_pattern = r"<\|\d{1,2}\.\d+\|>"
         all_time_stamps = re.findall(ts_pattern, response)
         print(response)
-        if (len(all_time_stamps) > 0) and (len(all_time_stamps) % 2 ==0) and last_audio:
-            ts_float = [ float(t.replace("<|", "").replace("|>", "")) for t in all_time_stamps]
+
+        if (len(all_time_stamps) > 0) and (len(all_time_stamps) % 2 == 0) and last_audio:
+            ts_float = [float(t.replace("<|", "").replace("|>", "")) for t in all_time_stamps]
             ts_float_pair = [ts_float[i:i + 2] for i in range(0, len(all_time_stamps),2)]
             # 读取音频文件
-            format = os.path.splitext(last_audio)[-1].replace(".","")
+            format = os.path.splitext(last_audio)[-1].replace(".", "")
             audio_file = AudioSegment.from_file(last_audio, format=format)
             chat_response_t = response.replace("<|", "").replace("|>", "")
             chat_response = chat_response_t
