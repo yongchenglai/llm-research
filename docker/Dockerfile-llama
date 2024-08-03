@@ -52,10 +52,11 @@ RUN pip install --no-cache-dir \
     decord>=0.6.0 \
     chainlit \
     autoawq autoawq-kernels \
-    auto_gptq optimum
+    auto_gptq optimum \
+    flash-attn
 
 # RUN pip install --no-cache-dir flash_attn --no-build-isolation
-RUN pip install -U flash-attn --no-build-isolation --use-pep517
+# RUN pip install -U flash-attn --no-build-isolation --use-pep517
 
 
 #RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
