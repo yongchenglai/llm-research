@@ -108,7 +108,8 @@ if __name__ == "__main__":
                         choices=["float32", "bfloat16", "float16"])
     parser.add_argument("--server_name", type=str, default="0.0.0.0")
     parser.add_argument("--server_port", type=int, default=7860)
-    parser.add_argument("--is_4bit", action='store_true', help='use 4bit model')
+    parser.add_argument('--quant', type=int, choices=[4, 8], default=0,
+                        help='Enable 4-bit or 8-bit precision loading')
     args = parser.parse_args()
 
     tokenizer = AutoTokenizer.from_pretrained(
@@ -117,35 +118,46 @@ if __name__ == "__main__":
         use_fast=False)
     tokenizer.pad_token = tokenizer.eos_token
 
-    quantization_config = BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_quant_type="nf4",
-        bnb_4bit_use_double_quant=True,
-        bnb_4bit_compute_dtype=args.torch_dtype,
-    )
 
-
-    if args.is_4bit == False:
+    # Load the model
+    if args.quant == 4:
         model = AutoModelForCausalLM.from_pretrained(
             args.model_name_or_path,
-            device_map='cuda:0' if torch.cuda.is_available() else "auto",
+            device_map="auto",
             torch_dtype=args.torch_dtype,
-            quantization_config=quantization_config,
-            attn_implementation="flash_attention_2",
-            trust_remote_code=True)
-        model.eval()
-
-    else:
-        from auto_gptq import AutoGPTQForCausalLM
-        model = AutoGPTQForCausalLM.from_quantized(
-            args.model_name_or_path,
-            low_cpu_mem_usage=True,
-            device="cuda:0",
-            use_triton=False,
-            inject_fused_attention=False,
             trust_remote_code=True,
-            inject_fused_mlp=False)
+            attn_implementation="flash_attention_2",
+            quantization_config=BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_quant_type="nf4",
+                bnb_4bit_use_double_quant=True,
+                bnb_4bit_compute_dtype=args.torch_dtype,
+                llm_int8_skip_modules=["out_proj", "kv_proj", "lm_head"],
+            ),
+            low_cpu_mem_usage=True,
+        )
+    elif args.quant == 8:
+        model = AutoModelForCausalLM.from_pretrained(
+            args.model_name_or_path,
+            device_map="auto",
+            torch_dtype=args.torch_dtype,
+            trust_remote_code=True,
+            attn_implementation="flash_attention_2",
+            quantization_config=BitsAndBytesConfig(
+                load_in_8bit=True,
+                bnb_4bit_compute_dtype=args.torch_dtype,
+            ),
+            low_cpu_mem_usage=True
+        )
+    else:
+        model = AutoModelForCausalLM.from_pretrained(
+            args.model_name_or_path,
+            device_map="auto",
+            torch_dtype=args.torch_dtype,
+            trust_remote_code=True
+        )
 
+    model.eval()
     print(model)
 
     streamer = TextIteratorStreamer(tokenizer, skip_prompt=True)
