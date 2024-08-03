@@ -297,7 +297,7 @@ if __name__ == "__main__":
                         choices=["float32", "bfloat16", "float16"])
     parser.add_argument("--server_name", type=str, default="0.0.0.0")
     parser.add_argument("--server_port", type=int, default=7860)
-    parser.add_argument('--quant', type=int, choices=[4, 8], default=4,
+    parser.add_argument('--quant', type=int, choices=[4, 8], default=0,
                         help='Enable 4-bit or 8-bit precision loading')
     # parser.add_argument('--device', type=str, default='cuda', help='cuda or mps')
     args = parser.parse_args()
