@@ -24,7 +24,7 @@ if __name__ == "__main__":
     quantized_model_id = args.quantized_model_dir
 
     tokenizer = AutoTokenizer.from_pretrained(pretrained_model_id, use_fast=True)
-    examples = [
+    calibration_dataset = [
         tokenizer(
             "gptqmodel is an easy-to-use model quantization library "
             "with user-friendly apis, based on GPTQ algorithm."
@@ -32,7 +32,7 @@ if __name__ == "__main__":
     ]
 
     quantize_config = AutoRoundQuantizeConfig(
-        bits=4,
+        bits=4,  # 4-bit
         group_size=128  # 128 is good balance between quality and performance
     )
 
@@ -41,7 +41,7 @@ if __name__ == "__main__":
         quantize_config=quantize_config,
     )
 
-    model.quantize(examples)
+    model.quantize(calibration_dataset)
 
     model.save_quantized(quantized_model_id)
 
