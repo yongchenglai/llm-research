@@ -54,7 +54,9 @@ RUN pip install --no-cache-dir \
     autoawq autoawq-kernels \
     auto_gptq optimum
 
-RUN pip install --no-cache-dir flash_attn --no-build-isolation
+# RUN pip install --no-cache-dir flash_attn --no-build-isolation
+RUN pip install -U flash-attn --no-build-isolation --use-pep517 \
+    --index-url https://download.pytorch.org/whl/cu121
 
 #RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
 #    mv frpc_linux_amd64 frpc_linux_amd64_v0.2 && \
