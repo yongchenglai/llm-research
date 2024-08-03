@@ -26,7 +26,8 @@ if __name__ == "__main__":
     tokenizer = AutoTokenizer.from_pretrained(pretrained_model_id, use_fast=True)
     examples = [
         tokenizer(
-            "gptqmodel is an easy-to-use model quantization library with user-friendly apis, based on GPTQ algorithm."
+            "gptqmodel is an easy-to-use model quantization library "
+            "with user-friendly apis, based on GPTQ algorithm."
         )
     ]
 
