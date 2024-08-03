@@ -3,7 +3,7 @@ FROM pytorch/pytorch:2.1.2-cuda12.1-cudnn8-devel
 
 # Install the timezone data package
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" \
-        apt-get install -y tzdata && \
+        apt-get install -y tzdata git && \
         rm -rf /var/lib/apt/lists/*
 
 # Set the timezone to Asia/Shanghai
