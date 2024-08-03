@@ -168,7 +168,7 @@ if __name__ == "__main__":
         model = torch.compile(model)
 
     demo.queue().launch(
-        share=False,
+        share=args.share,
         debug=True,
         server_name=args.server_name,
         server_port=args.server_port,
