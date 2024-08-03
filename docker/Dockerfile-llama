@@ -45,7 +45,9 @@ RUN pip install --no-cache-dir \
     streamlit \
     cpm_kernels \
     decord>=0.6.0 \
-    chainlit
+    chainlit \
+    autoawq autoawq-kernels \
+    auto_gptq optimum
 
 RUN pip install --no-cache-dir flash_attn --no-build-isolation
 
