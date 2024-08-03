@@ -2,7 +2,7 @@
 FROM pytorch/pytorch:2.1.2-cuda12.1-cudnn8-devel
 
 RUN apt-get update -y --allow-unauthenticated
-RUN apt install -y git vim git-lfs
+RUN apt install -y git vim git-lfs wget
 
 RUN pip install --no-cache-dir \
     -i https://pypi.tuna.tsinghua.edu.cn/simple \
