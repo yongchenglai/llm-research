@@ -54,6 +54,7 @@ if __name__ == "__main__":
 
     del model
 
+    # load quantized model to the first GPU
     model = GPTQModel.from_quantized(
         quantized_model_id,
         device="cuda:0",
@@ -63,10 +64,5 @@ if __name__ == "__main__":
     outputs = model(input_ids=input_ids)
     print(f"output logits {outputs.logits.shape}: \n", outputs.logits)
     # inference with model.generate
-    print(
-        tokenizer.decode(
-            model.generate(
-                **tokenizer("gptqmodel is", return_tensors="pt").to(model.device)
-            )[0]
-        )
-    )
+    print(tokenizer.decode(model.generate(**tokenizer(
+        "gptqmodel is", return_tensors="pt").to(model.device))[0]))
