@@ -31,7 +31,7 @@ def predict(message, history):
         messages=history_openai_format,  # Chat history
         temperature=args.temp,  # Temperature for text generation
         stream=True,  # Stream response
-        max_tokens=16384,
+        max_tokens=32768,
         extra_body={
             'repetition_penalty':
             1,
