@@ -11,7 +11,7 @@ import argparse
 
 
 with gr.Blocks() as demo:
-    gr.Markdown("""<h1><center>巴比奇科技智能助手</center></h1>""")
+    gr.Markdown("""<h1><center>AI智能助手</center></h1>""")
     chatbot = gr.Chatbot()
     msg = gr.Textbox()
     state = gr.State()
