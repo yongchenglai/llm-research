@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     quantize_config = AutoRoundQuantizeConfig(
         bits=4,
-        group_size=128
+        group_size=128  # 128 is good balance between quality and performance
     )
 
     model = GPTQModel.from_pretrained(

@@ -31,6 +31,7 @@ if __name__ == "__main__":
 
     quantize_config = QuantizeConfig(
         bits=4,  # quantize model to 4-bit
+        # 128 is good balance between quality and performance
         group_size=128,  # it is recommended to set the value to 128
     )
 
