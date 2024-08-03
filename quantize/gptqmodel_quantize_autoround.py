@@ -4,10 +4,20 @@ from gptqmodel import GPTQModel
 from gptqmodel.quantization.config import AutoRoundQuantizeConfig  # noqa: E402
 from transformers import AutoTokenizer
 
-pretrained_model_id = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
-quantized_model_id = "./autoround/TinyLlama-1.1B-Chat-v1.0-4bit-128g"
 
-def main():
+if __name__ == "__main__":
+    import logging
+
+    logging.basicConfig(
+        format="%(asctime)s %(levelname)s [%(name)s] %(message)s",
+        level=logging.INFO,
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+
+
+    pretrained_model_id = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
+    quantized_model_id = "./autoround/TinyLlama-1.1B-Chat-v1.0-4bit-128g"
+
     tokenizer = AutoTokenizer.from_pretrained(pretrained_model_id, use_fast=True)
     examples = [
         tokenizer(
@@ -49,15 +59,3 @@ def main():
             )[0]
         )
     )
-
-
-if __name__ == "__main__":
-    import logging
-
-    logging.basicConfig(
-        format="%(asctime)s %(levelname)s [%(name)s] %(message)s",
-        level=logging.INFO,
-        datefmt="%Y-%m-%d %H:%M:%S",
-    )
-
-    main()

@@ -1,12 +1,26 @@
 # gptqmodel_quantize_basic.py
 from gptqmodel import GPTQModel, QuantizeConfig
 from transformers import AutoTokenizer
-
-pretrained_model_id = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
-quantized_model_id = "TinyLlama-1.1B-Chat-v1.0-4bit-128g"
+import argparse
 
 
-def main():
+if __name__ == "__main__":
+    import logging
+
+    logging.basicConfig(
+        format="%(asctime)s %(levelname)s [%(name)s] %(message)s",
+        level=logging.INFO,
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+
+    parser = argparse.ArgumentParser(description='autoawq')
+    parser.add_argument("--pretrained_model_dir", type=str, help='model path')
+    parser.add_argument("--quantized_model_dir", type=str, help='quant path')
+    args = parser.parse_args()
+
+    pretrained_model_id = args.pretrained_model_dir
+    quantized_model_id = args.quantized_model_dir
+
     tokenizer = AutoTokenizer.from_pretrained(pretrained_model_id, use_fast=True)
     calibration_dataset = [
         tokenizer(
@@ -20,7 +34,8 @@ def main():
         group_size=128,  # it is recommended to set the value to 128
     )
 
-    # load un-quantized model, by default, the model will always be loaded into CPU memory
+    # load un-quantized model, by default,
+    # the model will always be loaded into CPU memory
     model = GPTQModel.from_pretrained(pretrained_model_id, quantize_config)
 
     # quantize model, the calibration_dataset should be list of dict
@@ -66,13 +81,3 @@ def main():
         "gptqmodel is", return_tensors="pt").to(model.device))[0]))
 
 
-if __name__ == "__main__":
-    import logging
-
-    logging.basicConfig(
-        format="%(asctime)s %(levelname)s [%(name)s] %(message)s",
-        level=logging.INFO,
-        datefmt="%Y-%m-%d %H:%M:%S",
-    )
-
-    main()
