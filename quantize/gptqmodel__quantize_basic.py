@@ -1,4 +1,4 @@
-# gptq_quantize_basic.py
+# gptqmodel_quantize_basic.py
 from gptqmodel import GPTQModel, QuantizeConfig
 from transformers import AutoTokenizer
 
