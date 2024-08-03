@@ -52,8 +52,8 @@ RUN pip install --no-cache-dir \
     decord>=0.6.0 \
     chainlit \
     autoawq autoawq-kernels \
-    auto_gptq optimum \
-    flash-attn
+    auto_gptq optimum
+
 
 # RUN pip install --no-cache-dir flash_attn --no-build-isolation
 # RUN pip install -U flash-attn --no-build-isolation --use-pep517
