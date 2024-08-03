@@ -13,7 +13,7 @@ RUN cp /usr/share/zoneinfo/$TZ /etc/localtime \
         && echo $TZ > /etc/timezone
 
 RUN apt-get update -y --allow-unauthenticated
-RUN apt-get install -y git tmux htop vim git-lfs
+RUN apt-get install -y git tmux htop vim git-lfs pip wget
 
 RUN pip install --no-cache-dir \
     -i https://pypi.tuna.tsinghua.edu.cn/simple \
@@ -55,10 +55,10 @@ RUN pip install --no-cache-dir \
 
 RUN pip install --no-cache-dir flash_attn --no-build-isolation
 
-#RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
-#    mv frpc_linux_amd64 frpc_linux_amd64_v0.2 && \
-#    mv frpc_linux_amd64_v0.2 /opt/conda/lib/python3.10/site-packages/gradio/ && \
-#    chmod 755 /opt/conda/lib/python3.10/site-packages/gradio/frpc_linux_amd64_v0.2
+RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
+    mv frpc_linux_amd64 frpc_linux_amd64_v0.2 && \
+    mv frpc_linux_amd64_v0.2 /opt/conda/lib/python3.10/site-packages/gradio/ && \
+    chmod 755 /opt/conda/lib/python3.10/site-packages/gradio/frpc_linux_amd64_v0.2
 
 #设置工作目录
 WORKDIR /workspace
