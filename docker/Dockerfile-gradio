@@ -14,8 +14,6 @@ RUN cp /usr/share/zoneinfo/$TZ /etc/localtime \
 
 # 设置工作目录为/app
 WORKDIR /app
-COPY examples/gradio_openai_chatbot_webserver.py /app
-RUN chmod u+x /app/gradio_openai_chatbot_webserver.py
 
 RUN pip install --no-cache-dir gradio gradio_client openai
 
@@ -26,6 +24,9 @@ RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
     mv frpc_linux_amd64 frpc_linux_amd64_v0.2 && \
     mv frpc_linux_amd64_v0.2 /usr/local/lib/python3.10/site-packages/gradio/ && \
     chmod 755 /usr/local/lib/python3.10/site-packages/gradio/
+
+COPY examples/gradio_openai_chatbot_webserver.py /app
+RUN chmod u+x /app/gradio_openai_chatbot_webserver.py
 
 #设置启动命令
 #ENTRYPOINT ["python", "llama_chat_gradio.py", \
