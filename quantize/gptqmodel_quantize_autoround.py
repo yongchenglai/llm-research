@@ -36,13 +36,18 @@ if __name__ == "__main__":
         group_size=128  # 128 is good balance between quality and performance
     )
 
+    # load un-quantized model, by default,
+    # the model will always be loaded into CPU memory
     model = GPTQModel.from_pretrained(
         pretrained_model_id,
         quantize_config=quantize_config,
     )
 
+    # quantize model, the calibration_dataset should be list of dict
+    # whose keys can only be "input_ids" and "attention_mask"
     model.quantize(calibration_dataset)
 
+    # save quantized model
     model.save_quantized(quantized_model_id)
 
     tokenizer.save_pretrained(quantized_model_id)
