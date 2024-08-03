@@ -33,6 +33,7 @@ RUN pip install --no-cache-dir \
     transformers==4.43.3 \
     deepspeed==0.14.0 \
     scikit-learn \
+    torch==2.1.2 \
     torchvision \
     pytorchvideo \
     torchdata \
@@ -56,7 +57,7 @@ RUN pip install --no-cache-dir \
 
 
 # RUN pip install --no-cache-dir flash_attn --no-build-isolation
-# RUN pip install -U flash-attn --no-build-isolation --use-pep517
+RUN pip install -U flash-attn --no-build-isolation --use-pep517
 
 
 #RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
