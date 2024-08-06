@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
+# minicpmv_web_gradio_2.6.py
 import torch
 import argparse
 from transformers import AutoModel, AutoTokenizer, BitsAndBytesConfig
@@ -32,11 +33,14 @@ MAX_NUM_FRAMES = 64
 IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.bmp', '.tiff', '.webp'}
 VIDEO_EXTENSIONS = {'.mp4', '.mkv', '.mov', '.avi', '.flv', '.wmv', '.webm', '.m4v'}
 
+
 def get_file_extension(filename):
     return os.path.splitext(filename)[1].lower()
 
+
 def is_image(filename):
     return get_file_extension(filename) in IMAGE_EXTENSIONS
+
 
 def is_video(filename):
     return get_file_extension(filename) in VIDEO_EXTENSIONS
