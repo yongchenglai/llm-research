@@ -401,7 +401,11 @@ def fewshot_respond(_image, _user_message, _chat_bot, _app_cfg, params_form):
     return None, '', '', _chat_bot, _app_cfg
 
 
-def regenerate_button_clicked(_question, _image, _user_message, _assistant_message, _chat_bot, _app_cfg, params_form):
+def regenerate_button_clicked(
+    _question, _image, _user_message,
+    _assistant_message, _chat_bot,
+    _app_cfg, params_form,
+):
     if len(_chat_bot) <= 1 or not _chat_bot[-1][1]:
         gr.Warning('No question for regeneration.')
         return '', _image, _user_message, _assistant_message, _chat_bot, _app_cfg
