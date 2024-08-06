@@ -189,7 +189,8 @@ def encode_message(_question):
     matches = re.split(pattern, question)
     message = []
     if len(matches) != len(files) + 1:
-        gr.Warning("Number of Images not match the placeholder in text, please refresh the page to restart!")
+        gr.Warning("Number of Images not match the placeholder in text, "
+                   "please refresh the page to restart!")
     assert len(matches) == len(files) + 1
 
     text = matches[0].strip()
@@ -231,7 +232,8 @@ def respond(_question, _chat_bot, _app_cfg, params_form):
     images_cnt = _app_cfg['images_cnt']
     videos_cnt = _app_cfg['videos_cnt']
     files_cnts = check_has_videos(_question)
-    if files_cnts[1] + videos_cnt > 1 or (files_cnts[1] + videos_cnt == 1 and files_cnts[0] + images_cnt > 0):
+    if files_cnts[1] + videos_cnt > 1 or \
+            (files_cnts[1] + videos_cnt == 1 and files_cnts[0] + images_cnt > 0):
         gr.Warning("Only supports single video file input right now!")
         return _question, _chat_bot, _app_cfg
 
@@ -271,7 +273,8 @@ def respond(_question, _chat_bot, _app_cfg, params_form):
 
     upload_image_disabled = videos_cnt > 0
     upload_video_disabled = videos_cnt > 0 or images_cnt > 0
-    return create_multimodal_input(upload_image_disabled, upload_video_disabled), _chat_bot, _app_cfg
+    return create_multimodal_input(
+        upload_image_disabled, upload_video_disabled), _chat_bot, _app_cfg
 
 
 def fewshot_add_demonstration(_image, _user_message,
@@ -600,15 +603,18 @@ if __name__ == "__main__":
                 low_cpu_mem_usage=True,
             )
             model = model.to(device=device)
+
+
     tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
     model.eval()
-
+    print(model)
 
     # launch
     demo.launch(
         share=False,
         debug=True,
         show_api=False,
-        server_port=8885,
-        server_name="0.0.0.0")
+        server_port=args.server_port,
+        server_name=args.server_name,
+    )
 
