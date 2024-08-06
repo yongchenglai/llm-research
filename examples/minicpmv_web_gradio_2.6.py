@@ -446,8 +446,11 @@ with gr.Blocks(css=css) as demo:
                 clear_button = create_component({'value': 'Clear History'}, comp='Button')
 
             with gr.Column(scale=3, min_width=500):
-                app_session = gr.State({'sts':None,'ctx':[], 'images_cnt': 0, 'videos_cnt': 0, 'chat_type': 'Chat'})
-                chat_bot = mgr.Chatbot(label=f"Chat with {model_name}", value=copy.deepcopy(init_conversation), height=600, flushing=False, bubble_full_width=False)
+                app_session = gr.State({'sts':None, 'ctx':[], 'images_cnt': 0, 'videos_cnt': 0, 'chat_type': 'Chat'})
+                chat_bot = mgr.Chatbot(
+                    label=f"Chat with {model_name}",
+                    value=copy.deepcopy(init_conversation),
+                    height=600, flushing=False, bubble_full_width=False)
                 
                 with gr.Tab("Chat") as chat_tab:
                     txt_message = create_multimodal_input()
@@ -470,6 +473,7 @@ with gr.Blocks(css=css) as demo:
                             with gr.Row():
                                 add_demonstration_button = gr.Button("Add Example")
                                 generate_button = gr.Button(value="Generate", variant="primary")
+
                     add_demonstration_button.click(
                         fewshot_add_demonstration,
                         [image_input, user_message, assistant_message, chat_bot, app_session],
@@ -519,9 +523,18 @@ with gr.Blocks(css=css) as demo:
     with gr.Tab("How to use"):
         with gr.Column():
             with gr.Row():
-                image_example = gr.Image(value="http://thunlp.oss-cn-qingdao.aliyuncs.com/multi_modal/never_delete/m_bear2.gif", label='1. Chat with single or multiple images', interactive=False, width=400, elem_classes="example")
-                example2 = gr.Image(value="http://thunlp.oss-cn-qingdao.aliyuncs.com/multi_modal/never_delete/video2.gif", label='2. Chat with video', interactive=False, width=400, elem_classes="example")
-                example3 = gr.Image(value="http://thunlp.oss-cn-qingdao.aliyuncs.com/multi_modal/never_delete/fshot.gif", label='3. Few shot', interactive=False, width=400, elem_classes="example")
+                image_example = gr.Image(
+                    value="http://thunlp.oss-cn-qingdao.aliyuncs.com/multi_modal/never_delete/m_bear2.gif",
+                    label='1. Chat with single or multiple images',
+                    interactive=False, width=400, elem_classes="example")
+                example2 = gr.Image(
+                    value="http://thunlp.oss-cn-qingdao.aliyuncs.com/multi_modal/never_delete/video2.gif",
+                    label='2. Chat with video',
+                    interactive=False, width=400, elem_classes="example")
+                example3 = gr.Image(
+                    value="http://thunlp.oss-cn-qingdao.aliyuncs.com/multi_modal/never_delete/fshot.gif",
+                    label='3. Few shot',
+                    interactive=False, width=400, elem_classes="example")
 
 
 if __name__ == "__main__":
@@ -571,7 +584,8 @@ if __name__ == "__main__":
             )
 
             device_id = device_map["llm.model.embed_tokens"]
-            device_map["llm.lm_head"] = device_id  # firtt and last layer should be in same device
+            # first and last layer should be in same device
+            device_map["llm.lm_head"] = device_id
             device_map["vpm"] = device_id
             device_map["resampler"] = device_id
             device_id2 = device_map["llm.model.layers.26"]
@@ -613,6 +627,7 @@ if __name__ == "__main__":
     tokenizer = AutoTokenizer.from_pretrained(
         model_path,
         trust_remote_code=True)
+
     model.eval()
     print(model)
 
