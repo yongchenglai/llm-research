@@ -299,6 +299,8 @@ if __name__ == "__main__":
     parser.add_argument("--server_port", type=int, default=7860)
     parser.add_argument('--quant', type=int, choices=[4, 8], default=0,
                         help='Enable 4-bit or 8-bit precision loading')
+    parser.add_argument("--share", action="store_true", default=False,
+                        help="Create a publicly shareable link for the interface.")
     # parser.add_argument('--device', type=str, default='cuda', help='cuda or mps')
     args = parser.parse_args()
 
@@ -362,7 +364,7 @@ if __name__ == "__main__":
 
     # launch
     demo.launch(
-        share=True,
+        share=args.share,
         debug=True,
         show_api=False,
         server_port=args.server_port,
