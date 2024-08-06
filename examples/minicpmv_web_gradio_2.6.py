@@ -44,9 +44,19 @@ else:
     if args.multi_gpus:
         from accelerate import load_checkpoint_and_dispatch, init_empty_weights, infer_auto_device_map
         with init_empty_weights():
-            model = AutoModel.from_pretrained(model_path, trust_remote_code=True, attn_implementation='sdpa', torch_dtype=torch.bfloat16)
-        device_map = infer_auto_device_map(model, max_memory={0: "10GB", 1: "10GB"},
-            no_split_module_classes=['SiglipVisionTransformer', 'Qwen2DecoderLayer'])
+            model = AutoModel.from_pretrained(
+                model_path,
+                trust_remote_code=True,
+                attn_implementation='sdpa',
+                torch_dtype=torch.bfloat16,
+            )
+
+        device_map = infer_auto_device_map(
+            model,
+            max_memory={0: "10GB", 1: "10GB"},
+            no_split_module_classes=['SiglipVisionTransformer', 'Qwen2DecoderLayer'],
+        )
+
         device_id = device_map["llm.model.embed_tokens"]
         device_map["llm.lm_head"] = device_id # firtt and last layer should be in same device
         device_map["vpm"] = device_id
@@ -123,9 +133,14 @@ def create_component(params, comp='Slider'):
 
 
 def create_multimodal_input(upload_image_disabled=False, upload_video_disabled=False):
-    return mgr.MultimodalInput(upload_image_button_props={'label': 'Upload Image', 'disabled': upload_image_disabled, 'file_count': 'multiple'}, 
-                                        upload_video_button_props={'label': 'Upload Video', 'disabled': upload_video_disabled, 'file_count': 'single'},
-                                        submit_button_props={'label': 'Submit'})
+    return mgr.MultimodalInput(
+        upload_image_button_props={'label': 'Upload Image',
+                                   'disabled': upload_image_disabled,
+                                   'file_count': 'multiple'},
+        upload_video_button_props={'label': 'Upload Video',
+                                   'disabled': upload_video_disabled,
+                                   'file_count': 'single'},
+        submit_button_props={'label': 'Submit'})
 
 
 def chat(img, msgs, ctx, params=None, vision_hidden_states=None):
@@ -215,9 +230,11 @@ def encode_mm_file(mm_file):
         return encode_video(mm_file)
     return None
 
+
 def make_text(text):
     #return {"type": "text", "pairs": text} # # For remote call
     return text
+
 
 def encode_message(_question):
     files = _question.files
@@ -311,7 +328,9 @@ def respond(_question, _chat_bot, _app_cfg, params_form):
     return create_multimodal_input(upload_image_disabled, upload_video_disabled), _chat_bot, _app_cfg
 
 
-def fewshot_add_demonstration(_image, _user_message, _assistant_message, _chat_bot, _app_cfg):
+def fewshot_add_demonstration(_image, _user_message,
+                              _assistant_message,
+                              _chat_bot, _app_cfg):
     ctx = _app_cfg["ctx"]
     message_item = []
     if _image is not None:
