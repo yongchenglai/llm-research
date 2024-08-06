@@ -34,10 +34,7 @@ RUN pip install --no-cache-dir  \
 #RUN pip install --no-cache-dir xformers==0.0.23 \
 #        --index-url https://download.pytorch.org/whl/cu121
 
-#RUN pip install -U flash-attn \
-#        --no-build-isolation --use-pep517
-RUN pip install -U flash-attn \
-        --no-build-isolation --use-pep517
+RUN pip install -U flash-attn --no-build-isolation --use-pep517
 
 
 RUN pip install --no-cache-dir  \
