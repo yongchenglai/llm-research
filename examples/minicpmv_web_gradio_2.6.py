@@ -556,6 +556,8 @@ if __name__ == "__main__":
     # parser.add_argument('--device', type=str, default='cuda', help='cuda or mps')
     parser.add_argument('--device', type=str, default='cuda', help='cuda or mps')
     parser.add_argument('--multi-gpus', action='store_true', default=False, help='use multi-gpus')
+    parser.add_argument("--share", action="store_true", default=False,
+                        help="Create a publicly shareable link for the interface.")
     args = parser.parse_args()
 
     device = args.device
@@ -637,7 +639,7 @@ if __name__ == "__main__":
 
     # launch
     demo.launch(
-        share=False,
+        share=args.share,
         debug=True,
         show_api=False,
         server_port=args.server_port,
