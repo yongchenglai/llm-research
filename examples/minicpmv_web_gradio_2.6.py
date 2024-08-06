@@ -586,7 +586,12 @@ if __name__ == "__main__":
             device_map["llm.model.layers.16"] = device_id2
             # print(device_map)
 
-            model = load_checkpoint_and_dispatch(model, model_path, dtype=torch.bfloat16, device_map=device_map)
+            model = load_checkpoint_and_dispatch(
+                model,
+                model_path,
+                dtype=torch.bfloat16,
+                device_map=device_map,
+            )
         else:
             model = AutoModel.from_pretrained(
                 model_path,
@@ -605,7 +610,9 @@ if __name__ == "__main__":
             model = model.to(device=device)
 
 
-    tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+    tokenizer = AutoTokenizer.from_pretrained(
+        model_path,
+        trust_remote_code=True)
     model.eval()
     print(model)
 
