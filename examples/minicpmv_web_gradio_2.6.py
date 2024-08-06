@@ -25,63 +25,6 @@ import modelscope_studio as mgr
 # For Mac with MPS (Apple silicon or AMD GPUs).
 # PYTORCH_ENABLE_MPS_FALLBACK=1 python web_demo_2.6.py --device mps
 
-# Argparser
-parser = argparse.ArgumentParser(description='demo')
-parser.add_argument('--device', type=str, default='cuda', help='cuda or mps')
-parser.add_argument('--multi-gpus', action='store_true', default=False, help='use multi-gpus')
-args = parser.parse_args()
-device = args.device
-assert device in ['cuda', 'mps']
-
-# Load model
-model_path = 'openbmb/MiniCPM-V-2_6'
-if 'int4' in model_path:
-    if device == 'mps':
-        print('Error: running int4 model with bitsandbytes on Mac is not supported right now.')
-        exit()
-    model = AutoModel.from_pretrained(model_path, trust_remote_code=True)
-else:
-    if args.multi_gpus:
-        from accelerate import load_checkpoint_and_dispatch, init_empty_weights, infer_auto_device_map
-        with init_empty_weights():
-            model = AutoModel.from_pretrained(
-                model_path,
-                trust_remote_code=True,
-                attn_implementation='sdpa',
-                torch_dtype=torch.bfloat16,
-            )
-
-        device_map = infer_auto_device_map(
-            model,
-            max_memory={0: "10GB", 1: "10GB"},
-            no_split_module_classes=['SiglipVisionTransformer', 'Qwen2DecoderLayer'],
-        )
-
-        device_id = device_map["llm.model.embed_tokens"]
-        device_map["llm.lm_head"] = device_id # firtt and last layer should be in same device
-        device_map["vpm"] = device_id
-        device_map["resampler"] = device_id
-        device_id2 = device_map["llm.model.layers.26"]
-        device_map["llm.model.layers.8"] = device_id2
-        device_map["llm.model.layers.9"] = device_id2
-        device_map["llm.model.layers.10"] = device_id2
-        device_map["llm.model.layers.11"] = device_id2
-        device_map["llm.model.layers.12"] = device_id2
-        device_map["llm.model.layers.13"] = device_id2
-        device_map["llm.model.layers.14"] = device_id2
-        device_map["llm.model.layers.15"] = device_id2
-        device_map["llm.model.layers.16"] = device_id2
-        #print(device_map)
-
-        model = load_checkpoint_and_dispatch(model, model_path, dtype=torch.bfloat16, device_map=device_map)
-    else:
-        model = AutoModel.from_pretrained(model_path, trust_remote_code=True, torch_dtype=torch.bfloat16)
-        model = model.to(device=device)
-tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
-model.eval()
-
-
-
 
 ERROR_MSG = "Error, please retry"
 model_name = 'MiniCPM-V 2.6'
@@ -575,6 +518,80 @@ with gr.Blocks(css=css) as demo:
                 example3 = gr.Image(value="http://thunlp.oss-cn-qingdao.aliyuncs.com/multi_modal/never_delete/fshot.gif", label='3. Few shot', interactive=False, width=400, elem_classes="example")
 
 
-# launch
-demo.launch(share=False, debug=True, show_api=False, server_port=8885, server_name="0.0.0.0")
+if __name__ == "__main__":
+
+    # Argparser
+    parser = argparse.ArgumentParser(description='demo')
+    parser.add_argument("--model_name_or_path", type=str,
+                        default="openbmb/MiniCPM-Llama3-V-2_5")
+    parser.add_argument("--torch_dtype", type=str, default="bfloat16",
+                        choices=["float32", "bfloat16", "float16"])
+    parser.add_argument("--server_name", type=str, default="0.0.0.0")
+    parser.add_argument("--server_port", type=int, default=7860)
+    parser.add_argument('--quant', type=int, choices=[4, 8], default=0,
+                        help='Enable 4-bit or 8-bit precision loading')
+    # parser.add_argument('--device', type=str, default='cuda', help='cuda or mps')
+    parser.add_argument('--device', type=str, default='cuda', help='cuda or mps')
+    parser.add_argument('--multi-gpus', action='store_true', default=False, help='use multi-gpus')
+    args = parser.parse_args()
+
+    device = args.device
+    assert device in ['cuda', 'mps']
+
+    # Load model
+    model_path = 'openbmb/MiniCPM-V-2_6'
+    if 'int4' in model_path:
+        if device == 'mps':
+            print('Error: running int4 model with bitsandbytes on Mac is not supported right now.')
+            exit()
+        model = AutoModel.from_pretrained(model_path, trust_remote_code=True)
+    else:
+        if args.multi_gpus:
+            from accelerate import load_checkpoint_and_dispatch, init_empty_weights, infer_auto_device_map
+
+            with init_empty_weights():
+                model = AutoModel.from_pretrained(
+                    model_path,
+                    trust_remote_code=True,
+                    attn_implementation='sdpa',
+                    torch_dtype=torch.bfloat16,
+                )
+
+            device_map = infer_auto_device_map(
+                model,
+                max_memory={0: "10GB", 1: "10GB"},
+                no_split_module_classes=['SiglipVisionTransformer', 'Qwen2DecoderLayer'],
+            )
+
+            device_id = device_map["llm.model.embed_tokens"]
+            device_map["llm.lm_head"] = device_id  # firtt and last layer should be in same device
+            device_map["vpm"] = device_id
+            device_map["resampler"] = device_id
+            device_id2 = device_map["llm.model.layers.26"]
+            device_map["llm.model.layers.8"] = device_id2
+            device_map["llm.model.layers.9"] = device_id2
+            device_map["llm.model.layers.10"] = device_id2
+            device_map["llm.model.layers.11"] = device_id2
+            device_map["llm.model.layers.12"] = device_id2
+            device_map["llm.model.layers.13"] = device_id2
+            device_map["llm.model.layers.14"] = device_id2
+            device_map["llm.model.layers.15"] = device_id2
+            device_map["llm.model.layers.16"] = device_id2
+            # print(device_map)
+
+            model = load_checkpoint_and_dispatch(model, model_path, dtype=torch.bfloat16, device_map=device_map)
+        else:
+            model = AutoModel.from_pretrained(model_path, trust_remote_code=True, torch_dtype=torch.bfloat16)
+            model = model.to(device=device)
+    tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+    model.eval()
+
+
+    # launch
+    demo.launch(
+        share=False,
+        debug=True,
+        show_api=False,
+        server_port=8885,
+        server_name="0.0.0.0")
 
