@@ -387,7 +387,8 @@ def regenerate_button_clicked(
             last_image = last_message.files[0].file.path
         _chat_bot = _chat_bot[:-1]
         _app_cfg['ctx'] = _app_cfg['ctx'][:-2]
-        _image, _user_message, _assistant_message, _chat_bot, _app_cfg = fewshot_respond(last_image, last_user_message, _chat_bot, _app_cfg, params_form)
+        _image, _user_message, _assistant_message, _chat_bot, _app_cfg = fewshot_respond(
+            last_image, last_user_message, _chat_bot, _app_cfg, params_form)
         return _question, _image, _user_message, _assistant_message, _chat_bot, _app_cfg
 
 
@@ -450,7 +451,8 @@ with gr.Blocks(css=css) as demo:
                 clear_button = create_component({'value': 'Clear History'}, comp='Button')
 
             with gr.Column(scale=3, min_width=500):
-                app_session = gr.State({'sts':None, 'ctx':[], 'images_cnt': 0, 'videos_cnt': 0, 'chat_type': 'Chat'})
+                app_session = gr.State({'sts': None, 'ctx': [], 'images_cnt': 0,
+                                        'videos_cnt': 0, 'chat_type': 'Chat'})
                 chat_bot = mgr.Chatbot(
                     label=f"Chat with {model_name}",
                     value=copy.deepcopy(init_conversation),
@@ -555,7 +557,8 @@ if __name__ == "__main__":
                         help='Enable 4-bit or 8-bit precision loading')
     # parser.add_argument('--device', type=str, default='cuda', help='cuda or mps')
     parser.add_argument('--device', type=str, default='cuda', help='cuda or mps')
-    parser.add_argument('--multi-gpus', action='store_true', default=False, help='use multi-gpus')
+    parser.add_argument('--multi-gpus', action='store_true', default=False,
+                        help='use multi-gpus')
     parser.add_argument("--share", action="store_true", default=False,
                         help="Create a publicly shareable link for the interface.")
     args = parser.parse_args()
