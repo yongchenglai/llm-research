@@ -570,10 +570,13 @@ if __name__ == "__main__":
         if device == 'mps':
             print('Error: running int4 model with bitsandbytes on Mac is not supported right now.')
             exit()
-        model = AutoModel.from_pretrained(model_path, trust_remote_code=True)
+        model = AutoModel.from_pretrained(
+            model_path,
+            trust_remote_code=True)
     else:
         if args.multi_gpus:
-            from accelerate import load_checkpoint_and_dispatch, init_empty_weights, infer_auto_device_map
+            from accelerate import load_checkpoint_and_dispatch, \
+                init_empty_weights, infer_auto_device_map
 
             with init_empty_weights():
                 model = AutoModel.from_pretrained(
