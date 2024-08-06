@@ -2,7 +2,7 @@
 # encoding: utf-8
 import torch
 import argparse
-from transformers import AutoModel, AutoTokenizer
+from transformers import AutoModel, AutoTokenizer, BitsAndBytesConfig
 import gradio as gr
 from PIL import Image
 from decord import VideoReader, cpu
@@ -75,7 +75,10 @@ def create_component(params, comp='Slider'):
         )
 
 
-def create_multimodal_input(upload_image_disabled=False, upload_video_disabled=False):
+def create_multimodal_input(
+    upload_image_disabled=False,
+    upload_video_disabled=False,
+):
     return mgr.MultimodalInput(
         upload_image_button_props={'label': 'Upload Image',
                                    'disabled': upload_image_disabled,
@@ -539,7 +542,8 @@ if __name__ == "__main__":
     assert device in ['cuda', 'mps']
 
     # Load model
-    model_path = 'openbmb/MiniCPM-V-2_6'
+    # model_path = 'openbmb/MiniCPM-V-2_6'
+    model_path = args.model_name_or_path
     if 'int4' in model_path:
         if device == 'mps':
             print('Error: running int4 model with bitsandbytes on Mac is not supported right now.')
@@ -581,7 +585,20 @@ if __name__ == "__main__":
 
             model = load_checkpoint_and_dispatch(model, model_path, dtype=torch.bfloat16, device_map=device_map)
         else:
-            model = AutoModel.from_pretrained(model_path, trust_remote_code=True, torch_dtype=torch.bfloat16)
+            model = AutoModel.from_pretrained(
+                model_path,
+                trust_remote_code=True,
+                torch_dtype=torch.bfloat16,
+                attn_implementation="flash_attention_2",
+                quantization_config=BitsAndBytesConfig(
+                   load_in_4bit=True,
+                   bnb_4bit_quant_type="nf4",
+                   bnb_4bit_use_double_quant=True,
+                   bnb_4bit_compute_dtype=torch.bfloat16,
+                   # llm_int8_skip_modules=["out_proj", "kv_proj", "lm_head"],
+                ),
+                low_cpu_mem_usage=True,
+            )
             model = model.to(device=device)
     tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
     model.eval()
