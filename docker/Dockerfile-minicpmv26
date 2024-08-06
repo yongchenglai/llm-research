@@ -4,7 +4,7 @@ FROM pytorch/pytorch:2.1.2-cuda12.1-cudnn8-devel
 
 # Install the timezone data package
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" \
-        apt-get install -y tzdata git tmux htop vim pip wget && \
+        apt-get install -y tzdata && \
         rm -rf /var/lib/apt/lists/*
 
 # Set the timezone to Asia/Shanghai
@@ -14,6 +14,9 @@ RUN cp /usr/share/zoneinfo/$TZ /etc/localtime \
         && echo $TZ > /etc/timezone
 
 #RUN apt-get install -y git tmux htop vim pip wget \
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" \
+    apt-get install -y git tmux htop vim git-lfs pip wget && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir  \
         -i https://pypi.tuna.tsinghua.edu.cn/simple  \
