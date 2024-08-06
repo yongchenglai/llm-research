@@ -548,7 +548,7 @@ if __name__ == "__main__":
     # Argparser
     parser = argparse.ArgumentParser(description='demo')
     parser.add_argument("--model_name_or_path", type=str,
-                        default="openbmb/MiniCPM-Llama3-V-2_5")
+                        default="openbmb/MiniCPM-V-2_6")
     parser.add_argument("--torch_dtype", type=str, default="bfloat16",
                         choices=["float32", "bfloat16", "float16"])
     parser.add_argument("--server_name", type=str, default="0.0.0.0")
