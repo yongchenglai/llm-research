@@ -621,7 +621,7 @@ if __name__ == "__main__":
         else:
             model = AutoModel.from_pretrained(
                 model_path,
-                device_map="auto",
+                # device_map="auto",
                 trust_remote_code=True,
                 torch_dtype=torch.bfloat16,
                 attn_implementation="flash_attention_2",
@@ -634,7 +634,7 @@ if __name__ == "__main__":
                 ),
                 low_cpu_mem_usage=True,
             )
-            # model = model.to(device=device)
+            model = model.to(device=device)
 
 
     tokenizer = AutoTokenizer.from_pretrained(
