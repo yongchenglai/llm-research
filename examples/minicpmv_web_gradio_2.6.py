@@ -451,7 +451,7 @@ with gr.Blocks(css=css) as demo:
                 regenerate = create_component({'value': 'Regenerate'}, comp='Button')
                 clear_button = create_component({'value': 'Clear History'}, comp='Button')
 
-            with gr.Column(scale=3, min_width=500):
+            with gr.Column(scale=3, min_width=800):
                 app_session = gr.State({'sts': None, 'ctx': [], 'images_cnt': 0,
                                         'videos_cnt': 0, 'chat_type': 'Chat'})
                 chat_bot = mgr.Chatbot(
