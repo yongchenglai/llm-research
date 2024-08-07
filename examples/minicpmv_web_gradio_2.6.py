@@ -459,7 +459,7 @@ with gr.Blocks(css=css) as demo:
                     value=copy.deepcopy(init_conversation),
                     height=600, flushing=False, bubble_full_width=False)
                 
-                with gr.Tab("Chat & 视频理解") as chat_tab:
+                with gr.Tab("Chat & Video Understanding") as chat_tab:
                     txt_message = create_multimodal_input()
                     chat_tab_label = gr.Textbox(value="Chat", interactive=False, visible=False)
 
