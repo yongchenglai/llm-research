@@ -22,14 +22,17 @@ import argparse
 assert torch.cuda.is_available(), "CUDA is not available, but this code requires a GPU."
 
 
+"""
+python awq_quantize.py \
+--pretrained_model_dir='openbmb/MiniCPM-V-2_6' \
+--quantized_model_dir='openbmb/MiniCPM-V-2_6-int4'
+"""
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='autoawq')
     parser.add_argument("--pretrained_model_dir", type=str, help='model path')
     parser.add_argument("--quantized_model_dir", type=str, help='quant path')
     args = parser.parse_args()
-
-
 
     device = 'cuda'  # Select GPU to use
     #model_path = '/root/ld/ld_model_pretrained/MiniCPM-Llama3-V-2_5'  # Model download path
