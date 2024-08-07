@@ -85,10 +85,10 @@ def create_multimodal_input(
     upload_video_disabled=False,
 ):
     return mgr.MultimodalInput(
-        upload_image_button_props={'label': 'Upload Image',
+        upload_image_button_props={'label': 'Image',
                                    'disabled': upload_image_disabled,
                                    'file_count': 'multiple'},
-        upload_video_button_props={'label': 'Upload Video',
+        upload_video_button_props={'label': 'Video',
                                    'disabled': upload_video_disabled,
                                    'file_count': 'single'},
         submit_button_props={'label': 'Submit'})
