@@ -446,7 +446,7 @@ with gr.Blocks(css=css) as demo:
     with gr.Tab(model_name):
         with gr.Row():
             with gr.Column(scale=1, min_width=300):
-                gr.Markdown(value=introduction)
+                # gr.Markdown(value=introduction)
                 params_form = create_component(form_radio, comp='Radio')
                 regenerate = create_component({'value': 'Regenerate'}, comp='Button')
                 clear_button = create_component({'value': 'Clear History'}, comp='Button')
@@ -527,6 +527,7 @@ with gr.Blocks(css=css) as demo:
                     [txt_message, chat_bot, app_session, image_input, user_message, assistant_message]
                 )
 
+    """
     with gr.Tab("How to use"):
         with gr.Column():
             with gr.Row():
@@ -542,7 +543,7 @@ with gr.Blocks(css=css) as demo:
                     value="http://thunlp.oss-cn-qingdao.aliyuncs.com/multi_modal/never_delete/fshot.gif",
                     label='3. Few shot',
                     interactive=False, width=400, elem_classes="example")
-
+    """
 
 if __name__ == "__main__":
 
