@@ -634,7 +634,6 @@ if __name__ == "__main__":
                 ),
                 low_cpu_mem_usage=True,
             )
-            # model = model.to(device=device)
 
 
     tokenizer = AutoTokenizer.from_pretrained(
