@@ -96,3 +96,4 @@ class MiniCPMVConfig(Qwen2Config):
         self.patch_size = self.vision_config.patch_size
 
         super().__init__(**kwargs)
+
