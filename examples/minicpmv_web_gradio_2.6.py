@@ -451,7 +451,7 @@ with gr.Blocks(css=css) as demo:
                 regenerate = create_component({'value': 'Regenerate'}, comp='Button')
                 clear_button = create_component({'value': 'Clear History'}, comp='Button')
 
-            with gr.Column(scale=1, min_width=200):
+            with gr.Column(scale=3, min_width=500):
                 app_session = gr.State({'sts': None, 'ctx': [], 'images_cnt': 0,
                                         'videos_cnt': 0, 'chat_type': 'Chat'})
                 chat_bot = mgr.Chatbot(
@@ -459,7 +459,7 @@ with gr.Blocks(css=css) as demo:
                     value=copy.deepcopy(init_conversation),
                     height=600, flushing=False, bubble_full_width=False)
                 
-                with gr.Tab("Chat-视频理解") as chat_tab:
+                with gr.Tab("Chat & 视频理解") as chat_tab:
                     txt_message = create_multimodal_input()
                     chat_tab_label = gr.Textbox(value="Chat", interactive=False, visible=False)
 
