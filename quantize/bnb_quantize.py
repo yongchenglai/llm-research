@@ -29,7 +29,7 @@ python awq_quantize.py \
 """
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(description='autoawq')
+    parser = argparse.ArgumentParser(description='bnb quantize')
     parser.add_argument("--pretrained_model_dir", type=str, help='model path')
     parser.add_argument("--quantized_model_dir", type=str, help='quant path')
     args = parser.parse_args()
