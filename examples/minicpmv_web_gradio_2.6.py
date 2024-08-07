@@ -16,6 +16,7 @@ import json
 import traceback
 import re
 import modelscope_studio as mgr
+import GPUtil
 
 
 # README, How to run demo on different devices
@@ -574,7 +575,8 @@ if __name__ == "__main__":
 
     if 'int4' in model_path:
         if device == 'mps':
-            print('Error: running int4 model with bitsandbytes on Mac is not supported right now.')
+            print('Error: running int4 model with bitsandbytes '
+                  'on Mac is not supported right now.')
             exit()
         model = AutoModel.from_pretrained(
             model_path,
@@ -660,6 +662,9 @@ if __name__ == "__main__":
 
     model.eval()
     print(model)
+
+    gpu_usage = GPUtil.getGPUs()[0].memoryUsed
+    print(f"量化后显存占用: {round(gpu_usage / 1024, 2)}GB")
 
     # launch
     demo.launch(
