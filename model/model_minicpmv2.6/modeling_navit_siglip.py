@@ -211,7 +211,11 @@ def _trunc_normal_(tensor, mean, std, a, b):
 
 
 def trunc_normal_tf_(
-    tensor: torch.Tensor, mean: float = 0.0, std: float = 1.0, a: float = -2.0, b: float = 2.0
+    tensor: torch.Tensor,
+    mean: float = 0.0,
+    std: float = 1.0,
+    a: float = -2.0,
+    b: float = 2.0
 ) -> torch.Tensor:
     """Fills the input Tensor with values drawn from a truncated
     normal distribution. The values are effectively drawn from the
