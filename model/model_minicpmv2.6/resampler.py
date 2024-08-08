@@ -673,6 +673,7 @@ def _none_or_dtype(input: Optional[Tensor]) -> Optional[DType]:
         return input.dtype
     raise RuntimeError("input to _none_or_dtype() must be None or torch.Tensor")
 
+
 def _in_projection_packed(
     q: Tensor,
     k: Tensor,
