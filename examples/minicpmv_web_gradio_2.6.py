@@ -127,7 +127,7 @@ def encode_image(image):
     max_size = 448*16
     # image.size：指定图像大小(width, height)
     print('打印image对象:', image)
-    print('Image size: ', image.size)
+    print('Image size:', image.size)
     print("图像的宽=%s, 高=%s" % (image.width, image.height))
     print("图像模式:", image.mode)
     print("图像的格式:", image.format)
