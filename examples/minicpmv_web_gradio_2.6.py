@@ -161,6 +161,8 @@ def encode_video(video):
     if len(frame_idx) > MAX_NUM_FRAMES:
         frame_idx = uniform_sample(frame_idx, MAX_NUM_FRAMES)
     video = vr.get_batch(frame_idx).asnumpy()
+    # PIL库提供的Image.fromarray()可以将数字矩阵转图片,实现矩阵与图片的转化,
+    # 如果矩阵中有多个图片矩阵，那么就相当于图片拼接。
     video = [Image.fromarray(v.astype('uint8')) for v in video]
     video = [encode_image(v) for v in video]
     print('Video frames:', len(video))
