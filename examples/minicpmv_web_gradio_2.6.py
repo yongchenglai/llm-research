@@ -523,6 +523,7 @@ with gr.Blocks() as demo:
                     [txt_message, chat_bot, app_session],
                     [txt_message, chat_bot, app_session, image_input, user_message, assistant_message]
                 )
+
                 fewshot_tab.select(
                     select_chat_type,
                     [fewshot_tab_label, app_session],
@@ -533,10 +534,12 @@ with gr.Blocks() as demo:
                     [txt_message, chat_bot, app_session],
                     [txt_message, chat_bot, app_session, image_input, user_message, assistant_message]
                 )
+
                 chat_bot.flushed(
                     flushed,
                     outputs=[txt_message]
                 )
+
                 regenerate.click(
                     regenerate_button_clicked,
                     [txt_message, image_input, user_message, assistant_message, chat_bot, app_session, params_form],
