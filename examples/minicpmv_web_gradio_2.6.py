@@ -153,6 +153,7 @@ def encode_video(video):
     else:
         vr = VideoReader(video.file.path, ctx=cpu(0))
     sample_fps = round(vr.get_avg_fps() / 1)  # FPS
+    print('Video FPS:', sample_fps)
     # for i in range(start, stop[, step]) #分别是起始、终止和步长
     frame_idx = [i for i in range(0, len(vr), sample_fps)]
     print('Video original frames:', len(frame_idx))
