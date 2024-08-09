@@ -122,6 +122,7 @@ def encode_image(image):
             image = Image.open(image.path).convert("RGB")
         else:
             image = Image.open(image.file.path).convert("RGB")
+    
     # resize to max_size
     max_size = 448*16 
     if max(image.size) > max_size:
