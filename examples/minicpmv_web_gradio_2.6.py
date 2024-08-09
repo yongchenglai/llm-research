@@ -285,8 +285,8 @@ def respond(_question, _chat_bot, _app_cfg, params_form):
     _context.append({"role": "assistant", "content": [make_text(_answer)]}) 
     _chat_bot.append((_question, _answer))
     if code == 0:
-        _app_cfg['ctx']=_context
-        _app_cfg['sts']=sts
+        _app_cfg['ctx'] = _context
+        _app_cfg['sts'] = sts
     _app_cfg['images_cnt'] = images_cnt
     _app_cfg['videos_cnt'] = videos_cnt
 
