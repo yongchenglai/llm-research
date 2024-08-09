@@ -142,16 +142,17 @@ def encode_image(image):
 
 
 def encode_video(video):
-    def uniform_sample(l, n):
-        gap = len(l) / n
-        idxs = [int(i * gap + gap / 2) for i in range(n)]
-        return [l[i] for i in idxs]
+    def uniform_sample(frame_idx, max_num_frames):
+        gap = len(frame_idx) / max_num_frames
+        idxs = [int(i * gap + gap / 2) for i in range(max_num_frames)]
+        return [frame_idx[i] for i in idxs]
 
     if hasattr(video, 'path'):
         vr = VideoReader(video.path, ctx=cpu(0))
     else:
         vr = VideoReader(video.file.path, ctx=cpu(0))
     sample_fps = round(vr.get_avg_fps() / 1)  # FPS
+    # for i in range(start, stop[, step]) #分别是起始、终止和步长
     frame_idx = [i for i in range(0, len(vr), sample_fps)]
     if len(frame_idx) > MAX_NUM_FRAMES:
         frame_idx = uniform_sample(frame_idx, MAX_NUM_FRAMES)
