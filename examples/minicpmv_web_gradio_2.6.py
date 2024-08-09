@@ -457,7 +457,9 @@ with gr.Blocks(css=css) as demo:
                 chat_bot = mgr.Chatbot(
                     label=f"Chat with {model_name}",
                     value=copy.deepcopy(init_conversation),
-                    height=600, flushing=False, bubble_full_width=False)
+                    height=600,
+                    flushing=False,
+                    bubble_full_width=False)
                 
                 with gr.Tab("Chat & Video Understanding") as chat_tab:
                     txt_message = create_multimodal_input()
