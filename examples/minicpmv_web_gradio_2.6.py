@@ -156,6 +156,7 @@ def encode_video(video):
     # for i in range(start, stop[, step]) #分别是起始、终止和步长
     frame_idx = [i for i in range(0, len(vr), sample_fps)]
     print('Video original frames:', len(frame_idx))
+    print('Video original frame_idx:', frame_idx)
     if len(frame_idx) > MAX_NUM_FRAMES:
         frame_idx = uniform_sample(frame_idx, MAX_NUM_FRAMES)
     video = vr.get_batch(frame_idx).asnumpy()
