@@ -463,7 +463,9 @@ with gr.Blocks(css=css) as demo:
                 
                 with gr.Tab("Chat & Video Understanding") as chat_tab:
                     txt_message = create_multimodal_input()
-                    chat_tab_label = gr.Textbox(value="Chat", interactive=False, visible=False)
+                    chat_tab_label = gr.Textbox(value="Chat",
+                                                interactive=False,
+                                                visible=False)
 
                     txt_message.submit(
                         respond,
@@ -472,7 +474,9 @@ with gr.Blocks(css=css) as demo:
                     )
 
                 with gr.Tab("Few Shot") as fewshot_tab:
-                    fewshot_tab_label = gr.Textbox(value="Few Shot", interactive=False, visible=False)
+                    fewshot_tab_label = gr.Textbox(value="Few Shot",
+                                                   interactive=False,
+                                                   visible=False)
                     with gr.Row():
                         with gr.Column(scale=1):
                             image_input = gr.Image(type="filepath", sources=["upload"])
