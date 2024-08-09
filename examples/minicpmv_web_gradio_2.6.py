@@ -456,7 +456,8 @@ Click `How to use` tab to see examples.
 """
 
 
-with gr.Blocks(css=css) as demo:
+# with gr.Blocks(css=css) as demo:
+with gr.Blocks() as demo:
     with gr.Tab(model_name):
         with gr.Row():
             with gr.Column(scale=1, min_width=300):
