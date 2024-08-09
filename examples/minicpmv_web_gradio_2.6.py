@@ -144,6 +144,7 @@ def encode_image(image):
 def encode_video(video):
     def uniform_sample(frame_idx, max_num_frames):
         gap = len(frame_idx) / max_num_frames
+        print('Video Gap:', gap)
         frame_idxs = [int(i * gap + gap / 2) for i in range(max_num_frames)]
         return [frame_idx[i] for i in frame_idxs]
 
