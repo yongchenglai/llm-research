@@ -160,13 +160,13 @@ def encode_video(video):
     print('Video original frame_idx:', frame_idx)
     if len(frame_idx) > MAX_NUM_FRAMES:
         frame_idx = uniform_sample(frame_idx, MAX_NUM_FRAMES)
-    video = vr.get_batch(frame_idx).asnumpy()
+    video_frames = vr.get_batch(frame_idx).asnumpy()
     # PIL库提供的Image.fromarray()可以将数字矩阵转图片,实现矩阵与图片的转化,
     # 如果矩阵中有多个图片矩阵，那么就相当于图片拼接。
-    video = [Image.fromarray(v.astype('uint8')) for v in video]
-    video = [encode_image(v) for v in video]
-    print('Video frames:', len(video))
-    return video
+    video_frames = [Image.fromarray(v.astype('uint8')) for v in video_frames]
+    video_frames = [encode_image(v) for v in video_frames]
+    print('Video frames:', len(video_frames))
+    return video_frames
 
 
 def check_mm_type(mm_file):
