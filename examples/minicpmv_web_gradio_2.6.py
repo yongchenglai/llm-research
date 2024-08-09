@@ -125,6 +125,7 @@ def encode_image(image):
 
     # resize to max_size
     max_size = 448*16
+    # image.size：指定图像大小(width, height)
     print('Image size: ', image.size)
     if max(image.size) > max_size:
         w, h = image.size
