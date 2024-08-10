@@ -11,7 +11,8 @@ from torchvision import transforms
 from .modeling_llama import LlamaForCausalLM, LlamaPreTrainedModel
 # from .tokenization_llama import LlamaTokenizer
 from transformers import AutoModel, PreTrainedTokenizerFast, TextIteratorStreamer
-from transformers.models.idefics2.modeling_idefics2 import Idefics2VisionTransformer
+# from transformers.models.idefics2.modeling_idefics2 import Idefics2VisionTransformer
+from .modeling_idefics import Idefics2VisionTransformer
 
 from .configuration_minicpm import MiniCPMVConfig
 from .resampler import Resampler
