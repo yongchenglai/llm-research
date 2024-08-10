@@ -458,107 +458,106 @@ Click `How to use` tab to see examples.
 
 # with gr.Blocks(css=css) as demo:
 with gr.Blocks() as demo:
-    with gr.Tab(model_name):
-        with gr.Row():
-            with gr.Column(scale=1, min_width=300):
-                # gr.Markdown(value=introduction)
-                params_form = create_component(form_radio, comp='Radio')
-                regenerate = create_component({'value': 'Regenerate'}, comp='Button')
-                clear_button = create_component({'value': 'Clear History'}, comp='Button')
+    # with gr.Tab(model_name):
+    with gr.Row():
+        with gr.Column(scale=1, min_width=300):
+            # gr.Markdown(value=introduction)
+            params_form = create_component(form_radio, comp='Radio')
+            regenerate = create_component({'value': 'Regenerate'}, comp='Button')
+            clear_button = create_component({'value': 'Clear History'}, comp='Button')
 
-            with gr.Column(scale=3, min_width=500):
-                app_session = gr.State({'sts': None, 'ctx': [], 'images_cnt': 0,
-                                        'videos_cnt': 0, 'chat_type': 'Chat'})
-                chat_bot = mgr.Chatbot(
-                    label=f"Chat with {model_name}",
-                    value=copy.deepcopy(init_conversation),
-                    height=600,
-                    flushing=False,
-                    bubble_full_width=False)
-                
-                with gr.Tab("Chat & Video Understanding") as chat_tab:
-                    txt_message = create_multimodal_input()
-                    chat_tab_label = gr.Textbox(value="Chat",
-                                                interactive=False,
-                                                visible=False)
+        with gr.Column(scale=3, min_width=500):
+            app_session = gr.State({'sts': None, 'ctx': [], 'images_cnt': 0,
+                                    'videos_cnt': 0, 'chat_type': 'Chat'})
+            chat_bot = mgr.Chatbot(
+                label=f"Chat with {model_name}",
+                value=copy.deepcopy(init_conversation),
+                height=600,
+                flushing=False,
+                bubble_full_width=False)
 
-                    txt_message.submit(
-                        respond,
-                        [txt_message, chat_bot, app_session, params_form], 
-                        [txt_message, chat_bot, app_session]
-                    )
+            with gr.Tab("Chat & Video Understanding") as chat_tab:
+                txt_message = create_multimodal_input()
+                chat_tab_label = gr.Textbox(value="Chat",
+                                            interactive=False,
+                                            visible=False)
 
-                with gr.Tab("Few Shot") as fewshot_tab:
-                    fewshot_tab_label = gr.Textbox(value="Few Shot",
-                                                   interactive=False,
-                                                   visible=False)
-                    with gr.Row():
-                        with gr.Column(scale=1):
-                            image_input = gr.Image(type="filepath", sources=["upload"])
-                        with gr.Column(scale=3):
-                            user_message = gr.Textbox(label="User")
-                            assistant_message = gr.Textbox(label="Assistant")
-                            with gr.Row():
-                                add_demonstration_button = gr.Button("Add Example")
-                                generate_button = gr.Button(value="Generate", variant="primary")
-
-                    add_demonstration_button.click(
-                        fn=fewshot_add_demonstration,
-                        inputs=[image_input, user_message, assistant_message, chat_bot, app_session],
-                        outputs=[image_input, user_message, assistant_message, chat_bot, app_session]
-                    )
-                    generate_button.click(
-                        fn=fewshot_respond,
-                        inputs=[image_input, user_message, chat_bot, app_session, params_form],
-                        outputs=[image_input, user_message, assistant_message, chat_bot, app_session]
-                    )
-
-
-                chat_tab.select(
-                    fn=select_chat_type,
-                    inputs=[chat_tab_label, app_session],
-                    outputs=[app_session]
+                txt_message.submit(
+                    respond,
+                    [txt_message, chat_bot, app_session, params_form],
+                    [txt_message, chat_bot, app_session]
                 )
 
-                chat_tab.select( # do clear
-                    fn=clear,
-                    inputs=[txt_message, chat_bot, app_session],
-                    outputs=[txt_message, chat_bot, app_session,
-                             image_input, user_message, assistant_message]
+            with gr.Tab("Few Shot") as fewshot_tab:
+                fewshot_tab_label = gr.Textbox(value="Few Shot",
+                                               interactive=False,
+                                               visible=False)
+                with gr.Row():
+                    with gr.Column(scale=1):
+                        image_input = gr.Image(type="filepath", sources=["upload"])
+                    with gr.Column(scale=3):
+                        user_message = gr.Textbox(label="User")
+                        assistant_message = gr.Textbox(label="Assistant")
+                        with gr.Row():
+                            add_demonstration_button = gr.Button("Add Example")
+                            generate_button = gr.Button(value="Generate", variant="primary")
+
+                add_demonstration_button.click(
+                    fn=fewshot_add_demonstration,
+                    inputs=[image_input, user_message, assistant_message, chat_bot, app_session],
+                    outputs=[image_input, user_message, assistant_message, chat_bot, app_session]
+                )
+                generate_button.click(
+                    fn=fewshot_respond,
+                    inputs=[image_input, user_message, chat_bot, app_session, params_form],
+                    outputs=[image_input, user_message, assistant_message, chat_bot, app_session]
                 )
 
-                fewshot_tab.select(
-                    fn=select_chat_type,
-                    inputs=[fewshot_tab_label, app_session],
-                    outputs=[app_session]
-                )
+            chat_tab.select(
+                fn=select_chat_type,
+                inputs=[chat_tab_label, app_session],
+                outputs=[app_session]
+            )
 
-                fewshot_tab.select( # do clear
-                    fn=clear,
-                    inputs=[txt_message, chat_bot, app_session],
-                    outputs=[txt_message, chat_bot, app_session,
-                             image_input, user_message, assistant_message]
-                )
+            chat_tab.select(  # do clear
+                fn=clear,
+                inputs=[txt_message, chat_bot, app_session],
+                outputs=[txt_message, chat_bot, app_session,
+                         image_input, user_message, assistant_message]
+            )
 
-                chat_bot.flushed(
-                    fn=flushed,
-                    outputs=[txt_message]
-                )
+            fewshot_tab.select(
+                fn=select_chat_type,
+                inputs=[fewshot_tab_label, app_session],
+                outputs=[app_session]
+            )
 
-                regenerate.click(
-                    fn=regenerate_button_clicked,
-                    inputs=[txt_message, image_input, user_message,
-                            assistant_message, chat_bot, app_session, params_form],
-                    outputs=[txt_message, image_input, user_message,
-                             assistant_message, chat_bot, app_session]
-                )
+            fewshot_tab.select(  # do clear
+                fn=clear,
+                inputs=[txt_message, chat_bot, app_session],
+                outputs=[txt_message, chat_bot, app_session,
+                         image_input, user_message, assistant_message]
+            )
 
-                clear_button.click(
-                    fn=clear,
-                    inputs=[txt_message, chat_bot, app_session],
-                    outputs=[txt_message, chat_bot, app_session,
-                             image_input, user_message, assistant_message]
-                )
+            chat_bot.flushed(
+                fn=flushed,
+                outputs=[txt_message]
+            )
+
+            regenerate.click(
+                fn=regenerate_button_clicked,
+                inputs=[txt_message, image_input, user_message,
+                        assistant_message, chat_bot, app_session, params_form],
+                outputs=[txt_message, image_input, user_message,
+                         assistant_message, chat_bot, app_session]
+            )
+
+            clear_button.click(
+                fn=clear,
+                inputs=[txt_message, chat_bot, app_session],
+                outputs=[txt_message, chat_bot, app_session,
+                         image_input, user_message, assistant_message]
+            )
 
     """
     with gr.Tab("How to use"):
