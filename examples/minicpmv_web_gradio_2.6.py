@@ -303,16 +303,20 @@ def fewshot_add_demonstration(_image, _user_message,
     message_item = []
     if _image is not None:
         image = Image.open(_image).convert("RGB")
-        ctx.append({"role": "user", "content": [encode_image(image), make_text(_user_message)]})
-        message_item.append({"text": "[mm_media]1[/mm_media]" + _user_message, "files": [_image]})
+        ctx.append({"role": "user",
+                    "content": [encode_image(image), make_text(_user_message)]})
+        message_item.append(
+            {"text": "[mm_media]1[/mm_media]" + _user_message, "files": [_image]})
     else:
         if _user_message:
-            ctx.append({"role": "user", "content": [make_text(_user_message)]})
+            ctx.append({"role": "user",
+                        "content": [make_text(_user_message)]})
             message_item.append({"text": _user_message, "files": []})
         else:
             message_item.append(None)
     if _assistant_message:
-        ctx.append({"role": "assistant", "content": [make_text(_assistant_message)]})
+        ctx.append({"role": "assistant",
+                    "content": [make_text(_assistant_message)]})
         message_item.append({"text": _assistant_message, "files": []})
     else:
         message_item.append(None)
@@ -364,8 +368,8 @@ def fewshot_respond(_image, _user_message, _chat_bot, _app_cfg, params_form):
             {"text": _answer, "files": []}        
         ])
     if code == 0:
-        _app_cfg['ctx']=_context
-        _app_cfg['sts']=sts
+        _app_cfg['ctx'] = _context
+        _app_cfg['sts'] = sts
     return None, '', '', _chat_bot, _app_cfg
 
 
