@@ -251,6 +251,8 @@ with gr.Blocks() as demo:
     with gr.Row():
         with gr.Column(scale=1, min_width=300):
             params_form = create_component(form_radio, comp='Radio')
+            # Accordion is a layout element which can be toggled to
+            # show/hide the contained content.
             with gr.Accordion("Beam Search") as beams_according:
                 num_beams = create_component(num_beams_slider)
                 repetition_penalty = create_component(repetition_penalty_slider)
