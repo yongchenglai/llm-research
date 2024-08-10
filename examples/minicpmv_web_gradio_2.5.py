@@ -133,7 +133,7 @@ def create_component(params, comp='Slider'):
 
 
 def chat(img, msgs, ctx, params=None, vision_hidden_states=None):
-    default_params = {"num_beams":3,
+    default_params = {"num_beams": 3,
                       "repetition_penalty": 1.2,
                       "max_new_tokens": 1024}
     if params is None:
