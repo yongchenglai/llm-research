@@ -503,9 +503,9 @@ with gr.Blocks() as demo:
                                 generate_button = gr.Button(value="Generate", variant="primary")
 
                     add_demonstration_button.click(
-                        fewshot_add_demonstration,
-                        [image_input, user_message, assistant_message, chat_bot, app_session],
-                        [image_input, user_message, assistant_message, chat_bot, app_session]
+                        fn=fewshot_add_demonstration,
+                        inputs=[image_input, user_message, assistant_message, chat_bot, app_session],
+                        outputs=[image_input, user_message, assistant_message, chat_bot, app_session]
                     )
                     generate_button.click(
                         fewshot_respond,

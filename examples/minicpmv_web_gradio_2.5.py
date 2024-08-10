@@ -269,24 +269,26 @@ with gr.Blocks() as demo:
             txt_message = gr.Textbox(label="Input text")
             
             regenerate.click(
-                regenerate_button_clicked,
-                [txt_message, chat_bot, app_session, params_form,
-                 num_beams, repetition_penalty,
-                 repetition_penalty_2, top_p, top_k, temperature],
-                [txt_message, chat_bot, app_session]
+                fn=regenerate_button_clicked,
+                inputs=[txt_message, chat_bot, app_session, params_form,
+                        num_beams, repetition_penalty,
+                        repetition_penalty_2, top_p, top_k, temperature],
+                outputs=[txt_message, chat_bot, app_session],
             )
 
             txt_message.submit(
-                respond, 
-                [txt_message, chat_bot, app_session, params_form,
-                 num_beams, repetition_penalty,
-                 repetition_penalty_2, top_p, top_k, temperature],
-                [txt_message, chat_bot, app_session]
+                fn=respond,
+                inputs=[txt_message, chat_bot, app_session, params_form,
+                        num_beams, repetition_penalty,
+                        repetition_penalty_2, top_p, top_k, temperature],
+                outputs=[txt_message, chat_bot, app_session],
             )
-            
-            bt_pic.upload(lambda: None, None, chat_bot, queue=False).\
-                then(upload_img, inputs=[bt_pic, chat_bot, app_session],
-                     outputs=[chat_bot, app_session])
+
+            bt_pic.upload(lambda: None, None, chat_bot, queue=False).then(
+                fn=upload_img,
+                inputs=[bt_pic, chat_bot, app_session],
+                outputs=[chat_bot, app_session],
+            )
 
 
 if __name__ == "__main__":
