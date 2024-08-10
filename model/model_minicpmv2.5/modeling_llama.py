@@ -61,6 +61,7 @@ logger = logging.get_logger(__name__)
 
 _CONFIG_FOR_DOC = "LlamaConfig"
 
+
 class LlamaConfig(PretrainedConfig):
     r"""
     This is the configuration class to store the configuration of a [`LlamaModel`]. It is used to instantiate an LLaMA

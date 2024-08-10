@@ -42,7 +42,6 @@ from transformers import AutoModel
 from transformers.configuration_utils import PretrainedConfig
 # from transformers.utils import logging
 from transformers.models.auto.configuration_auto import CONFIG_MAPPING
-
 # from .configuration_idefics2 import Idefics2Config, Idefics2VisionConfig
 
 if is_flash_attn_2_available():
