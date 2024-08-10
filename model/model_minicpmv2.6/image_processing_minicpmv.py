@@ -13,12 +13,12 @@ from transformers.image_processing_utils import BaseImageProcessor, BatchFeature
 from transformers import AutoImageProcessor
 from transformers.image_transforms import to_channel_dimension_format
 from transformers.image_utils import (
-    ImageInput, 
-    make_list_of_images, 
-    valid_images, 
-    is_torch_tensor, 
+    ImageInput,
+    make_list_of_images,
+    valid_images,
+    is_torch_tensor,
     is_batched,
-    to_numpy_array, 
+    to_numpy_array,
     infer_channel_dimension_format,
     ChannelDimension
 )
@@ -53,7 +53,7 @@ class MiniCPMVBatchFeature(BatchFeature):
     ):
         if tensor_type is None:
             return self
-        
+
         is_tensor, as_tensor = self._get_is_as_tensor_fns(tensor_type)
 
         def converter(value):
@@ -178,9 +178,9 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
         grid_height = refine_height / grid_y
 
         best_grid_size = self.find_best_resize(
-            (grid_width, grid_height),
-            scale_resolution,
-            patch_size,
+            original_size=(grid_width, grid_height),
+            scale_resolution=scale_resolution,
+            patch_size=patch_size,
             allow_upscale=allow_upscale)
         refine_size = (best_grid_size[0] * grid_x, best_grid_size[1] * grid_y)
         return refine_size
@@ -256,7 +256,7 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
         if grid is None:
             return ""
         slice_image_placeholder = (
-            self.slice_start_token 
+            self.slice_start_token
             + self.unk_token * self.image_feature_size
             + self.slice_end_token
         )
@@ -269,7 +269,7 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
             for j in range(cols):
                 lines.append(slice_image_placeholder)
             slices.append("".join(lines))
-            
+
         slice_placeholder = "\n".join(slices)
         return slice_placeholder
 
@@ -285,7 +285,7 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
             return [image]
 
         max_slice_nums = self.max_slice_nums if max_slice_nums is None else int(max_slice_nums)
-        assert max_slice_nums > 0 
+        assert max_slice_nums > 0
         source_image, patches, sliced_grid = self.slice_image(
             image,
             max_slice_nums,  # default: 9
@@ -318,7 +318,7 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
             if i == 1 or i > max_slice_nums:
                 continue
             candidate_split_grids_nums.append(i)
-        
+
         candidate_grids = []
         for split_grids_nums in candidate_split_grids_nums:
             m = 1
@@ -334,7 +334,7 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
             if error < min_error:
                 best_grid = grid
                 min_error = error
-        
+
         return best_grid
 
 
@@ -347,13 +347,13 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
     ):
         max_slice_nums = self.max_slice_nums \
             if max_slice_nums is None else int(max_slice_nums)
-        assert max_slice_nums > 0        
+        assert max_slice_nums > 0
         grid = self.get_sliced_grid(image_size=image_size,
                                     max_slice_nums=max_slice_nums)
 
         image_placeholder = (
-            self.im_start_token 
-            + self.unk_token * self.image_feature_size 
+            self.im_start_token
+            + self.unk_token * self.image_feature_size
             + self.im_end_token
         )
         use_image_id = self.use_image_id \
@@ -438,19 +438,19 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
         new_images_list = []
         image_sizes_list = []
         tgt_sizes_list = []
-        
+
         for _images in images_list:
             if _images is None or len(_images) == 0:
                 new_images_list.append([])
                 image_sizes_list.append([])
                 tgt_sizes_list.append([])
-                continue             
+                continue
             if not valid_images(_images):
                 raise ValueError(
                     "Invalid image type. Must be of type PIL.Image.Image, numpy.ndarray, "
                     "torch.Tensor, tf.Tensor or jax.ndarray."
                 )
-            
+
             _images = [self.to_pil_image(image).convert("RGB") for image in _images]
             input_data_format = infer_channel_dimension_format(np.array(_images[0]))
 
@@ -483,7 +483,7 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
 
             if tgt_sizes:
                 tgt_sizes = np.vstack(tgt_sizes)
-            
+
             new_images_list.append(new_images)
             image_sizes_list.append(image_sizes)
             tgt_sizes_list.append(tgt_sizes)
