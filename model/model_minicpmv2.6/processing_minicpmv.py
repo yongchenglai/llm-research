@@ -31,9 +31,11 @@ from .image_processing_minicpmv import MiniCPMVBatchFeature
 
 class MiniCPMVProcessor(ProcessorMixin):
     r"""
-    Constructs a MiniCPMV processor which wraps a MiniCPMV image processor and a MiniCPMV tokenizer into a single processor.
+    Constructs a MiniCPMV processor which wraps a MiniCPMV image processor
+    and a MiniCPMV tokenizer into a single processor.
 
-    [`MiniCPMVProcessor`] offers all the functionalities of [`MiniCPMVImageProcessor`] and [`LlamaTokenizerWrapper`]. See the
+    [`MiniCPMVProcessor`] offers all the functionalities of
+    [`MiniCPMVImageProcessor`] and [`LlamaTokenizerWrapper`]. See the
     [`~MiniCPMVProcessor.__call__`] and [`~MiniCPMVProcessor.decode`] for more information.
 
     Args:
@@ -64,13 +66,26 @@ class MiniCPMVProcessor(ProcessorMixin):
     ) -> MiniCPMVBatchFeature:
 
         if images is not None:
-            image_inputs = self.image_processor(images, do_pad=do_pad, max_slice_nums=max_slice_nums, return_tensors=return_tensors)
-        return self._convert_images_texts_to_inputs(image_inputs, text, max_slice_nums=max_slice_nums, use_image_id=use_image_id, max_length=max_length, **kwargs)
+            image_inputs = self.image_processor(
+                images,
+                do_pad=do_pad,
+                max_slice_nums=max_slice_nums,
+                return_tensors=return_tensors)
+
+        return self._convert_images_texts_to_inputs(
+            image_inputs,
+            text,
+            max_slice_nums=max_slice_nums,
+            use_image_id=use_image_id,
+            max_length=max_length,
+            **kwargs)
     
-    # Copied from transformers.models.clip.processing_clip.CLIPProcessor.batch_decode with CLIP->Llama
+    # Copied from transformers.models.clip.processing_clip.
+    # CLIPProcessor.batch_decode with CLIP->Llama
     def batch_decode(self, *args, **kwargs):
         """
-        This method forwards all its arguments to LlamaTokenizerFast's [`~PreTrainedTokenizer.batch_decode`]. Please
+        This method forwards all its arguments to LlamaTokenizerFast's
+        [`~PreTrainedTokenizer.batch_decode`]. Please
         refer to the docstring of this method for more information.
         """
         output_ids = args[0]
@@ -85,17 +100,20 @@ class MiniCPMVProcessor(ProcessorMixin):
         return result_text
         # return self.tokenizer.batch_decode(*args, **kwargs)
     
-    # Copied from transformers.models.clip.processing_clip.CLIPProcessor.decode with CLIP->Llama
+    # Copied from transformers.models.clip.processing_clip.
+    # CLIPProcessor.decode with CLIP->Llama
     def decode(self, *args, **kwargs):
         """
-        This method forwards all its arguments to LlamaTokenizerFast's [`~PreTrainedTokenizer.decode`]. Please refer to
+        This method forwards all its arguments to LlamaTokenizerFast's
+        [`~PreTrainedTokenizer.decode`]. Please refer to
         the docstring of this method for more information.
         """
         result = args[0]
         result = result[result != 0]
         if result[0] == self.tokenizer.bos_id:
             result = result[1:]
-        if result[-1] == self.tokenizer.eos_id or (hasattr(self.tokenizer, "eot_id") and result[-1] == self.tokenizer.eot_id):
+        if result[-1] == self.tokenizer.eos_id or \
+                (hasattr(self.tokenizer, "eot_id") and result[-1] == self.tokenizer.eot_id):
             result = result[:-1]
         return self.tokenizer.decode(result, *args[1:], **kwargs).strip()
 
@@ -110,8 +128,10 @@ class MiniCPMVProcessor(ProcessorMixin):
             input_ids = input_ids[:max_inp_length]
         input_ids = torch.tensor(input_ids, dtype=torch.int32)
 
-        start_cond = (input_ids == self.tokenizer.im_start_id) | (input_ids == self.tokenizer.slice_start_id)
-        end_cond = (input_ids == self.tokenizer.im_end_id) | (input_ids == self.tokenizer.slice_end_id)
+        start_cond = (input_ids == self.tokenizer.im_start_id) | \
+                     (input_ids == self.tokenizer.slice_start_id)
+        end_cond = (input_ids == self.tokenizer.im_end_id) | \
+                   (input_ids == self.tokenizer.slice_end_id)
 
         image_start_tokens = torch.where(start_cond)[0]
         image_start_tokens += 1
@@ -127,6 +147,7 @@ class MiniCPMVProcessor(ProcessorMixin):
         )
         return input_ids, image_bounds
 
+
     def _convert_images_texts_to_inputs(
             self, 
             images, 
@@ -139,11 +160,17 @@ class MiniCPMVProcessor(ProcessorMixin):
             **kwargs
         ):
         if images is None or not len(images):
-            model_inputs = self.tokenizer(texts, return_tensors=return_tensors, truncation=truncation, max_length=max_length, **kwargs)
+            model_inputs = self.tokenizer(
+                texts,
+                return_tensors=return_tensors,
+                truncation=truncation,
+                max_length=max_length, **kwargs)
             return MiniCPMVBatchFeature(data={**model_inputs})
         
         pattern = "(<image>./</image>)"
-        images, image_sizes, tgt_sizes = images["pixel_values"], images["image_sizes"], images["tgt_sizes"]
+        images, image_sizes, tgt_sizes = images["pixel_values"], \
+                                         images["image_sizes"], \
+                                         images["tgt_sizes"]
         
         if isinstance(texts, str):
             texts = [texts]
