@@ -231,17 +231,23 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
                 original_size=original_size,
                 scale_resolution=scale_resolution,
                 patch_size=patch_size)
+
             source_image = image.copy().resize(
                 best_resize,
                 resample=Image.Resampling.BICUBIC)
+
             refine_size = self.get_refine_size(
                 original_size=original_size,
                 grid=best_grid,
                 scale_resolution=scale_resolution,
                 patch_size=patch_size,
                 allow_upscale=True)
-            refine_image = image.resize(refine_size, resample=Image.Resampling.BICUBIC)
-            patches = self.split_to_patches(refine_image, best_grid)
+
+            refine_image = image.resize(
+                refine_size,
+                resample=Image.Resampling.BICUBIC)
+
+            patches = self.split_to_patches(image=refine_image, grid=best_grid)
 
         return source_image, patches, best_grid
 
