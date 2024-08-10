@@ -18,7 +18,7 @@ from typing import Union
 
 from transformers.configuration_utils import PretrainedConfig
 from transformers.utils import logging
-from transformers.auto import CONFIG_MAPPING
+from transformers.models.auto.configuration_auto import CONFIG_MAPPING
 
 
 logger = logging.get_logger(__name__)
