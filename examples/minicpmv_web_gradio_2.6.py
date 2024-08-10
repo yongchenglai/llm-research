@@ -504,43 +504,43 @@ with gr.Blocks() as demo:
                 add_demonstration_button.click(
                     fn=fewshot_add_demonstration,
                     inputs=[image_input, user_message, assistant_message, chat_bot, app_session],
-                    outputs=[image_input, user_message, assistant_message, chat_bot, app_session]
+                    outputs=[image_input, user_message, assistant_message, chat_bot, app_session],
                 )
                 generate_button.click(
                     fn=fewshot_respond,
                     inputs=[image_input, user_message, chat_bot, app_session, params_form],
-                    outputs=[image_input, user_message, assistant_message, chat_bot, app_session]
+                    outputs=[image_input, user_message, assistant_message, chat_bot, app_session],
                 )
 
             chat_tab.select(
                 fn=select_chat_type,
                 inputs=[chat_tab_label, app_session],
-                outputs=[app_session]
+                outputs=[app_session],
             )
 
             chat_tab.select(  # do clear
                 fn=clear,
                 inputs=[txt_message, chat_bot, app_session],
                 outputs=[txt_message, chat_bot, app_session,
-                         image_input, user_message, assistant_message]
+                         image_input, user_message, assistant_message],
             )
 
             fewshot_tab.select(
                 fn=select_chat_type,
                 inputs=[fewshot_tab_label, app_session],
-                outputs=[app_session]
+                outputs=[app_session],
             )
 
             fewshot_tab.select(  # do clear
                 fn=clear,
                 inputs=[txt_message, chat_bot, app_session],
                 outputs=[txt_message, chat_bot, app_session,
-                         image_input, user_message, assistant_message]
+                         image_input, user_message, assistant_message],
             )
 
             chat_bot.flushed(
                 fn=flushed,
-                outputs=[txt_message]
+                outputs=[txt_message],
             )
 
             regenerate.click(
@@ -548,14 +548,14 @@ with gr.Blocks() as demo:
                 inputs=[txt_message, image_input, user_message,
                         assistant_message, chat_bot, app_session, params_form],
                 outputs=[txt_message, image_input, user_message,
-                         assistant_message, chat_bot, app_session]
+                         assistant_message, chat_bot, app_session],
             )
 
             clear_button.click(
                 fn=clear,
                 inputs=[txt_message, chat_bot, app_session],
                 outputs=[txt_message, chat_bot, app_session,
-                         image_input, user_message, assistant_message]
+                         image_input, user_message, assistant_message],
             )
 
 
