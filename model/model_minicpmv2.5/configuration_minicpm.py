@@ -116,3 +116,4 @@ class MiniCPMVConfig(LlamaConfig):
         self.patch_size = self.vision_config.patch_size
 
         super().__init__(**kwargs)
+
