@@ -508,47 +508,53 @@ with gr.Blocks() as demo:
                         outputs=[image_input, user_message, assistant_message, chat_bot, app_session]
                     )
                     generate_button.click(
-                        fewshot_respond,
-                        [image_input, user_message, chat_bot, app_session, params_form],
-                        [image_input, user_message, assistant_message, chat_bot, app_session]
+                        fn=fewshot_respond,
+                        inputs=[image_input, user_message, chat_bot, app_session, params_form],
+                        outputs=[image_input, user_message, assistant_message, chat_bot, app_session]
                     )
 
+
                 chat_tab.select(
-                    select_chat_type,
-                    [chat_tab_label, app_session],
-                    [app_session]
+                    fn=select_chat_type,
+                    inputs=[chat_tab_label, app_session],
+                    outputs=[app_session]
                 )
                 chat_tab.select( # do clear
-                    clear,
-                    [txt_message, chat_bot, app_session],
-                    [txt_message, chat_bot, app_session, image_input, user_message, assistant_message]
+                    fn=clear,
+                    inputs=[txt_message, chat_bot, app_session],
+                    outputs=[txt_message, chat_bot, app_session,
+                             image_input, user_message, assistant_message]
                 )
 
                 fewshot_tab.select(
-                    select_chat_type,
-                    [fewshot_tab_label, app_session],
-                    [app_session]
+                    fn=select_chat_type,
+                    inputs=[fewshot_tab_label, app_session],
+                    outputs=[app_session]
                 )
                 fewshot_tab.select( # do clear
-                    clear,
-                    [txt_message, chat_bot, app_session],
-                    [txt_message, chat_bot, app_session, image_input, user_message, assistant_message]
+                    fn=clear,
+                    inputs=[txt_message, chat_bot, app_session],
+                    outputs=[txt_message, chat_bot, app_session,
+                             image_input, user_message, assistant_message]
                 )
 
                 chat_bot.flushed(
-                    flushed,
+                    fn=flushed,
                     outputs=[txt_message]
                 )
 
                 regenerate.click(
-                    regenerate_button_clicked,
-                    [txt_message, image_input, user_message, assistant_message, chat_bot, app_session, params_form],
-                    [txt_message, image_input, user_message, assistant_message, chat_bot, app_session]
+                    fn=regenerate_button_clicked,
+                    inputs=[txt_message, image_input, user_message,
+                            assistant_message, chat_bot, app_session, params_form],
+                    outputs=[txt_message, image_input, user_message,
+                             assistant_message, chat_bot, app_session]
                 )
                 clear_button.click(
-                    clear,
-                    [txt_message, chat_bot, app_session],
-                    [txt_message, chat_bot, app_session, image_input, user_message, assistant_message]
+                    fn=clear,
+                    inputs=[txt_message, chat_bot, app_session],
+                    outputs=[txt_message, chat_bot, app_session,
+                             image_input, user_message, assistant_message]
                 )
 
     """
