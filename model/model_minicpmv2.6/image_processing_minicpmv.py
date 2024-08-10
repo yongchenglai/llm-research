@@ -112,11 +112,12 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
     model_input_names = ["pixel_values"]
 
     def __init__(
-            self, 
-            max_slice_nums=9,
-            scale_resolution=448,
-            patch_size=14,
-            **kwargs):
+        self,
+        max_slice_nums=9,
+        scale_resolution=448,
+        patch_size=14,
+        **kwargs,
+    ):
         super().__init__(**kwargs)
         self.max_slice_nums = max_slice_nums
         self.scale_resolution = scale_resolution
