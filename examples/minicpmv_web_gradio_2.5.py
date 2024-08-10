@@ -305,11 +305,11 @@ if __name__ == "__main__":
                         help='Enable 4-bit or 8-bit precision loading')
     parser.add_argument("--share", action="store_true", default=False,
                         help="Create a publicly shareable link for the interface.")
-    # parser.add_argument('--device', type=str, default='cuda', help='cuda or mps')
+    parser.add_argument('--device', type=str, default='cuda', help='cuda or mps')
     args = parser.parse_args()
 
-    # device = args.device
-    # assert device in ['cuda', 'mps']
+    device = args.device
+    assert device in ['cuda', 'mps']
     DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
     TORCH_TYPE = torch.bfloat16 \
         if torch.cuda.is_available() and \
@@ -326,7 +326,7 @@ if __name__ == "__main__":
     if args.quant == 4:
         model = AutoModel.from_pretrained(
             model_path,
-            device_map="auto",
+            device_map=device,
             torch_dtype=TORCH_TYPE,
             trust_remote_code=True,
             attn_implementation="flash_attention_2",
@@ -342,7 +342,7 @@ if __name__ == "__main__":
     elif args.quant == 8:
         model = AutoModel.from_pretrained(
             model_path,
-            device_map="auto",
+            device_map=device,
             torch_dtype=TORCH_TYPE,
             trust_remote_code=True,
             attn_implementation="flash_attention_2",
@@ -355,7 +355,7 @@ if __name__ == "__main__":
     else:
         model = AutoModel.from_pretrained(
             model_path,
-            device_map="auto",
+            device_map=device,
             torch_dtype=TORCH_TYPE,
             trust_remote_code=True
         )
