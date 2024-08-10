@@ -60,9 +60,7 @@ if is_flash_attn_2_available():
 
     _flash_supports_window_size = "window_size" in list(inspect.signature(flash_attn_func).parameters)
 
-
 logger = logging.get_logger(__name__)
-
 
 _CHECKPOINT_FOR_DOC = "Qwen/Qwen2-7B-beta"
 _CONFIG_FOR_DOC = "Qwen2Config"
