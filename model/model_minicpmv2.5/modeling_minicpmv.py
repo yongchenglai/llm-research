@@ -636,7 +636,7 @@ def slice_image(
             allow_upscale=True
         )
         source_image = image.resize(
-            best_size,
+            size=best_size,
             resample=Image.Resampling.BICUBIC)
     else:
         candidate_split_grids_nums = []
