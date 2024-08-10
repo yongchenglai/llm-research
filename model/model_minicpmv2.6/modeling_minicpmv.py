@@ -9,7 +9,6 @@ from copy import deepcopy
 from PIL import Image
 from transformers import AutoProcessor, TextIteratorStreamer
 # from transformers import Qwen2PreTrainedModel, Qwen2ForCausalLM
-# from transformers import AutoProcessor, Qwen2PreTrainedModel, Qwen2ForCausalLM, TextIteratorStreamer
 from .modeling_qwen2 import Qwen2PreTrainedModel, Qwen2ForCausalLM
 
 from .configuration_minicpm import MiniCPMVConfig
