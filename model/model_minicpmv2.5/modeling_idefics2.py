@@ -38,7 +38,7 @@ from transformers.utils import (
     logging,
     replace_return_docstrings,
 )
-from transformers.auto import AutoModel
+from transformers import AutoModel
 from .configuration_idefics2 import Idefics2Config, Idefics2VisionConfig
 
 

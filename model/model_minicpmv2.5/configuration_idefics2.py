@@ -16,9 +16,9 @@
 import os
 from typing import Union
 
-from ...configuration_utils import PretrainedConfig
-from ...utils import logging
-from ..auto import CONFIG_MAPPING
+from transformers.configuration_utils import PretrainedConfig
+from transformers.utils import logging
+from transformers.auto import CONFIG_MAPPING
 
 
 logger = logging.get_logger(__name__)
