@@ -38,11 +38,18 @@ class MiniCPMVBatchFeature(BatchFeature):
     r"""
     Extend from BatchFeature for supporting various image size
     """
-    def __init__(self, data: Optional[Dict[str, Any]] = None, tensor_type: Union[None, str, TensorType] = None):
+    def __init__(
+        self,
+        data: Optional[Dict[str, Any]] = None,
+        tensor_type: Union[None, str, TensorType] = None,
+    ):
         super().__init__(data)
         self.convert_to_tensors(tensor_type=tensor_type)
 
-    def convert_to_tensors(self, tensor_type: Optional[Union[str, TensorType]] = None):
+    def convert_to_tensors(
+        self,
+        tensor_type: Optional[Union[str, TensorType]] = None,
+    ):
         if tensor_type is None:
             return self
         
