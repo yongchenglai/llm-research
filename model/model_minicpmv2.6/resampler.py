@@ -181,18 +181,20 @@ class MultiheadAttention(nn.MultiheadAttention):
                          add_zero_attn, kdim, vdim, batch_first, device, dtype)
 
         # rewrite out_proj layer，with nn.Linear
-        self.out_proj = nn.Linear(embed_dim, embed_dim, bias=bias, device=device, dtype=dtype)
+        self.out_proj = nn.Linear(embed_dim, embed_dim,
+                                  bias=bias, device=device, dtype=dtype)
 
     def forward(
-                self,
-                query: Tensor,
-                key: Tensor,
-                value: Tensor,
-                key_padding_mask: Optional[Tensor] = None,
-                need_weights: bool = True,
-                attn_mask: Optional[Tensor] = None,
-                average_attn_weights: bool = True,
-                is_causal : bool = False) -> Tuple[Tensor, Optional[Tensor]]:
+        self,
+        query: Tensor,
+        key: Tensor,
+        value: Tensor,
+        key_padding_mask: Optional[Tensor] = None,
+        need_weights: bool = True,
+        attn_mask: Optional[Tensor] = None,
+        average_attn_weights: bool = True,
+        is_causal: bool = False,
+    ) -> Tuple[Tensor, Optional[Tensor]]:
         why_not_fast_path = ''
         if ((attn_mask is not None and torch.is_floating_point(attn_mask))
            or (key_padding_mask is not None) and torch.is_floating_point(key_padding_mask)):
