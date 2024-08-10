@@ -219,7 +219,13 @@ class MiniCPMVProcessor(ProcessorMixin):
         return list(dict.fromkeys(tokenizer_input_names + image_processor_input_names))
 
 
-    def pad(self, inputs, max_length=None, padding_value=0, padding_side="left"):
+    def pad(
+        self,
+        inputs,
+        max_length=None,
+        padding_value=0,
+        padding_side="left",
+    ):
         items = []
         if isinstance(inputs[0], list):
             assert isinstance(inputs[0][0], torch.Tensor)
