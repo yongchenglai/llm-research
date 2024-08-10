@@ -228,14 +228,14 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
         else:
             # source image, down-sampling and ensure divided by patch_size
             best_resize = self.find_best_resize(
-                original_size,
-                scale_resolution,
-                patch_size)
+                original_size=original_size,
+                scale_resolution=scale_resolution,
+                patch_size=patch_size)
             source_image = image.copy().resize(
                 best_resize,
                 resample=Image.Resampling.BICUBIC)
             refine_size = self.get_refine_size(
-                original_size=original_size, 
+                original_size=original_size,
                 grid=best_grid,
                 scale_resolution=scale_resolution,
                 patch_size=patch_size,
