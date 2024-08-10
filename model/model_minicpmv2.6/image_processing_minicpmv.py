@@ -291,11 +291,12 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
         max_slice_nums = self.max_slice_nums \
             if max_slice_nums is None else int(max_slice_nums)
         assert max_slice_nums > 0
+        
         source_image, patches, sliced_grid = self.slice_image(
-            image,
-            max_slice_nums,  # default: 9
-            self.scale_resolution,  # default: 448
-            self.patch_size  # default: 14
+            image=image,
+            max_slice_nums=max_slice_nums,  # default: 9
+            scale_resolution=self.scale_resolution,  # default: 448
+            patch_size=self.patch_size  # default: 14
         )
 
         slice_images.append(source_image)
