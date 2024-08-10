@@ -1551,6 +1551,8 @@ class Qwen2ForCausalLM(Qwen2PreTrainedModel):
     """,
     QWEN2_START_DOCSTRING,
 )
+
+
 class Qwen2ForSequenceClassification(Qwen2PreTrainedModel):
     def __init__(self, config):
         super().__init__(config)
