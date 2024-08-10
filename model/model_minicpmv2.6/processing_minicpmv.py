@@ -193,6 +193,7 @@ class MiniCPMVProcessor(ProcessorMixin):
             input_ids, image_bounds = self._convert(final_text, max_length)
             input_ids_list.append(input_ids)
             image_bounds_list.append(image_bounds)
+
         padded_input_ids, padding_lengths = self.pad(
             input_ids_list,
             padding_side="left"
