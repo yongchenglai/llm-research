@@ -23,8 +23,8 @@ from typing import Union
 
 from transformers.utils import logging
 from transformers import LlamaConfig, PretrainedConfig
-# from transformers.models.idefics2.modeling_idefics2 import Idefics2VisionConfig
-from .configuration_idefics2 import Idefics2VisionConfig
+from transformers.models.idefics2.modeling_idefics2 import Idefics2VisionConfig
+# from .configuration_idefics2 import Idefics2VisionConfig
 
 logger = logging.get_logger(__name__)
 
