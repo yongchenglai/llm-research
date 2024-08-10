@@ -211,7 +211,11 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
     ):
         original_size = image.size
         source_image = None
-        best_grid = self.get_sliced_grid(original_size, max_slice_nums, never_split)
+        best_grid = self.get_sliced_grid(
+            image_size=original_size,
+            max_slice_nums=max_slice_nums,
+            never_split=never_split)
+
         patches = []
 
         if best_grid is None:
@@ -284,7 +288,8 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
         if not self.slice_mode:
             return [image]
 
-        max_slice_nums = self.max_slice_nums if max_slice_nums is None else int(max_slice_nums)
+        max_slice_nums = self.max_slice_nums \
+            if max_slice_nums is None else int(max_slice_nums)
         assert max_slice_nums > 0
         source_image, patches, sliced_grid = self.slice_image(
             image,
