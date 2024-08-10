@@ -299,7 +299,9 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
 
         if processor is None:
             if self.processor is None:
-                self.processor = AutoProcessor.from_pretrained(self.config._name_or_path, trust_remote_code=True)
+                self.processor = AutoProcessor.from_pretrained(
+                    self.config._name_or_path,
+                    trust_remote_code=True)
             processor = self.processor
         
         assert self.config.query_num == processor.image_processor.image_feature_size, \
