@@ -214,7 +214,7 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
         best_grid = self.get_sliced_grid(
             image_size=original_size,
             max_slice_nums=max_slice_nums,
-            never_split=never_split)
+            nerver_split=never_split)
 
         patches = []
 
