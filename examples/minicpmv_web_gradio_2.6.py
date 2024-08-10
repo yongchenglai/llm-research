@@ -483,9 +483,9 @@ with gr.Blocks() as demo:
                                             visible=False)
 
                 txt_message.submit(
-                    respond,
-                    [txt_message, chat_bot, app_session, params_form],
-                    [txt_message, chat_bot, app_session]
+                    fn=respond,
+                    inputs=[txt_message, chat_bot, app_session, params_form],
+                    outputs=[txt_message, chat_bot, app_session]
                 )
 
             with gr.Tab("Few Shot") as fewshot_tab:
