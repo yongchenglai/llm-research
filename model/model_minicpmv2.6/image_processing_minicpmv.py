@@ -354,8 +354,9 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
         max_slice_nums = self.max_slice_nums \
             if max_slice_nums is None else int(max_slice_nums)
         assert max_slice_nums > 0
-        grid = self.get_sliced_grid(image_size=image_size,
-                                    max_slice_nums=max_slice_nums)
+        grid = self.get_sliced_grid(
+            image_size=image_size,
+            max_slice_nums=max_slice_nums)
 
         image_placeholder = (
             self.im_start_token
