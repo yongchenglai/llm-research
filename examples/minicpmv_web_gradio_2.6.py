@@ -559,7 +559,7 @@ with gr.Blocks() as demo:
                          image_input, user_message, assistant_message]
             )
 
-   
+
 if __name__ == "__main__":
 
     # Argparser
