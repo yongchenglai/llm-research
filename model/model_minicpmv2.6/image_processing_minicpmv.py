@@ -384,13 +384,13 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
         return patches.numpy()
 
     def preprocess(
-            self, 
-            images: Union[Image.Image, List[Image.Image], List[List[Image.Image]]],
-            do_pad: Optional[bool] = True, # TODO: add pad for MiniCPM-Llama3-V-2_5
-            max_slice_nums: int = None,
-            return_tensors: Optional[Union[str, TensorType]] = None,
-            **kwargs
-        ) -> MiniCPMVBatchFeature:
+        self,
+        images: Union[Image.Image, List[Image.Image], List[List[Image.Image]]],
+        do_pad: Optional[bool] = True, # TODO: add pad for MiniCPM-Llama3-V-2_5
+        max_slice_nums: int = None,
+        return_tensors: Optional[Union[str, TensorType]] = None,
+        **kwargs,
+    ) -> MiniCPMVBatchFeature:
         if isinstance(images, Image.Image):
             images_list = [[images]]
         elif isinstance(images[0], Image.Image):
@@ -424,16 +424,24 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
                 image_patches = self.get_sliced_images(image, max_slice_nums)
                 image_patches = [to_numpy_array(image).astype(np.float32) / 255 for image in image_patches]
                 image_patches = [
-                    self.normalize(image=image, mean=self.mean, std=self.std, input_data_format=input_data_format)
-                        for image in image_patches
+                    self.normalize(
+                        image=image,
+                        mean=self.mean,
+                        std=self.std,
+                        input_data_format=input_data_format,
+                    ) for image in image_patches
                 ]
                 image_patches = [
-                    to_channel_dimension_format(image, ChannelDimension.FIRST, input_channel_dim=input_data_format) 
-                        for image in image_patches
+                    to_channel_dimension_format(
+                        image,
+                        ChannelDimension.FIRST,
+                        input_channel_dim=input_data_format,
+                    ) for image in image_patches
                 ]
                 for slice_image in image_patches:
                     new_images.append(self.reshape_by_patch(slice_image))
-                    tgt_sizes.append(np.array((slice_image.shape[1] // self.patch_size, slice_image.shape[2] // self.patch_size)))
+                    tgt_sizes.append(np.array((slice_image.shape[1] // self.patch_size,
+                                               slice_image.shape[2] // self.patch_size)))
 
             if tgt_sizes:
                 tgt_sizes = np.vstack(tgt_sizes)
@@ -441,8 +449,13 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
             new_images_list.append(new_images)
             image_sizes_list.append(image_sizes)
             tgt_sizes_list.append(tgt_sizes)
+
         return MiniCPMVBatchFeature(
-            data={"pixel_values": new_images_list, "image_sizes": image_sizes_list, "tgt_sizes": tgt_sizes_list}, tensor_type=return_tensors
+            data={"pixel_values": new_images_list,
+                  "image_sizes": image_sizes_list,
+                  "tgt_sizes": tgt_sizes_list},
+            tensor_type=return_tensors
         )
+
 
 AutoImageProcessor.register("MiniCPMVImageProcessor", MiniCPMVImageProcessor)
