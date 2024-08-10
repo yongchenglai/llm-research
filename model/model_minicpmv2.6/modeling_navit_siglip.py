@@ -671,10 +671,11 @@ class SiglipEncoderLayer(nn.Module):
             hidden_states (`torch.FloatTensor`):
                 Input to the layer of shape `(batch, seq_len, embed_dim)`.
             attention_mask (`torch.FloatTensor`):
-                Attention mask of shape `(batch, 1, q_len, k_v_seq_len)` where padding elements are indicated by very large negative values.
+                Attention mask of shape `(batch, 1, q_len, k_v_seq_len)`
+                where padding elements are indicated by very large negative values.
             output_attentions (`bool`, *optional*, defaults to `False`):
-                Whether or not to return the attentions tensors of all attention layers. See `attentions` under
-                returned tensors for more detail.
+                Whether or not to return the attentions tensors of all attention layers.
+                See `attentions` under returned tensors for more detail.
         """
         residual = hidden_states
 
@@ -701,7 +702,7 @@ class SiglipEncoderLayer(nn.Module):
 
 class SiglipPreTrainedModel(PreTrainedModel):
     """
-    An abstract class to handle weights initialization and a simple 
+    An abstract class to handle weights initialization and a simple
     interface for downloading and loading pretrained models.
     """
 
