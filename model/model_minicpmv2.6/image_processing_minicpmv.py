@@ -233,7 +233,7 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
                 patch_size=patch_size)
 
             source_image = image.copy().resize(
-                best_resize,
+                size=best_resize,
                 resample=Image.Resampling.BICUBIC)
 
             refine_size = self.get_refine_size(
