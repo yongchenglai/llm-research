@@ -350,10 +350,12 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
                 sys_msg = {'role': 'system', 'content': system_prompt}
                 copy_msgs = [sys_msg] + copy_msgs        
 
-            prompts_lists.append(processor.tokenizer.apply_chat_template(
-                copy_msgs,
-                tokenize=False,
-                add_generation_prompt=True))
+            prompts_lists.append(
+                processor.tokenizer.apply_chat_template(
+                   copy_msgs,
+                   tokenize=False,
+                   add_generation_prompt=True))
+
             input_images_lists.append(images)
 
         inputs = processor(
