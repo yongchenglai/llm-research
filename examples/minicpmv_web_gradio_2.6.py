@@ -559,24 +559,7 @@ with gr.Blocks() as demo:
                          image_input, user_message, assistant_message]
             )
 
-    """
-    with gr.Tab("How to use"):
-        with gr.Column():
-            with gr.Row():
-                image_example = gr.Image(
-                    value="http://thunlp.oss-cn-qingdao.aliyuncs.com/multi_modal/never_delete/m_bear2.gif",
-                    label='1. Chat with single or multiple images',
-                    interactive=False, width=400, elem_classes="example")
-                example2 = gr.Image(
-                    value="http://thunlp.oss-cn-qingdao.aliyuncs.com/multi_modal/never_delete/video2.gif",
-                    label='2. Chat with video',
-                    interactive=False, width=400, elem_classes="example")
-                example3 = gr.Image(
-                    value="http://thunlp.oss-cn-qingdao.aliyuncs.com/multi_modal/never_delete/fshot.gif",
-                    label='3. Few shot',
-                    interactive=False, width=400, elem_classes="example")
-    """
-
+   
 if __name__ == "__main__":
 
     # Argparser
