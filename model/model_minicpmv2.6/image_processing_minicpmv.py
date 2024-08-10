@@ -46,6 +46,7 @@ class MiniCPMVBatchFeature(BatchFeature):
         super().__init__(data)
         self.convert_to_tensors(tensor_type=tensor_type)
 
+
     def convert_to_tensors(
         self,
         tensor_type: Optional[Union[str, TensorType]] = None,
@@ -72,7 +73,8 @@ class MiniCPMVBatchFeature(BatchFeature):
         for key, value in self.items():
             self[key] = recursive_converter(converter, value)
         return self
-            
+
+
     def to(self, *args, **kwargs) -> "MiniCPMVBatchFeature":
         requires_backends(self, ["torch"])
         import torch
@@ -158,12 +160,14 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
         return (best_width, best_height)
 
 
-    def get_refine_size(self,
-                        original_size,
-                        grid,
-                        scale_resolution,
-                        patch_size,
-                        allow_upscale=False):
+    def get_refine_size(
+        self,
+        original_size,
+        grid,
+        scale_resolution,
+        patch_size,
+        allow_upscale=False,
+    ):
         width, height = original_size
         grid_x, grid_y = grid
 
@@ -173,10 +177,11 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
         grid_width = refine_width / grid_x
         grid_height = refine_height / grid_y
 
-        best_grid_size = self.find_best_resize((grid_width, grid_height),
-                                               scale_resolution,
-                                               patch_size,
-                                               allow_upscale=allow_upscale)
+        best_grid_size = self.find_best_resize(
+            (grid_width, grid_height),
+            scale_resolution,
+            patch_size,
+            allow_upscale=allow_upscale)
         refine_size = (best_grid_size[0] * grid_x, best_grid_size[1] * grid_y)
         return refine_size
 
