@@ -139,14 +139,15 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
     def ensure_divide(self, length, patch_size):
         return max(round(length / patch_size) * patch_size, patch_size)
 
-    def find_best_resize(self,
-                         original_size,
-                         scale_resolution,
-                         patch_size,
-                         allow_upscale=False):
+    def find_best_resize(
+        self,
+        original_size,
+        scale_resolution,
+        patch_size,
+        allow_upscale=False,
+    ):
         width, height = original_size
-        if (width * height >
-                scale_resolution * scale_resolution) or allow_upscale:
+        if (width * height > scale_resolution * scale_resolution) or allow_upscale:
             r = width / height
             height = int(scale_resolution / math.sqrt(r))
             width = int(height * r)
