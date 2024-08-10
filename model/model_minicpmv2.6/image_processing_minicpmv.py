@@ -268,7 +268,12 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
                     slice_images.append(patches[i][j])
         return slice_images
 
-    def get_sliced_grid(self, image_size, max_slice_nums, nerver_split=False):
+    def get_sliced_grid(
+        self,
+        image_size,
+        max_slice_nums,
+        nerver_split=False,
+    ):
         original_width, original_height = image_size
         log_ratio = math.log(original_width / original_height)
         ratio = original_width * original_height / (self.scale_resolution * self.scale_resolution)
@@ -299,17 +304,26 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
         
         return best_grid
     
-    def get_slice_image_placeholder(self, image_size, image_idx=0, max_slice_nums=None, use_image_id=None):
-        max_slice_nums = self.max_slice_nums if max_slice_nums is None else int(max_slice_nums)
+    def get_slice_image_placeholder(
+        self,
+        image_size,
+        image_idx=0,
+        max_slice_nums=None,
+        use_image_id=None,
+    ):
+        max_slice_nums = self.max_slice_nums \
+            if max_slice_nums is None else int(max_slice_nums)
         assert max_slice_nums > 0        
-        grid = self.get_sliced_grid(image_size=image_size, max_slice_nums=max_slice_nums)
+        grid = self.get_sliced_grid(image_size=image_size,
+                                    max_slice_nums=max_slice_nums)
 
         image_placeholder = (
             self.im_start_token 
             + self.unk_token * self.image_feature_size 
             + self.im_end_token
         )
-        use_image_id = self.use_image_id if use_image_id is None else bool(use_image_id)
+        use_image_id = self.use_image_id \
+            if use_image_id is None else bool(use_image_id)
         if use_image_id:
             final_placeholder = self.get_image_id_placeholder(image_idx) + image_placeholder
         else:
@@ -321,15 +335,17 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
         
     def to_pil_image(self, image, rescale=None) -> PIL.Image.Image:
         """
-        Converts `image` to a PIL Image. Optionally rescales it and puts the channel dimension back as the last axis if
+        Converts `image` to a PIL Image. Optionally rescales it
+        and puts the channel dimension back as the last axis if
         needed.
 
         Args:
             image (`PIL.Image.Image` or `numpy.ndarray` or `torch.Tensor`):
                 The image to convert to the PIL Image format.
             rescale (`bool`, *optional*):
-                Whether or not to apply the scaling factor (to make pixel values integers between 0 and 255). Will
-                default to `True` if the image type is a floating type, `False` otherwise.
+                Whether or not to apply the scaling factor (to make pixel
+                values integers between 0 and 255). Will default to `True`
+                if the image type is a floating type, `False` otherwise.
         """
         if isinstance(image, PIL.Image.Image):
             return image
