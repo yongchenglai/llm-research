@@ -294,18 +294,24 @@ class MiniCPMV(MiniCPMVPreTrainedModel):
         
         if batched is False:
             images_list, msgs_list = [images_list], [msgs_list]
-        assert len(images_list) == len(msgs_list), "The batch dim of images_list and msgs_list should be the same."
+        assert len(images_list) == len(msgs_list), \
+            "The batch dim of images_list and msgs_list should be the same."
 
         if processor is None:
             if self.processor is None:
                 self.processor = AutoProcessor.from_pretrained(self.config._name_or_path, trust_remote_code=True)
             processor = self.processor
         
-        assert self.config.query_num == processor.image_processor.image_feature_size, "These two values should be the same. Check `config.json` and `preprocessor_config.json`."
-        assert self.config.patch_size == processor.image_processor.patch_size, "These two values should be the same. Check `config.json` and `preprocessor_config.json`."
-        assert self.config.use_image_id == processor.image_processor.use_image_id, "These two values should be the same. Check `config.json` and `preprocessor_config.json`."
-        assert self.config.slice_config.max_slice_nums == processor.image_processor.max_slice_nums, "These two values should be the same. Check `config.json` and `preprocessor_config.json`."
-        assert self.config.slice_mode == processor.image_processor.slice_mode, "These two values should be the same. Check `config.json` and `preprocessor_config.json`."
+        assert self.config.query_num == processor.image_processor.image_feature_size, \
+            "These two values should be the same. Check `config.json` and `preprocessor_config.json`."
+        assert self.config.patch_size == processor.image_processor.patch_size, \
+            "These two values should be the same. Check `config.json` and `preprocessor_config.json`."
+        assert self.config.use_image_id == processor.image_processor.use_image_id, \
+            "These two values should be the same. Check `config.json` and `preprocessor_config.json`."
+        assert self.config.slice_config.max_slice_nums == processor.image_processor.max_slice_nums, \
+            "These two values should be the same. Check `config.json` and `preprocessor_config.json`."
+        assert self.config.slice_mode == processor.image_processor.slice_mode, \
+            "These two values should be the same. Check `config.json` and `preprocessor_config.json`."
 
         prompts_lists = []
         input_images_lists = []
