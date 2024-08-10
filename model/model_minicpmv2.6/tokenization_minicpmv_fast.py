@@ -1,4 +1,5 @@
-from transformers.models.qwen2 import Qwen2TokenizerFast
+# from transformers.models.qwen2 import Qwen2TokenizerFast
+from .tokenization_qwen2_fast import Qwen2TokenizerFast
 
 
 class MiniCPMVTokenizerFast(Qwen2TokenizerFast):
