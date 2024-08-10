@@ -9,7 +9,7 @@ from PIL import Image
 from torchvision import transforms
 # from transformers import LlamaForCausalLM, LlamaPreTrainedModel, LlamaTokenizer
 from .modeling_llama import LlamaForCausalLM, LlamaPreTrainedModel
-from .tokenization_llama import LlamaTokenizer
+# from .tokenization_llama import LlamaTokenizer
 from transformers import AutoModel, PreTrainedTokenizerFast, TextIteratorStreamer
 from transformers.models.idefics2.modeling_idefics2 import Idefics2VisionTransformer
 
