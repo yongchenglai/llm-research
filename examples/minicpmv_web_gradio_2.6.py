@@ -470,8 +470,8 @@ with gr.Blocks() as demo:
                                     'videos_cnt': 0, 'chat_type': 'Chat'})
             chat_bot = mgr.Chatbot(
                 label=f"Chat with {model_name}",
-                # value=copy.deepcopy(init_conversation),
-                value=None,
+                value=copy.deepcopy(init_conversation),
+                # value=None,
                 height=600,
                 flushing=False,
                 bubble_full_width=False)
