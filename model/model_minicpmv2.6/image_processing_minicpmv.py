@@ -136,8 +136,10 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
         self.std = np.array(kwargs.pop("norm_std", [0.5, 0.5, 0.5]))
         self.version = kwargs.pop("version", 2.0)
 
+
     def ensure_divide(self, length, patch_size):
         return max(round(length / patch_size) * patch_size, patch_size)
+
 
     def find_best_resize(
         self,
@@ -154,6 +156,7 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
         best_width = self.ensure_divide(width, patch_size)
         best_height = self.ensure_divide(height, patch_size)
         return (best_width, best_height)
+
 
     def get_refine_size(self,
                         original_size,
@@ -177,6 +180,7 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
         refine_size = (best_grid_size[0] * grid_x, best_grid_size[1] * grid_y)
         return refine_size
 
+
     def split_to_patches(self, image, grid):
         patches = []
         width, height = image.size
@@ -190,6 +194,7 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
                 images.append(patch)
             patches.append(images)
         return patches
+
 
     def slice_image(
         self,
@@ -222,6 +227,7 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
 
         return source_image, patches, best_grid
 
+
     def get_grid_placeholder(self, grid):
         if grid is None:
             return ""
@@ -243,9 +249,11 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
         slice_placeholder = "\n".join(slices)
         return slice_placeholder
 
+
     def get_image_id_placeholder(self, idx=0):
         return f"{self.im_id_start}{idx}{self.im_id_end}"
-    
+
+
     def get_sliced_images(self, image, max_slice_nums=None):
         slice_images = []
 
@@ -267,6 +275,7 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
                 for j in range(len(patches[0])):
                     slice_images.append(patches[i][j])
         return slice_images
+
 
     def get_sliced_grid(
         self,
@@ -303,7 +312,8 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
                 min_error = error
         
         return best_grid
-    
+
+
     def get_slice_image_placeholder(
         self,
         image_size,
@@ -332,7 +342,8 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
         if self.slice_mode:
             final_placeholder = final_placeholder + self.get_grid_placeholder(grid=grid)
         return final_placeholder
-        
+
+
     def to_pil_image(self, image, rescale=None) -> PIL.Image.Image:
         """
         Converts `image` to a PIL Image. Optionally rescales it
@@ -365,6 +376,7 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
             return PIL.Image.fromarray(image)
         return image
 
+
     def reshape_by_patch(self, image):
         """
         :param image: shape [3, H, W]
@@ -382,6 +394,7 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
         patches = patches.reshape(image.size(0), patch_size, patch_size, -1)
         patches = patches.permute(0, 1, 3, 2).reshape(image.size(0), patch_size, -1)
         return patches.numpy()
+
 
     def preprocess(
         self,
