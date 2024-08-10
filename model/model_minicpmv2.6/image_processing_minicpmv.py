@@ -192,7 +192,12 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
         return patches
 
     def slice_image(
-        self, image, max_slice_nums=9, scale_resolution=448, patch_size=14, never_split=False
+        self,
+        image,
+        max_slice_nums=9,
+        scale_resolution=448,
+        patch_size=14,
+        never_split=False
     ):
         original_size = image.size
         source_image = None
