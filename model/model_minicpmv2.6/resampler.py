@@ -13,6 +13,7 @@ from torch.nn.init import trunc_normal_, constant_, xavier_normal_, xavier_unifo
 
 from transformers.integrations import is_deepspeed_zero3_enabled
 
+
 def get_2d_sincos_pos_embed(embed_dim, image_size):
     """
     image_size: image_size or (image_height, image_width)
