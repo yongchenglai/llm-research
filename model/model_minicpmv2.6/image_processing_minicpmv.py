@@ -422,7 +422,8 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
             tgt_sizes = []
             for image in _images:
                 image_patches = self.get_sliced_images(image, max_slice_nums)
-                image_patches = [to_numpy_array(image).astype(np.float32) / 255 for image in image_patches]
+                image_patches = [to_numpy_array(image).astype(np.float32) / 255
+                                 for image in image_patches]
                 image_patches = [
                     self.normalize(
                         image=image,
