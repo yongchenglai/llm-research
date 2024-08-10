@@ -487,6 +487,7 @@ with gr.Blocks() as demo:
                     outputs=[txt_message, chat_bot, app_session]
                 )
 
+
             with gr.Tab("Few Shot") as fewshot_tab:
                 fewshot_tab_label = gr.Textbox(value="Few Shot",
                                                interactive=False,
