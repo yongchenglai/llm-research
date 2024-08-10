@@ -275,6 +275,7 @@ with gr.Blocks() as demo:
                  repetition_penalty_2, top_p, top_k, temperature],
                 [txt_message, chat_bot, app_session]
             )
+
             txt_message.submit(
                 respond, 
                 [txt_message, chat_bot, app_session, params_form,
@@ -282,6 +283,7 @@ with gr.Blocks() as demo:
                  repetition_penalty_2, top_p, top_k, temperature],
                 [txt_message, chat_bot, app_session]
             )
+            
             bt_pic.upload(lambda: None, None, chat_bot, queue=False).\
                 then(upload_img, inputs=[bt_pic, chat_bot, app_session],
                      outputs=[chat_bot, app_session])
