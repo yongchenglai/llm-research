@@ -14,6 +14,7 @@ from torch.nn.init import constant_, xavier_normal_, xavier_uniform_
 from transformers import PreTrainedModel
 from transformers.integrations import is_deepspeed_zero3_enabled
 
+
 def get_2d_sincos_pos_embed(embed_dim, image_size):
     """
     image_size: image_size or (image_height, image_width)
@@ -710,6 +711,7 @@ def _none_or_dtype(input: Optional[Tensor]) -> Optional[DType]:
         return input.dtype
     raise RuntimeError("input to _none_or_dtype() must be None or torch.Tensor")
 
+
 def _in_projection_packed(
     q: Tensor,
     k: Tensor,
@@ -817,3 +819,4 @@ def _in_projection(
     assert b_k is None or b_k.shape == (Eq,), f"expecting key bias shape of {(Eq,)}, but got {b_k.shape}"
     assert b_v is None or b_v.shape == (Eq,), f"expecting value bias shape of {(Eq,)}, but got {b_v.shape}"
     return linear(q, w_q, b_q), linear(k, w_k, b_k), linear(v, w_v, b_v)
+
