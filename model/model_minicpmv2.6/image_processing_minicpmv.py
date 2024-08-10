@@ -217,16 +217,29 @@ class MiniCPMVImageProcessor(BaseImageProcessor):
         if best_grid is None:
             # dont need to slice, upsample
             best_size = self.find_best_resize(
-                original_size, scale_resolution, patch_size, allow_upscale=True
+                original_size=original_size,
+                scale_resolution=scale_resolution,
+                patch_size=patch_size,
+                allow_upscale=True,
             )
-            source_image = image.resize(best_size, resample=Image.Resampling.BICUBIC)
+            source_image = image.resize(
+                best_size,
+                resample=Image.Resampling.BICUBIC)
         else:
             # source image, down-sampling and ensure divided by patch_size
-            best_resize = self.find_best_resize(original_size, scale_resolution, patch_size)
-            source_image = image.copy().resize(best_resize, resample=Image.Resampling.BICUBIC)
+            best_resize = self.find_best_resize(
+                original_size,
+                scale_resolution,
+                patch_size)
+            source_image = image.copy().resize(
+                best_resize,
+                resample=Image.Resampling.BICUBIC)
             refine_size = self.get_refine_size(
-                original_size, best_grid, scale_resolution, patch_size, allow_upscale=True
-            )
+                original_size=original_size, 
+                grid=best_grid,
+                scale_resolution=scale_resolution,
+                patch_size=patch_size,
+                allow_upscale=True)
             refine_image = image.resize(refine_size, resample=Image.Resampling.BICUBIC)
             patches = self.split_to_patches(refine_image, best_grid)
 

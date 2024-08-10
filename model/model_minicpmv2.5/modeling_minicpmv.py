@@ -611,8 +611,11 @@ def pad(orig_items, key, max_length=None, padding_value=0, padding_side="left"):
 
 
 def slice_image(
-    image, max_slice_nums=9, scale_resolution=448,
-    patch_size=14, never_split=False
+    image,
+    max_slice_nums=9,
+    scale_resolution=448,
+    patch_size=14,
+    never_split=False
 ):
     original_size = image.size
     original_width, original_height = original_size
@@ -627,9 +630,14 @@ def slice_image(
     if multiple <= 1 or never_split:
         # dont need to slice, upsample
         best_size = find_best_resize(
-            original_size, scale_resolution, patch_size, allow_upscale=True
+            original_size=original_size,
+            scale_resolution=scale_resolution,
+            patch_size=patch_size,
+            allow_upscale=True
         )
-        source_image = image.resize(best_size, Image.Resampling.BICUBIC)
+        source_image = image.resize(
+            best_size,
+            Image.Resampling.BICUBIC)
     else:
         candidate_split_grids_nums = []
         for i in [multiple - 1, multiple, multiple + 1]:
