@@ -701,8 +701,8 @@ class SiglipEncoderLayer(nn.Module):
 
 class SiglipPreTrainedModel(PreTrainedModel):
     """
-    An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
-    models.
+    An abstract class to handle weights initialization and a simple 
+    interface for downloading and loading pretrained models.
     """
 
     config_class = SiglipVisionConfig
@@ -938,7 +938,7 @@ class SiglipVisionTransformer(SiglipPreTrainedModel):
 
         patch_attention_mask = patch_attention_mask.view(batch_size, -1)
         # The call to `_upad_input` in `_flash_attention_forward` is expensive
-        # So when the `patch_attention_mask` is full of 1s (i.e. attending to 
+        # So when the `patch_attention_mask` is full of 1s (i.e. attending to
         # the whole sequence), avoiding passing the attention_mask,
         # which is equivalent to attending to the full sequence
         if not torch.any(~patch_attention_mask):
