@@ -52,7 +52,7 @@ from transformers.utils import (
 
 # from .configuration_qwen2 import Qwen2Config
 from transformers.configuration_utils import PretrainedConfig
-# from transformers.deprecated._archive_maps import QWEN2_PRETRAINED_CONFIG_ARCHIVE_MAP  # noqa: F401, E402
+
 
 if is_flash_attn_2_available():
     from flash_attn import flash_attn_func, flash_attn_varlen_func
