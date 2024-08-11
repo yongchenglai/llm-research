@@ -72,14 +72,18 @@ def predict(chatbot, task_history):
     """Generate a response from the model."""
     print(f"{task_history=}")
     print(f"{chatbot=}")
-    text = processor.apply_chat_template(task_history, add_generation_prompt=True, tokenize=False)
+    text = processor.apply_chat_template(
+        task_history,
+        add_generation_prompt=True,
+        tokenize=False)
     audios = []
     for message in task_history:
         if isinstance(message["content"], list):
             for ele in message["content"]:
                 if ele["type"] == "audio":
-                    audios.append(
-                        librosa.load(ele['audio_url'], sr=processor.feature_extractor.sampling_rate)[0]
+                    audios.append(librosa.load(
+                        ele['audio_url'],
+                        sr=processor.feature_extractor.sampling_rate)[0]
                     )
 
     print(f"{text=}")
@@ -90,7 +94,10 @@ def predict(chatbot, task_history):
     generate_ids = model.generate(**inputs, max_length=256)
     generate_ids = generate_ids[:, inputs.input_ids.size(1):]
 
-    response = processor.batch_decode(generate_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0]
+    response = processor.batch_decode(
+        generate_ids,
+        skip_special_tokens=True,
+        clean_up_tokenization_spaces=False)[0]
     print(f"{response=}")
     task_history.append({'role': 'assistant',
                          'content': response})
@@ -100,20 +107,10 @@ def predict(chatbot, task_history):
 
 def _launch_demo(args):
     with gr.Blocks() as demo:
-        gr.Markdown(
-            """<p align="center"><img src="https://qianwen-res.oss-cn-beijing.aliyuncs.com/assets/blog/qwenaudio/qwen2audio_logo.png" style="height: 80px"/><p>""")
         gr.Markdown("""<center><font size=8>Qwen2-Audio-Instruct Bot</center>""")
-        gr.Markdown(
-            """\
-    <center><font size=3>This WebUI is based on Qwen2-Audio-Instruct, developed by Alibaba Cloud. \
-    (本WebUI基于Qwen2-Audio-Instruct打造，实现聊天机器人功能。)</center>""")
-        gr.Markdown("""\
-    <center><font size=4>Qwen2-Audio <a href="https://modelscope.cn/models/qwen/Qwen2-Audio-7B">🤖 </a> 
-    | <a href="https://huggingface.co/Qwen/Qwen2-Audio-7B">🤗</a>&nbsp ｜ 
-    Qwen2-Audio-Instruct <a href="https://modelscope.cn/models/qwen/Qwen2-Audio-7B-Instruct">🤖 </a> | 
-    <a href="https://huggingface.co/Qwen/Qwen2-Audio-7B-Instruct">🤗</a>&nbsp ｜ 
-    &nbsp<a href="https://github.com/QwenLM/Qwen2-Audio">Github</a></center>""")
-        chatbot = mgr.Chatbot(label='Qwen2-Audio-7B-Instruct', elem_classes="control-height", height=750)
+        chatbot = mgr.Chatbot(label='Qwen2-Audio-7B-Instruct',
+                              elem_classes="control-height",
+                              height=750)
 
         user_input = mgr.MultimodalInput(
             interactive=True,
