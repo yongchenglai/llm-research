@@ -31,6 +31,8 @@ RUN pip install --no-cache-dir  \
         gradio>=4.0.0 \
         matplotlib>=3.7.0
 
+#RUN pip install git+https://github.com/huggingface/transformers
+
 #RUN pip install --no-cache-dir xformers==0.0.23 \
 #        --index-url https://download.pytorch.org/whl/cu121
 
