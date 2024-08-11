@@ -1046,6 +1046,7 @@ class Qwen2AudioForConditionalGeneration(Qwen2AudioPreTrainedModel):
             max_audio_tokens).to(num_audio_tokens.device) < num_audio_tokens.unsqueeze(1)
 
         masked_audio_features = audio_features[audio_features_mask].view(-1, embed_dim)
+
         batch_size, sequence_length = input_ids.shape
         _left_padding = torch.any(attention_mask[:, 0] == 0)
         _right_padding = torch.any(attention_mask[:, -1] == 0)
