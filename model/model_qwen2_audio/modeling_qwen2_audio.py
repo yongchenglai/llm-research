@@ -1353,14 +1353,17 @@ class Qwen2AudioForConditionalGeneration(Qwen2AudioPreTrainedModel):
             # the cache (e.g. when passing input_embeds as input)
             if attention_mask is not None and attention_mask.shape[1] > input_ids.shape[1]:
                 input_ids = input_ids[:, -(attention_mask.shape[1] - past_length) :]
-            # 2 - If the past_length is smaller than input_ids', then input_ids holds all input tokens. We can discard
+            # 2 - If the past_length is smaller than input_ids',
+            # then input_ids holds all input tokens. We can discard
             # input_ids based on the past_length.
             elif past_length < input_ids.shape[1]:
                 input_ids = input_ids[:, past_length:]
-            # 3 - Otherwise (past_length >= input_ids.shape[1]), let's assume input_ids only has unprocessed tokens.
+            # 3 - Otherwise (past_length >= input_ids.shape[1]),
+            # let's assume input_ids only has unprocessed tokens.
             elif self.config.audio_token_index in input_ids:
-                input_ids = input_ids[:, input_ids.shape[1] - 1 :]
-            # If the cache has seen more tokens than it can hold, then the cache has a size limit. Let's discard the
+                input_ids = input_ids[:, input_ids.shape[1] - 1:]
+            # If the cache has seen more tokens than it can hold,
+            # then the cache has a size limit. Let's discard the
             # older attention values, as their corresponding values are not part of the input.
             if cache_length < past_length and attention_mask is not None:
                 attention_mask = attention_mask[:, -(cache_length + input_ids.shape[1]) :]
@@ -1413,21 +1416,24 @@ class Qwen2AudioForConditionalGeneration(Qwen2AudioPreTrainedModel):
         # update token_type_ids with last value
         if "token_type_ids" in model_kwargs:
             token_type_ids = model_kwargs["token_type_ids"]
-            model_kwargs["token_type_ids"] = torch.cat([token_type_ids, token_type_ids[:, -1].unsqueeze(-1)], dim=-1)
+            model_kwargs["token_type_ids"] = torch.cat(
+                [token_type_ids, token_type_ids[:, -1].unsqueeze(-1)], dim=-1)
 
         if not is_encoder_decoder:
             # update attention mask
             if "attention_mask" in model_kwargs:
                 attention_mask = model_kwargs["attention_mask"]
                 model_kwargs["attention_mask"] = torch.cat(
-                    [attention_mask, attention_mask.new_ones((attention_mask.shape[0], 1))], dim=-1
+                    [attention_mask,
+                     attention_mask.new_ones((attention_mask.shape[0], 1))], dim=-1
                 )
         else:
             # update decoder attention mask
             if "decoder_attention_mask" in model_kwargs:
                 decoder_attention_mask = model_kwargs["decoder_attention_mask"]
                 model_kwargs["decoder_attention_mask"] = torch.cat(
-                    [decoder_attention_mask, decoder_attention_mask.new_ones((decoder_attention_mask.shape[0], 1))],
+                    [decoder_attention_mask,
+                     decoder_attention_mask.new_ones((decoder_attention_mask.shape[0], 1))],
                     dim=-1,
                 )
 
@@ -1436,8 +1442,11 @@ class Qwen2AudioForConditionalGeneration(Qwen2AudioPreTrainedModel):
         else:
             past_positions = model_kwargs.pop("cache_position")
             new_positions = torch.arange(
-                past_positions[-1] + 1, past_positions[-1] + num_new_tokens + 1, dtype=past_positions.dtype
+                past_positions[-1] + 1,
+                past_positions[-1] + num_new_tokens + 1,
+                dtype=past_positions.dtype
             ).to(past_positions.device)
+
             model_kwargs["cache_position"] = torch.cat((past_positions, new_positions))
         return model_kwargs
 
