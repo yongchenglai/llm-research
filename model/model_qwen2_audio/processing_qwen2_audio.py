@@ -20,9 +20,9 @@ from typing import List, Optional, Union
 
 import numpy as np
 
-from ...feature_extraction_utils import BatchFeature
-from ...processing_utils import ProcessorMixin
-from ...tokenization_utils_base import PaddingStrategy, PreTokenizedInput, TextInput
+from transformers.feature_extraction_utils import BatchFeature
+from transformers.processing_utils import ProcessorMixin
+from transformers.tokenization_utils_base import PaddingStrategy, PreTokenizedInput, TextInput
 
 
 class Qwen2AudioProcessor(ProcessorMixin):
