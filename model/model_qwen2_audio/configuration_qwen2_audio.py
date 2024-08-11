@@ -196,7 +196,7 @@ class Qwen2AudioConfig(PretrainedConfig):
             text_config = Qwen2Config(**text_config)
         elif text_config is None:
             # text_config = CONFIG_MAPPING["qwen2"]()
-            text_config = Qwen2Config
+            text_config = Qwen2Config()
 
         self.text_config = text_config
 
