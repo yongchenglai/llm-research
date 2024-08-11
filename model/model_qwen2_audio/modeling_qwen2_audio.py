@@ -873,12 +873,14 @@ class Qwen2AudioForConditionalGeneration(Qwen2AudioPreTrainedModel):
         super().__init__(config)
         self.audio_tower = AutoModel.from_config(
             config=config.audio_config,
-            attn_implementation=config._attn_implementation)
+            attn_implementation=config._attn_implementation,
+        )
 
         self.multi_modal_projector = Qwen2AudioMultiModalProjector(config)
         self.vocab_size = config.text_config.vocab_size
         self.language_model = AutoModelForCausalLM.from_config(
-            config.text_config, attn_implementation=config._attn_implementation
+            config=config.text_config,
+            attn_implementation=config._attn_implementation,
         )
         self.pad_token_id = self.config.pad_token_id \
             if self.config.pad_token_id is not None else -1
@@ -896,35 +898,43 @@ class Qwen2AudioForConditionalGeneration(Qwen2AudioPreTrainedModel):
             raise ValueError(f"{padding_side} is not `left` or `right`.")
         self._padding_side = padding_side
 
-    # Copied from transformers.models.llava.modeling_llava.LlavaForConditionalGeneration.get_input_embeddings
+    # Copied from transformers.models.llava.modeling_llava.
+    # LlavaForConditionalGeneration.get_input_embeddings
     def get_input_embeddings(self):
         return self.language_model.get_input_embeddings()
 
-    # Copied from transformers.models.llava.modeling_llava.LlavaForConditionalGeneration.set_input_embeddings
+    # Copied from transformers.models.llava.modeling_llava.
+    # LlavaForConditionalGeneration.set_input_embeddings
     def set_input_embeddings(self, value):
         self.language_model.set_input_embeddings(value)
 
-    # Copied from transformers.models.llava.modeling_llava.LlavaForConditionalGeneration.get_output_embeddings
+    # Copied from transformers.models.llava.modeling_llava.
+    # LlavaForConditionalGeneration.get_output_embeddings
     def get_output_embeddings(self):
         return self.language_model.get_output_embeddings()
 
-    # Copied from transformers.models.llava.modeling_llava.LlavaForConditionalGeneration.set_output_embeddings
+    # Copied from transformers.models.llava.modeling_llava.
+    # LlavaForConditionalGeneration.set_output_embeddings
     def set_output_embeddings(self, new_embeddings):
         self.language_model.set_output_embeddings(new_embeddings)
 
-    # Copied from transformers.models.llava.modeling_llava.LlavaForConditionalGeneration.set_decoder
+    # Copied from transformers.models.llava.modeling_llava.
+    # LlavaForConditionalGeneration.set_decoder
     def set_decoder(self, decoder):
         self.language_model.set_decoder(decoder)
 
-    # Copied from transformers.models.llava.modeling_llava.LlavaForConditionalGeneration.get_decoder
+    # Copied from transformers.models.llava.modeling_llava.
+    # LlavaForConditionalGeneration.get_decoder
     def get_decoder(self):
         return self.language_model.get_decoder()
 
-    # Copied from transformers.models.llava.modeling_llava.LlavaForConditionalGeneration.tie_weights
+    # Copied from transformers.models.llava.modeling_llava.
+    # LlavaForConditionalGeneration.tie_weights
     def tie_weights(self):
         return self.language_model.tie_weights()
 
-    # Copied from transformers.models.llava.modeling_llava.LlavaForConditionalGeneration.resize_token_embeddings
+    # Copied from transformers.models.llava.modeling_llava.
+    # LlavaForConditionalGeneration.resize_token_embeddings
     def resize_token_embeddings(
         self,
         new_num_tokens: Optional[int] = None,
@@ -1031,9 +1041,10 @@ class Qwen2AudioForConditionalGeneration(Qwen2AudioPreTrainedModel):
                     ]
         """
         num_audios, max_audio_tokens, embed_dim = audio_features.shape
-        audio_features_mask = torch.arange(max_audio_tokens).expand(num_audios, max_audio_tokens).to(
-            num_audio_tokens.device
-        ) < num_audio_tokens.unsqueeze(1)
+        audio_features_mask = torch.arange(max_audio_tokens).expand(
+            num_audios,
+            max_audio_tokens).to(num_audio_tokens.device) < num_audio_tokens.unsqueeze(1)
+
         masked_audio_features = audio_features[audio_features_mask].view(-1, embed_dim)
         batch_size, sequence_length = input_ids.shape
         _left_padding = torch.any(attention_mask[:, 0] == 0)
