@@ -880,8 +880,10 @@ class Qwen2AudioForConditionalGeneration(Qwen2AudioPreTrainedModel):
         self.language_model = AutoModelForCausalLM.from_config(
             config.text_config, attn_implementation=config._attn_implementation
         )
-        self.pad_token_id = self.config.pad_token_id if self.config.pad_token_id is not None else -1
-        self._padding_side = "left"  # set it to left by default, user can use setter to change padding_sides
+        self.pad_token_id = self.config.pad_token_id \
+            if self.config.pad_token_id is not None else -1
+        # set it to left by default, user can use setter to change padding_sides
+        self._padding_side = "left"
         self.post_init()
 
     @property
