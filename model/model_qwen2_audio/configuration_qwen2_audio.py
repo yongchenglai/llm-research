@@ -16,7 +16,7 @@
 from transformers.configuration_utils import PretrainedConfig
 from transformers.utils import logging
 from transformers.models.auto.configuration_auto import CONFIG_MAPPING
-
+from transformers import Qwen2Config
 
 logger = logging.get_logger(__name__)
 
@@ -195,7 +195,7 @@ class Qwen2AudioConfig(PretrainedConfig):
             text_config = CONFIG_MAPPING[text_config["model_type"]](**text_config)
         elif text_config is None:
             # text_config = CONFIG_MAPPING["qwen2"]()
-            text_config = Qwen2AudioConfig
+            text_config = Qwen2Config
 
         self.text_config = text_config
 
