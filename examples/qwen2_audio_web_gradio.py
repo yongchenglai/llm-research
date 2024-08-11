@@ -125,7 +125,8 @@ def _launch_demo(args):
             interactive=True,
             sources=['microphone', 'upload'],
             submit_button_props=dict(value="🚀 Submit (发送)"),
-            upload_button_props=dict(value="📁 Upload (上传文件)", show_progress=True),
+            upload_button_props=dict(value="📁 Upload (上传文件)",
+                                     show_progress=True),
         )
         task_history = gr.State([])
 
@@ -133,10 +134,15 @@ def _launch_demo(args):
             empty_bin = gr.Button("🧹 Clear History (清除历史)")
             regen_btn = gr.Button("🤔️ Regenerate (重试)")
 
-        user_input.submit(fn=add_text,
-                          inputs=[chatbot, task_history, user_input],
-                          outputs=[chatbot, task_history, user_input]).then(
-            predict, [chatbot, task_history], [chatbot, task_history], show_progress=True
+        user_input.submit(
+            fn=add_text,
+            inputs=[chatbot, task_history, user_input],
+            outputs=[chatbot, task_history, user_input]
+        ).then(
+            predict,
+            [chatbot, task_history],
+            [chatbot, task_history],
+            show_progress=True
         )
 
         empty_bin.click(fn=reset_state,
@@ -150,6 +156,8 @@ def _launch_demo(args):
 
     demo.queue().launch(
         share=args.share,
+        debug=True,
+        show_api=False,
         inbrowser=args.inbrowser,
         server_port=args.server_port,
         server_name=args.server_name,
@@ -164,14 +172,14 @@ if __name__ == "__main__":
         device_map = "cpu"
     else:
         device_map = "auto"
-
-    # model = Qwen2AudioForConditionalGeneration.from_pretrained(
-    model = AutoModel.from_pretrained(
+    """
+    model = Qwen2AudioForConditionalGeneration.from_pretrained(
         args.model_name_or_path,
         torch_dtype="auto",
         device_map=device_map,
         resume_download=True,
     )
+    """
 
     if args.quant == 4:
         model = AutoModel.from_pretrained(
@@ -211,6 +219,7 @@ if __name__ == "__main__":
         )
 
     model.eval()
+    print(model)
     model.generation_config.max_new_tokens = 2048  # For chat.
 
     print("generation_config", model.generation_config)
