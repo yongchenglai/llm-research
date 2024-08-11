@@ -872,8 +872,8 @@ QWEN2AUDIO_INPUTS_DOCSTRING = r"""
 class Qwen2AudioForConditionalGeneration(Qwen2AudioPreTrainedModel):
     def __init__(self, config: Qwen2AudioConfig):
         super().__init__(config)
-        # self.audio_tower = AutoModel.from_config(
-        self.audio_tower = AutoModelForCausalLM.from_config(
+        self.audio_tower = AutoModel.from_config(
+            # self.audio_tower = AutoModelForCausalLM.from_config(
             config=config.audio_config,
             attn_implementation=config._attn_implementation,
         )
