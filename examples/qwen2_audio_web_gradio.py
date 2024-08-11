@@ -129,8 +129,15 @@ def _launch_demo(args):
                           outputs=[chatbot, task_history, user_input]).then(
             predict, [chatbot, task_history], [chatbot, task_history], show_progress=True
         )
-        empty_bin.click(reset_state, outputs=[chatbot, task_history], show_progress=True)
-        regen_btn.click(regenerate, [chatbot, task_history], [chatbot, task_history], show_progress=True)
+
+        empty_bin.click(fn=reset_state,
+                        outputs=[chatbot, task_history],
+                        show_progress=True)
+
+        regen_btn.click(fn=regenerate,
+                        inputs=[chatbot, task_history],
+                        outputs=[chatbot, task_history],
+                        show_progress=True)
 
     demo.queue().launch(
         share=False,
@@ -153,8 +160,13 @@ if __name__ == "__main__":
         device_map=device_map,
         resume_download=True,
     ).eval()
+
     model.generation_config.max_new_tokens = 2048  # For chat.
+
     print("generation_config", model.generation_config)
-    processor = AutoProcessor.from_pretrained(args.checkpoint_path, resume_download=True)
+    processor = AutoProcessor.from_pretrained(
+        args.checkpoint_path,
+        resume_download=True)
+
     _launch_demo(args)
 
