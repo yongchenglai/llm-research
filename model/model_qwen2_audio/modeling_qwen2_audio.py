@@ -35,6 +35,7 @@ from transformers.utils import (
     replace_return_docstrings,
 )
 from transformers.models.auto.modeling_auto import AutoModel, AutoModelForCausalLM
+from transformers import AutoConfig
 from .configuration_qwen2_audio import Qwen2AudioConfig, Qwen2AudioEncoderConfig
 
 
@@ -871,7 +872,8 @@ QWEN2AUDIO_INPUTS_DOCSTRING = r"""
 class Qwen2AudioForConditionalGeneration(Qwen2AudioPreTrainedModel):
     def __init__(self, config: Qwen2AudioConfig):
         super().__init__(config)
-        self.audio_tower = AutoModel.from_config(
+        # self.audio_tower = AutoModel.from_config(
+        self.audio_tower = AutoConfig.from_config(
             config=config.audio_config,
             attn_implementation=config._attn_implementation,
         )
