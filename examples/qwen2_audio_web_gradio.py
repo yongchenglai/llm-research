@@ -2,23 +2,30 @@
 import gradio as gr
 import modelscope_studio as mgr
 import librosa
-from transformers import AutoProcessor, Qwen2AudioForConditionalGeneration
-from argparse import ArgumentParser
-
-DEFAULT_CKPT_PATH = 'Qwen/Qwen2-Audio-7B-Instruct'
+# from transformers import AutoProcessor, Qwen2AudioForConditionalGeneration
+from transformers import AutoProcessor, AutoModel
+import argparse
 
 
 def _get_args():
-    parser = ArgumentParser()
-    parser.add_argument("-c", "--checkpoint-path", type=str, default=DEFAULT_CKPT_PATH,
-                        help="Checkpoint name or path, default to %(default)r")
+
+    parser = argparse.ArgumentParser(description='demo')
+    parser.add_argument("--model_name_or_path", type=str,
+                        default="'Qwen/Qwen2-Audio-7B-Instruct'")
+    parser.add_argument("--torch_dtype", type=str, default="bfloat16",
+                        choices=["float32", "bfloat16", "float16"])
+    parser.add_argument("--server_name", type=str, default="0.0.0.0")
+    parser.add_argument("--server_port", type=int, default=7860)
+    parser.add_argument('--quant', type=int, choices=[4, 8], default=0,
+                        help='Enable 4-bit or 8-bit precision loading')
+    parser.add_argument('--device', type=str, default='cuda', help='cuda or mps')
+    parser.add_argument('--multi-gpus', action='store_true', default=False,
+                        help='use multi-gpus')
+    parser.add_argument("--share", action="store_true", default=False,
+                        help="Create a publicly shareable link for the interface.")
     parser.add_argument("--cpu-only", action="store_true", help="Run demo with CPU only")
     parser.add_argument("--inbrowser", action="store_true", default=False,
                         help="Automatically launch the interface in a new tab on the default browser.")
-    parser.add_argument("--server-port", type=int, default=8000,
-                        help="Demo server port.")
-    parser.add_argument("--server-name", type=str, default="127.0.0.1",
-                        help="Demo server name.")
 
     args = parser.parse_args()
     return args
@@ -154,13 +161,15 @@ if __name__ == "__main__":
     else:
         device_map = "auto"
 
-    model = Qwen2AudioForConditionalGeneration.from_pretrained(
+    # model = Qwen2AudioForConditionalGeneration.from_pretrained(
+    model = AutoModel.from_pretrained(
         args.checkpoint_path,
         torch_dtype="auto",
         device_map=device_map,
         resume_download=True,
-    ).eval()
+    )
 
+    model.eval()
     model.generation_config.max_new_tokens = 2048  # For chat.
 
     print("generation_config", model.generation_config)
