@@ -35,7 +35,7 @@ from transformers.utils import (
     replace_return_docstrings,
 )
 from transformers.models.auto.modeling_auto import AutoModel, AutoModelForCausalLM
-from transformers import AutoConfig
+# from transformers import AutoConfig
 from .configuration_qwen2_audio import Qwen2AudioConfig, Qwen2AudioEncoderConfig
 
 
