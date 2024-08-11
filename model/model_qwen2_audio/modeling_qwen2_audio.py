@@ -597,6 +597,8 @@ QWEN2AUDIOENCODER_START_DOCSTRING = r"""
     """The audio model from Qwen2Audio without any head or projection on top.""",
     QWEN2AUDIOENCODER_START_DOCSTRING,
 )
+
+
 # Copied from transformers.models.whisper.modeling_whisper.WhisperEncoder with Whisper->Qwen2Audio
 class Qwen2AudioEncoder(Qwen2AudioPreTrainedModel):
     """
