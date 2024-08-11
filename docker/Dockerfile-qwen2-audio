@@ -70,7 +70,8 @@ RUN pip install --no-cache-dir  \
         socksio==1.0.0 \
         #gradio==4.38.1 \
         #gradio_client==1.1.0 \
-        gradio==4.31.3 \
+        #gradio==4.31.3 \
+        gradio \
         gradio_client \
         streamlit \
         gguf \
@@ -79,8 +80,9 @@ RUN pip install --no-cache-dir  \
         transformers_stream_generator \
         pydub \
         modelscope_studio \
-        decord
-
+        decord \
+        librosa \
+        urllib
 
 
 WORKDIR /app
