@@ -1,7 +1,12 @@
 {
   "architectures": [
     "Qwen2AudioForConditionalGeneration"
-  ], 
+  ],
+  "auto_map": {
+    "AutoConfig": "configuration_qwen2_audio.Qwen2AudioConfig",
+    "AutoModel": "modeling_qwen2_audio.Qwen2AudioForConditionalGeneration",
+    "AutoModelForCausalLM": "modeling_qwen2_audio.Qwen2AudioForConditionalGeneration"
+  },
   "audio_config": {
     "model_type": "qwen2_audio_encoder",
     "num_mel_bins": 128,
