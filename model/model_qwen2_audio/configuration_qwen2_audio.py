@@ -15,7 +15,7 @@
 
 from transformers.configuration_utils import PretrainedConfig
 from transformers.utils import logging
-from transformers.models.auto.configuration_auto import CONFIG_MAPPING
+# from transformers.models.auto.configuration_auto import CONFIG_MAPPING
 from transformers import Qwen2Config
 
 logger = logging.get_logger(__name__)
