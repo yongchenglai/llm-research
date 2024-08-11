@@ -923,15 +923,27 @@ class Qwen2AudioForConditionalGeneration(Qwen2AudioPreTrainedModel):
         return self.language_model.tie_weights()
 
     # Copied from transformers.models.llava.modeling_llava.LlavaForConditionalGeneration.resize_token_embeddings
-    def resize_token_embeddings(self, new_num_tokens: Optional[int] = None, pad_to_multiple_of=None) -> nn.Embedding:
-        model_embeds = self.language_model.resize_token_embeddings(new_num_tokens, pad_to_multiple_of)
+    def resize_token_embeddings(
+        self,
+        new_num_tokens: Optional[int] = None,
+        pad_to_multiple_of=None,
+    ) -> nn.Embedding:
+        model_embeds = self.language_model.resize_token_embeddings(
+            new_num_tokens,
+            pad_to_multiple_of)
         # update vocab size
         self.config.text_config.vocab_size = model_embeds.num_embeddings
         self.vocab_size = model_embeds.num_embeddings
         return model_embeds
 
     def _merge_input_ids_with_audio_features(
-        self, audio_features, num_audio_tokens, inputs_embeds, input_ids, attention_mask, labels
+        self,
+        audio_features,
+        num_audio_tokens,
+        inputs_embeds,
+        input_ids,
+        attention_mask,
+        labels
     ):
         """
         Merge input_ids with with audio features into final embeddings
