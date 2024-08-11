@@ -183,7 +183,7 @@ if __name__ == "__main__":
 
     if args.quant == 4:
         model = AutoModel.from_pretrained(
-            args.model_name_or_path,
+            pretrained_model_name_or_path=args.model_name_or_path,
             device_map=device_map,
             trust_remote_code=True,
             torch_dtype=args.torch_dtype,
@@ -199,7 +199,7 @@ if __name__ == "__main__":
         )
     elif args.quant == 8:
         model = AutoModel.from_pretrained(
-            args.model_name_or_path,
+            pretrained_model_name_or_path=args.model_name_or_path,
             device_map=device_map,
             torch_dtype=args.torch_dtype,
             trust_remote_code=True,
@@ -212,7 +212,7 @@ if __name__ == "__main__":
         )
     else:
         model = AutoModel.from_pretrained(
-            args.model_name_or_path,
+            pretrained_model_name_or_path=args.model_name_or_path,
             device_map=device_map,
             torch_dtype=args.torch_dtype,
             trust_remote_code=True

@@ -875,6 +875,7 @@ class Qwen2AudioForConditionalGeneration(Qwen2AudioPreTrainedModel):
         self.audio_tower = AutoModel.from_config(
             # self.audio_tower = AutoModelForCausalLM.from_config(
             config=config.audio_config,
+            trust_remote_code=True,
             attn_implementation=config._attn_implementation,
         )
 
