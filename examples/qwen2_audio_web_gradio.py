@@ -225,7 +225,9 @@ if __name__ == "__main__":
     print("generation_config", model.generation_config)
     processor = AutoProcessor.from_pretrained(
         args.model_name_or_path,
-        resume_download=True)
+        trust_remote_code=True,
+        # resume_download=True,
+    )
 
     _launch_demo(args)
 
