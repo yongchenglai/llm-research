@@ -81,8 +81,7 @@ RUN pip install --no-cache-dir  \
         pydub \
         modelscope_studio \
         decord \
-        librosa \
-        urllib
+        librosa
 
 
 WORKDIR /app
