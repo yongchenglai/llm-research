@@ -1068,7 +1068,8 @@ class Qwen2AudioForConditionalGeneration(Qwen2AudioPreTrainedModel):
         special_audio_token_mask = input_ids == self.config.audio_token_index
         num_special_audio_tokens = torch.sum(special_audio_token_mask, dim=-1)
 
-        # In case the Audio model or the Language model has been offloaded to CPU, we need to manually
+        # In case the Audio model or the Language model
+        # has been offloaded to CPU, we need to manually
         # set the corresponding tensors into their correct target device.
         target_device = inputs_embeds.device
         attention_mask = attention_mask.to(target_device)
@@ -1080,7 +1081,8 @@ class Qwen2AudioForConditionalGeneration(Qwen2AudioPreTrainedModel):
 
         # 2. Compute the positions where text should be written
         # Calculate new positions for text tokens in merged audio-text sequence.
-        # `special_audio_token_mask` identifies audio tokens. Each audio token will be replaced by `audio_feat_lengths - 1` text tokens.
+        # `special_audio_token_mask` identifies audio tokens.
+        # Each audio token will be replaced by `audio_feat_lengths - 1` text tokens.
         # `torch.cumsum` computes how each audio token shifts subsequent text token positions.
         token_placeholder_num = torch.zeros_like(input_ids)
         token_placeholder_num[special_audio_token_mask] = num_audio_tokens.long() - 1
@@ -1099,10 +1101,17 @@ class Qwen2AudioForConditionalGeneration(Qwen2AudioPreTrainedModel):
 
         # 3. Create the full embedding, already padded to the maximum position
         final_embedding = torch.zeros(
-            batch_size, max_token_num, embed_dim, dtype=inputs_embeds.dtype, device=inputs_embeds.device
+            batch_size,
+            max_token_num,
+            embed_dim,
+            dtype=inputs_embeds.dtype,
+            device=inputs_embeds.device
         )
         final_attention_mask = torch.zeros(
-            batch_size, max_token_num, dtype=attention_mask.dtype, device=inputs_embeds.device
+            size=batch_size,
+            names=max_token_num,
+            dtype=attention_mask.dtype,
+            device=inputs_embeds.device
         )
         final_input_ids = torch.full(
             (batch_size, max_token_num), self.pad_token_id, dtype=input_ids.dtype, device=inputs_embeds.device
