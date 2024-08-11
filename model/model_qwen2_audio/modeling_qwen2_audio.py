@@ -872,7 +872,7 @@ class Qwen2AudioForConditionalGeneration(Qwen2AudioPreTrainedModel):
     def __init__(self, config: Qwen2AudioConfig):
         super().__init__(config)
         self.audio_tower = AutoModel.from_config(
-            config.audio_config,
+            config=config.audio_config,
             attn_implementation=config._attn_implementation)
 
         self.multi_modal_projector = Qwen2AudioMultiModalProjector(config)
