@@ -3,7 +3,7 @@
     "Qwen2AudioForConditionalGeneration"
   ],
   "auto_map": {
-    "AutoConfig": "configuration_qwen2_audio.Qwen2AudioEncoderConfig",
+    "AutoConfig": "configuration_qwen2_audio.Qwen2AudioConfig", "configuration_qwen2_audio.Qwen2AudioEncoderConfig",
     "AutoModel": "modeling_qwen2_audio.Qwen2AudioForConditionalGeneration",
     "Qwen2AudioEncoder": "modeling_qwen2_audio.Qwen2AudioForConditionalGeneration",
     "Qwen2AudioPreTrainedModel": "modeling_qwen2_audio.Qwen2AudioForConditionalGeneration",
