@@ -1114,23 +1114,40 @@ class Qwen2AudioForConditionalGeneration(Qwen2AudioPreTrainedModel):
             device=inputs_embeds.device
         )
         final_input_ids = torch.full(
-            (batch_size, max_token_num), self.pad_token_id, dtype=input_ids.dtype, device=inputs_embeds.device
+            size=(batch_size, max_token_num),
+            fill_value=self.pad_token_id,
+            dtype=input_ids.dtype,
+            device=inputs_embeds.device
         )
 
         # 4. Fill the embeddings based on the mask. If we have ["hey" "<audio>", "how", "are"]
         # we need to index copy on [0, 577, 578, 579] for the text and [1:576] for the audio features
-        final_embedding[batch_indices, text_to_overwrite] = inputs_embeds[batch_indices, non_audio_indices]
-        final_attention_mask[batch_indices, text_to_overwrite] = attention_mask[batch_indices, non_audio_indices]
-        final_input_ids[batch_indices, text_to_overwrite] = input_ids[batch_indices, non_audio_indices]
+        final_embedding[batch_indices, text_to_overwrite] = \
+            inputs_embeds[batch_indices, non_audio_indices]
+
+        final_attention_mask[batch_indices, text_to_overwrite] = \
+            attention_mask[batch_indices, non_audio_indices]
+
+        final_input_ids[batch_indices, text_to_overwrite] = \
+            input_ids[batch_indices, non_audio_indices]
+
         final_labels = None
         if labels is not None:
             labels = labels.to(target_device)
-            final_labels = torch.full_like(final_attention_mask, self.config.ignore_index).to(torch.long)
-            final_labels[batch_indices, text_to_overwrite] = labels[batch_indices, non_audio_indices]
+            final_labels = torch.full_like(
+                final_attention_mask,
+                self.config.ignore_index).to(torch.long)
 
-        # 5. Fill the embeddings corresponding to the audios. Anything that is still zeros needs filling
+            final_labels[batch_indices, text_to_overwrite] = \
+                labels[batch_indices, non_audio_indices]
+
+        # 5. Fill the embeddings corresponding to the audios.
+        # Anything that is still zeros needs filling
         audio_to_overwrite = torch.full(
-            (batch_size, max_token_num), True, dtype=torch.bool, device=inputs_embeds.device
+            (batch_size, max_token_num),
+            True,
+            dtype=torch.bool,
+            device=inputs_embeds.device
         )
         audio_to_overwrite[batch_indices, text_to_overwrite] = False
         seq_indices = torch.arange(max_token_num).unsqueeze(0).to(target_device)
@@ -1302,7 +1319,8 @@ class Qwen2AudioForConditionalGeneration(Qwen2AudioPreTrainedModel):
             attention_mask=attention_mask,
         )
 
-    # Copied from transformers.models.llava_next.modeling_llava_next.LlavaNextForConditionalGeneration.prepare_inputs_for_generation with image->audio
+    # Copied from transformers.models.llava_next.modeling_llava_next.
+    # LlavaNextForConditionalGeneration.prepare_inputs_for_generation with image->audio
     def prepare_inputs_for_generation(
         self,
         input_ids,
@@ -1320,7 +1338,8 @@ class Qwen2AudioForConditionalGeneration(Qwen2AudioPreTrainedModel):
                 cache_length = past_length = past_key_values[0][0].shape[2]
 
             # Ignore copy
-            # Here, we get the attention_mask, which was previously stored in the state after _merge_input_ids_with_audio_features.
+            # Here, we get the attention_mask, which was previously stored
+            # in the state after _merge_input_ids_with_audio_features.
             if input_features is not None and kwargs.get("attention_mask") is not None:
                 attention_mask = kwargs["attention_mask"]
                 attention_mask = torch.cat(
@@ -1328,9 +1347,10 @@ class Qwen2AudioForConditionalGeneration(Qwen2AudioPreTrainedModel):
                 )
 
             # Keep only the unprocessed tokens:
-            # 1 - If the length of the attention_mask exceeds the length of input_ids, then we are in a setting where
-            # some of the inputs are exclusively passed as part of the cache (e.g. when passing input_embeds as
-            # input)
+            # 1 - If the length of the attention_mask exceeds
+            # the length of input_ids, then we are in a setting where
+            # some of the inputs are exclusively passed as part of
+            # the cache (e.g. when passing input_embeds as input)
             if attention_mask is not None and attention_mask.shape[1] > input_ids.shape[1]:
                 input_ids = input_ids[:, -(attention_mask.shape[1] - past_length) :]
             # 2 - If the past_length is smaller than input_ids', then input_ids holds all input tokens. We can discard
