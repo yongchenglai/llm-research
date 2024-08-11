@@ -3,7 +3,7 @@ import gradio as gr
 import modelscope_studio as mgr
 import librosa
 # from transformers import AutoProcessor, Qwen2AudioForConditionalGeneration
-from transformers import AutoProcessor, AutoModel
+from transformers import AutoModel, AutoProcessor, BitsAndBytesConfig
 import argparse
 
 
@@ -25,9 +25,11 @@ def _get_args():
                         help="Create a publicly shareable link for the interface.")
     parser.add_argument("--cpu-only", action="store_true", help="Run demo with CPU only")
     parser.add_argument("--inbrowser", action="store_true", default=False,
-                        help="Automatically launch the interface in a new tab on the default browser.")
+                        help="Automatically launch the interface "
+                             "in a new tab on the default browser.")
 
     args = parser.parse_args()
+
     return args
 
 
@@ -147,7 +149,7 @@ def _launch_demo(args):
                         show_progress=True)
 
     demo.queue().launch(
-        share=False,
+        share=args.share,
         inbrowser=args.inbrowser,
         server_port=args.server_port,
         server_name=args.server_name,
@@ -155,7 +157,9 @@ def _launch_demo(args):
 
 
 if __name__ == "__main__":
+
     args = _get_args()
+
     if args.cpu_only:
         device_map = "cpu"
     else:
@@ -163,18 +167,55 @@ if __name__ == "__main__":
 
     # model = Qwen2AudioForConditionalGeneration.from_pretrained(
     model = AutoModel.from_pretrained(
-        args.checkpoint_path,
+        args.model_name_or_path,
         torch_dtype="auto",
         device_map=device_map,
         resume_download=True,
     )
+
+    if args.quant == 4:
+        model = AutoModel.from_pretrained(
+            args.model_name_or_path,
+            device_map=device_map,
+            trust_remote_code=True,
+            torch_dtype=args.torch_dtype,
+            attn_implementation="flash_attention_2",
+            quantization_config=BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_quant_type="nf4",
+                bnb_4bit_use_double_quant=True,
+                bnb_4bit_compute_dtype=args.torch_dtype,
+                llm_int8_skip_modules=["out_proj", "kv_proj", "lm_head"],
+            ),
+            low_cpu_mem_usage=True,
+        )
+    elif args.quant == 8:
+        model = AutoModel.from_pretrained(
+            args.model_name_or_path,
+            device_map=device_map,
+            torch_dtype=args.torch_dtype,
+            trust_remote_code=True,
+            attn_implementation="flash_attention_2",
+            quantization_config=BitsAndBytesConfig(
+                load_in_8bit=True,
+                bnb_4bit_compute_dtype=args.torch_dtype,
+            ),
+            low_cpu_mem_usage=True
+        )
+    else:
+        model = AutoModel.from_pretrained(
+            args.model_name_or_path,
+            device_map=device_map,
+            torch_dtype=args.torch_dtype,
+            trust_remote_code=True
+        )
 
     model.eval()
     model.generation_config.max_new_tokens = 2048  # For chat.
 
     print("generation_config", model.generation_config)
     processor = AutoProcessor.from_pretrained(
-        args.checkpoint_path,
+        args.model_name_or_path,
         resume_download=True)
 
     _launch_demo(args)
