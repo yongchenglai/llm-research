@@ -192,7 +192,8 @@ class Qwen2AudioConfig(PretrainedConfig):
 
         if isinstance(text_config, dict):
             text_config["model_type"] = text_config["model_type"] if "model_type" in text_config else "qwen2"
-            text_config = CONFIG_MAPPING[text_config["model_type"]](**text_config)
+            # text_config = CONFIG_MAPPING[text_config["model_type"]](**text_config)
+            text_config = Qwen2Config(**text_config)
         elif text_config is None:
             # text_config = CONFIG_MAPPING["qwen2"]()
             text_config = Qwen2Config
