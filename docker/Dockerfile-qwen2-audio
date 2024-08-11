@@ -38,11 +38,6 @@ RUN pip install --no-cache-dir  \
 
 RUN pip install -U flash-attn --no-build-isolation --use-pep517
 
-RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
-    mv frpc_linux_amd64 frpc_linux_amd64_v0.2 && \
-    mv frpc_linux_amd64_v0.2 /opt/conda/lib/python3.10/site-packages/gradio/ && \
-    chmod 755 /opt/conda/lib/python3.10/site-packages/gradio/frpc_linux_amd64_v0.2
-
 RUN pip install --no-cache-dir  \
         -i https://pypi.tuna.tsinghua.edu.cn/simple  \
         --trusted-host pypi.tuna.tsinghua.edu.cn \
@@ -87,12 +82,13 @@ RUN pip install --no-cache-dir  \
         decord \
         librosa
 
-
 WORKDIR /app
-
 EXPOSE 7860
 
-
+RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
+    mv frpc_linux_amd64 frpc_linux_amd64_v0.2 && \
+    mv frpc_linux_amd64_v0.2 /opt/conda/lib/python3.10/site-packages/gradio/ && \
+    chmod 755 /opt/conda/lib/python3.10/site-packages/gradio/frpc_linux_amd64_v0.2
 
 
 
