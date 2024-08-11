@@ -172,9 +172,11 @@ class Qwen2AudioConfig(PretrainedConfig):
             audio_config["model_type"] = (
                 audio_config["model_type"] if "model_type" in audio_config else "qwen2_audio_encoder"
             )
-            audio_config = CONFIG_MAPPING[audio_config["model_type"]](**audio_config)
+            #audio_config = CONFIG_MAPPING[audio_config["model_type"]](**audio_config)
+            audio_config = audio_config
         elif audio_config is None:
-            audio_config = CONFIG_MAPPING["qwen2_audio_encoder"](
+            # audio_config = CONFIG_MAPPING["qwen2_audio_encoder"](
+            audio_config = Qwen2AudioEncoderConfig(
                 d_model=1280,
                 encoder_attention_heads=20,
                 encoder_ffn_dim=5120,
@@ -192,7 +194,8 @@ class Qwen2AudioConfig(PretrainedConfig):
             text_config["model_type"] = text_config["model_type"] if "model_type" in text_config else "qwen2"
             text_config = CONFIG_MAPPING[text_config["model_type"]](**text_config)
         elif text_config is None:
-            text_config = CONFIG_MAPPING["qwen2"]()
+            # text_config = CONFIG_MAPPING["qwen2"]()
+            text_config = Qwen2AudioConfig()
 
         self.text_config = text_config
 
