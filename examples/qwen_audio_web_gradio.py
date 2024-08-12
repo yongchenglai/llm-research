@@ -54,7 +54,7 @@ def _load_model_tokenizer(args):
         device_map = "cuda"
 
     model = AutoModelForCausalLM.from_pretrained(
-        args.model_name_or_path,
+        pretrained_model_name_or_path=args.model_name_or_path,
         device_map="auto",
         trust_remote_code=True,
         torch_dtype=torch.bfloat16,
@@ -71,7 +71,7 @@ def _load_model_tokenizer(args):
         # revision='master',
     )
     model.generation_config = GenerationConfig.from_pretrained(
-        args.model_name_or_path,
+        pretrained_model_name=args.model_name_or_path,
         trust_remote_code=True,
         # resume_download=True,
     )
@@ -218,34 +218,57 @@ def _launch_demo(args, model, tokenizer):
         return []
 
     with gr.Blocks() as demo:
-        gr.Markdown("""<center><font size=8>Qwen-Audio-Chat Bot</center>""")
+        # gr.Markdown("""<center><font size=8>Qwen-Audio-Chat Bot</center>""")
 
         chatbot = gr.Chatbot(label='Qwen-Audio-Chat',
-                             elem_classes="control-height", height=750)
+                             elem_classes="control-height",
+                             height=750)
         query = gr.Textbox(lines=2, label='Input')
         task_history = gr.State([])
         mic = gr.Audio(sources="microphone", type="filepath")
 
         with gr.Row():
-            empty_bin = gr.Button("🧹 Clear History (清除历史)")
-            submit_btn = gr.Button("🚀 Submit (发送)")
-            regen_btn = gr.Button("🤔️ Regenerate (重试)")
-            addfile_btn = gr.UploadButton("📁 Upload (上传文件)",
+            empty_bin = gr.Button("Clear History(清除历史)")
+            submit_btn = gr.Button("Submit(发送)")
+            regen_btn = gr.Button("Regenerate(重试)")
+            addfile_btn = gr.UploadButton("Upload(上传文件)",
                                           file_types=["audio"])
 
-        mic.change(add_mic, [chatbot, task_history, mic], [chatbot, task_history])
-        submit_btn.click(add_text, [chatbot, task_history, query],
-                         [chatbot, task_history]).then(
-            predict, [chatbot, task_history], [chatbot],
+        mic.change(fn=add_mic,
+                   inputs=[chatbot, task_history, mic],
+                   outputs=[chatbot, task_history])
+        submit_btn.click(
+            fn=add_text,
+            inputs=[chatbot, task_history, query],
+            outputs=[chatbot, task_history]
+        ).then(
+            fn=predict,
+            inputs=[chatbot, task_history],
+            outputs=[chatbot],
             show_progress=True
         )
-        submit_btn.click(reset_user_input, [], [query])
-        empty_bin.click(reset_state, [task_history], [chatbot],
-                        show_progress=True)
-        regen_btn.click(regenerate, [chatbot, task_history], [chatbot],
-                        show_progress=True)
-        addfile_btn.upload(add_file, [chatbot, task_history, addfile_btn],
-                           [chatbot, task_history], show_progress=True)
+        submit_btn.click(
+            fn=reset_user_input,
+            inputs=[],
+            outputs=[query])
+
+        empty_bin.click(
+            fn=reset_state,
+            inputs=[task_history],
+            outputs=[chatbot],
+            show_progress=True)
+
+        regen_btn.click(
+            fn=regenerate,
+            inputs=[chatbot, task_history],
+            outputs=[chatbot],
+            show_progress=True)
+
+        addfile_btn.upload(
+            fn=add_file, 
+            inputs=[chatbot, task_history, addfile_btn],
+            outputs=[chatbot, task_history],
+            show_progress=True)
 
     demo.queue().launch(
         share=args.share,
