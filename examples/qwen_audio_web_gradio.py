@@ -228,7 +228,7 @@ def _launch_demo(args, model, tokenizer):
         # Creates an audio component that can be used to
         # upload/record audio (as an input) or display audio (as an output).
         mic = gr.Audio(
-            sources=["microphone"],
+            sources=["microphone", "upload"],
             type="filepath")
 
         with gr.Row():
