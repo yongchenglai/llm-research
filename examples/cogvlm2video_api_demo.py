@@ -8,6 +8,7 @@ import argparse
 from flask import Flask, request, jsonify
 import traceback
 
+
 app = Flask(__name__)
 
 MODEL_PATH = "THUDM/cogvlm2-video-llama3-chat"
