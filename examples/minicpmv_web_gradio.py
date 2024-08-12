@@ -29,6 +29,7 @@ form_radio = {
     'interactive': True,
     'label': 'Decode Type'
 }
+
 # Beam Form
 num_beams_slider = {
     'minimum': 0,
@@ -38,6 +39,7 @@ num_beams_slider = {
     'interactive': True,
     'label': 'Num Beams'
 }
+
 repetition_penalty_slider = {
     'minimum': 0,
     'maximum': 3,
@@ -46,6 +48,7 @@ repetition_penalty_slider = {
     'interactive': True,
     'label': 'Repetition Penalty'
 }
+
 repetition_penalty_slider2 = {
     'minimum': 0,
     'maximum': 3,
@@ -54,6 +57,7 @@ repetition_penalty_slider2 = {
     'interactive': True,
     'label': 'Repetition Penalty'
 }
+
 max_new_tokens_slider = {
     'minimum': 1,
     'maximum': 4096,
@@ -62,6 +66,7 @@ max_new_tokens_slider = {
     'interactive': True,
     'label': 'Max New Tokens'    
 }
+
 top_p_slider = {
     'minimum': 0,
     'maximum': 1,
@@ -70,6 +75,7 @@ top_p_slider = {
     'interactive': True,
     'label': 'Top P'    
 }
+
 top_k_slider = {
     'minimum': 0,
     'maximum': 200,
@@ -78,6 +84,7 @@ top_k_slider = {
     'interactive': True,
     'label': 'Top K'    
 }
+
 temperature_slider = {
     'minimum': 0,
     'maximum': 2,
@@ -154,8 +161,11 @@ def upload_img(image, _chatbot, _app_session):
     return _chatbot, _app_session
 
 
-def respond(_question, _chat_bot, _app_cfg, params_form, num_beams,
-            repetition_penalty, repetition_penalty_2, top_p, top_k, temperature):
+def respond(
+    _question, _chat_bot, _app_cfg, params_form, num_beams,
+    repetition_penalty, repetition_penalty_2,
+    top_p, top_k, temperature,
+):
     if _app_cfg.get('ctx', None) is None:
         _chat_bot.append((_question, 'Please upload an image to start'))
         return '', _chat_bot, _app_cfg
@@ -195,10 +205,10 @@ def respond(_question, _chat_bot, _app_cfg, params_form, num_beams,
 
 
 def regenerate_button_clicked(
-        _question, _chat_bot, _app_cfg,
-        params_form, num_beams,
-        repetition_penalty, repetition_penalty_2,
-        top_p, top_k, temperature):
+    _question, _chat_bot, _app_cfg, params_form, num_beams,
+    repetition_penalty, repetition_penalty_2,
+    top_p, top_k, temperature,
+):
     if len(_chat_bot) <= 1:
         _chat_bot.append(('Regenerate', 'No question for regeneration.'))
         return '', _chat_bot, _app_cfg
@@ -209,23 +219,31 @@ def regenerate_button_clicked(
         _chat_bot = _chat_bot[:-1]
         _app_cfg['ctx'] = _app_cfg['ctx'][:-2]
     return respond(_question, _chat_bot, _app_cfg, params_form, num_beams,
-                   repetition_penalty, repetition_penalty_2, top_p, top_k, temperature)
+                   repetition_penalty, repetition_penalty_2,
+                   top_p, top_k, temperature)
 
 
 
 with gr.Blocks() as demo:
     with gr.Row():
         with gr.Column(scale=1, min_width=300):
-            params_form = create_component(form_radio, comp='Radio')
+            params_form = create_component(params=form_radio, comp='Radio')
             with gr.Accordion("Beam Search") as beams_according:
-                num_beams = create_component(num_beams_slider)
-                repetition_penalty = create_component(repetition_penalty_slider)
+                num_beams = create_component(params=num_beams_slider)
+                repetition_penalty = create_component(
+                    params=repetition_penalty_slider)
+
             with gr.Accordion("Sampling") as sampling_according:
-                top_p = create_component(top_p_slider)
-                top_k = create_component(top_k_slider)
-                temperature = create_component(temperature_slider)
-                repetition_penalty_2 = create_component(repetition_penalty_slider2)
-            regenerate = create_component({'value': 'Regenerate'}, comp='Button')
+                top_p = create_component(params=top_p_slider)
+                top_k = create_component(params=top_k_slider)
+                temperature = create_component(params=temperature_slider)
+                repetition_penalty_2 = create_component(
+                    params=repetition_penalty_slider2)
+
+            regenerate = create_component(
+                params={'value': 'Regenerate'},
+                comp='Button')
+
         with gr.Column(scale=3, min_width=500):
             app_session = gr.State({'sts': None, 'ctx': None, 'img': None})
             bt_pic = gr.Image(label="Upload an image to start")
@@ -233,21 +251,31 @@ with gr.Blocks() as demo:
             txt_message = gr.Textbox(label="Input text")
             
             regenerate.click(
-                regenerate_button_clicked,
-                [txt_message, chat_bot, app_session, params_form, num_beams,
-                 repetition_penalty, repetition_penalty_2, top_p, top_k, temperature],
-                [txt_message, chat_bot, app_session]
+                fn=regenerate_button_clicked,
+                inputs=[txt_message, chat_bot, app_session, params_form, num_beams,
+                        repetition_penalty, repetition_penalty_2,
+                        top_p, top_k, temperature],
+                outputs=[txt_message, chat_bot, app_session]
             )
+
             txt_message.submit(
-                respond, 
-                [txt_message, chat_bot, app_session, params_form, num_beams,
-                 repetition_penalty, repetition_penalty_2, top_p, top_k, temperature],
-                [txt_message, chat_bot, app_session]
+                fn=respond,
+                inputs=[txt_message, chat_bot, app_session, params_form, num_beams,
+                        repetition_penalty, repetition_penalty_2,
+                        top_p, top_k, temperature],
+                outputs=[txt_message, chat_bot, app_session]
             )
-            bt_pic.upload(lambda: None, None, chat_bot, queue=False).\
-                then(upload_img,
-                     inputs=[bt_pic, chat_bot, app_session],
-                     outputs=[chat_bot, app_session])
+
+            bt_pic.upload(
+                fn=lambda: None,
+                inputs=None,
+                outputs=chat_bot,
+                queue=False,
+            ).then(
+                fn=upload_img,
+                inputs=[bt_pic, chat_bot, app_session],
+                outputs=[chat_bot, app_session],
+            )
 
 
 if __name__ == "__main__":
@@ -273,11 +301,11 @@ if __name__ == "__main__":
     # Load model
     # model_path = 'openbmb/MiniCPM-V-2'
     model = AutoModel.from_pretrained(
-        args.model_name_or_path,
+        pretrained_model_name_or_path=args.model_name_or_path,
         trust_remote_code=True).to(dtype=torch.bfloat16)
 
     tokenizer = AutoTokenizer.from_pretrained(
-        args.model_name_or_path,
+        pretrained_model_name_or_path=args.model_name_or_path,
         trust_remote_code=True)
 
     model = model.to(device=device, dtype=dtype)
