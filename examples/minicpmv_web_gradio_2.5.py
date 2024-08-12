@@ -319,7 +319,7 @@ if __name__ == "__main__":
         else torch.float16
 
     tokenizer = AutoTokenizer.from_pretrained(
-        args.model_name_or_path,
+        pretrained_model_name_or_path=args.model_name_or_path,
         trust_remote_code=True)
 
     model_path = args.model_name_or_path
@@ -327,7 +327,7 @@ if __name__ == "__main__":
     # Load the model
     if args.quant == 4:
         model = AutoModel.from_pretrained(
-            model_path,
+            pretrained_model_name_or_path=model_path,
             device_map=device,
             torch_dtype=args.torch_dtype,
             trust_remote_code=True,
@@ -343,7 +343,7 @@ if __name__ == "__main__":
         )
     elif args.quant == 8:
         model = AutoModel.from_pretrained(
-            model_path,
+            pretrained_model_name_or_path=model_path,
             device_map=device,
             torch_dtype=args.torch_dtype,
             trust_remote_code=True,
@@ -356,7 +356,7 @@ if __name__ == "__main__":
         )
     else:
         model = AutoModel.from_pretrained(
-            model_path,
+            pretrained_model_name_or_path=model_path,
             device_map=device,
             torch_dtype=args.torch_dtype,
             trust_remote_code=True
