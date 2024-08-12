@@ -160,6 +160,7 @@ if __name__ == "__main__":
                 outputs = outputs[:, inputs['input_ids'].shape[1]:]
                 response = tokenizer.decode(outputs[0], skip_special_tokens=True)
                 print("\nCogVLM2-Video:", response)
+
             history.append((query, response))
 
 
