@@ -1,4 +1,4 @@
-# cogvlm2-video_cli_demo.py
+# cogvlm2video_cli_demo.py
 import io
 import numpy as np
 import torch
