@@ -618,7 +618,7 @@ if __name__ == "__main__":
         device_map = infer_auto_device_map(
             model=model,
             max_memory={0: "10GB", 1: "10GB"},
-            no_split_module_classes=['SiglipVisionTransformer', 
+            no_split_module_classes=['SiglipVisionTransformer',
                                      'Qwen2DecoderLayer'],
         )
 
