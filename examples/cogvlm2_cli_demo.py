@@ -36,7 +36,7 @@ if __name__ == "__main__":
         args.quant = 4
 
     tokenizer = AutoTokenizer.from_pretrained(
-        model_path,
+        pretrained_model_name_or_path=model_path,
         trust_remote_code=True
     )
 
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     # Load the model
     if args.quant == 4:
         model = AutoModelForCausalLM.from_pretrained(
-            model_path,
+            pretrained_model_name_or_path=model_path,
             torch_dtype=TORCH_TYPE,
             trust_remote_code=True,
             quantization_config=BitsAndBytesConfig(
@@ -64,7 +64,7 @@ if __name__ == "__main__":
         ).eval()
     elif args.quant == 8:
         model = AutoModelForCausalLM.from_pretrained(
-            model_path,
+            pretrained_model_name_or_path=model_path,
             torch_dtype=TORCH_TYPE,
             trust_remote_code=True,
             quantization_config=BitsAndBytesConfig(
@@ -75,7 +75,7 @@ if __name__ == "__main__":
         ).eval()
     else:
         model = AutoModelForCausalLM.from_pretrained(
-            model_path,
+            pretrained_model_name_or_path=model_path,
             torch_dtype=TORCH_TYPE,
             trust_remote_code=True
         ).eval().to(DEVICE)
