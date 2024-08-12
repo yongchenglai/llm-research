@@ -592,7 +592,7 @@ if __name__ == "__main__":
     # Load model
     model_path = args.model_name_or_path
     tokenizer = AutoTokenizer.from_pretrained(
-        model_path,
+        pretrained_model_name_or_path=model_path,
         trust_remote_code=True)
 
     if 'int4' in model_path:
@@ -601,7 +601,7 @@ if __name__ == "__main__":
                   'on Mac is not supported right now.')
             exit()
         model = AutoModel.from_pretrained(
-            model_path,
+            pretrained_model_name_or_path=model_path,
             trust_remote_code=True)
     elif args.multi_gpus:
         from accelerate import load_checkpoint_and_dispatch, \
@@ -609,14 +609,14 @@ if __name__ == "__main__":
 
         with init_empty_weights():
             model = AutoModel.from_pretrained(
-                model_path,
+                pretrained_model_name_or_path=model_path,
                 trust_remote_code=True,
                 attn_implementation='sdpa',
                 torch_dtype=torch.bfloat16,
             )
 
         device_map = infer_auto_device_map(
-            model,
+            model=model,
             max_memory={0: "10GB", 1: "10GB"},
             no_split_module_classes=['SiglipVisionTransformer', 'Qwen2DecoderLayer'],
         )
@@ -639,15 +639,15 @@ if __name__ == "__main__":
         # print(device_map)
 
         model = load_checkpoint_and_dispatch(
-            model,
-            model_path,
+            model=model,
+            checkpoint=model_path,
             dtype=torch.bfloat16,
             device_map=device_map,
         )
 
     elif args.quant == 4:
         model = AutoModel.from_pretrained(
-            model_path,
+            pretrained_model_name_or_path=model_path,
             device_map=device,
             trust_remote_code=True,
             torch_dtype=args.torch_dtype,
@@ -663,7 +663,7 @@ if __name__ == "__main__":
         )
     elif args.quant == 8:
         model = AutoModel.from_pretrained(
-            model_path,
+            pretrained_model_name_or_path=model_path,
             device_map=device,
             torch_dtype=args.torch_dtype,
             trust_remote_code=True,
@@ -676,7 +676,7 @@ if __name__ == "__main__":
         )
     else:
         model = AutoModel.from_pretrained(
-            model_path,
+            pretrained_model_name_or_path=model_path,
             device_map=device,
             torch_dtype=args.torch_dtype,
             trust_remote_code=True
