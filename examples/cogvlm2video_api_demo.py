@@ -63,9 +63,13 @@ tokenizer = AutoTokenizer.from_pretrained(
     # padding_side="left"
 )
 
-if torch.cuda.is_available() and torch.cuda.get_device_properties(0).total_memory < 48 * 1024 ** 3 and not args.quant:
-    print("GPU memory is less than 48GB. Please use cli_demo_multi_gpus.py or pass `--quant 4` or `--quant 8`.")
+if torch.cuda.is_available() and \
+        torch.cuda.get_device_properties(0).total_memory < 48 * 1024 ** 3 and \
+        not args.quant:
+    print("GPU memory is less than 48GB. Please use cli_demo_multi_gpus.py "
+          "or pass `--quant 4` or `--quant 8`.")
     exit()
+
 
 model = AutoModelForCausalLM.from_pretrained(
     MODEL_PATH,
