@@ -66,7 +66,7 @@ if __name__ == "__main__":
         args.quant = 4
 
     tokenizer = AutoTokenizer.from_pretrained(
-        model_path,
+        pretrained_model_name_or_path=model_path,
         trust_remote_code=True,
         # padding_side="left"
     )
@@ -81,7 +81,7 @@ if __name__ == "__main__":
     # Load the model
     if args.quant == 4:
         model = AutoModelForCausalLM.from_pretrained(
-            model_path,
+            pretrained_model_name_or_path=model_path,
             torch_dtype=TORCH_TYPE,
             # device_map="auto",
             trust_remote_code=True,
@@ -96,7 +96,7 @@ if __name__ == "__main__":
 
     elif args.quant == 8:
         model = AutoModelForCausalLM.from_pretrained(
-            model_path,
+            pretrained_model_name_or_path=model_path,
             torch_dtype=TORCH_TYPE,
             # device_map="auto",
             trust_remote_code=True,
@@ -109,7 +109,7 @@ if __name__ == "__main__":
 
     else:
         model = AutoModelForCausalLM.from_pretrained(
-            model_path,
+            pretrained_model_name_or_path=model_path,
             torch_dtype=TORCH_TYPE,
             trust_remote_code=True
         ).eval().to(DEVICE)
@@ -125,7 +125,7 @@ if __name__ == "__main__":
                   'the following will be a plain text conversation.')
             video = None
         else:
-            video = load_video(video_path, strategy=strategy)
+            video = load_video(video_path=video_path, strategy=strategy)
 
         history = []
         while True:
