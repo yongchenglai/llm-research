@@ -23,11 +23,23 @@ with gr.Blocks() as demo:
 
     with gr.Accordion("生成参数", open=False):
         slider_temp = gr.Slider(
-            minimum=0, maximum=1, label="temperature", value=0.3)
+            minimum=0,
+            maximum=1,
+            label="temperature",
+            value=0.3)
+
         slider_top_p = gr.Slider(
-            minimum=0.5, maximum=1, label="top_p", value=0.95)
+            minimum=0.5,
+            maximum=1,
+            label="top_p",
+            value=0.95)
+
         slider_context_times = gr.Slider(
-            minimum=0, maximum=5, label="上文轮次", value=0, step=2.0)
+            minimum=0,
+            maximum=5,
+            label="上文轮次",
+            value=0,
+            step=2.0)
 
     def user(user_message, history):
         return "", history + [[user_message, None]]
@@ -90,15 +102,38 @@ with gr.Blocks() as demo:
               '文字长度：', len(bot_message),
               '字耗时：', (end_time-start_time)/len(bot_message))
 
-    msg.submit(user, [msg, chatbot], [msg, chatbot], queue=False).then(
-        bot, [chatbot, slider_temp, slider_top_p, slider_context_times], chatbot
+    msg.submit(
+        fn=user,
+        inputs=[msg, chatbot],
+        outputs=[msg, chatbot],
+        queue=False
+    ).then(
+        fn=bot,
+        inputs=[chatbot, slider_temp, slider_top_p, slider_context_times],
+        outputs=chatbot
     )
-    sent_bt.click(user, [msg, chatbot], [msg, chatbot], queue=False).then(
-        bot, [chatbot, slider_temp, slider_top_p, slider_context_times], chatbot
+
+    sent_bt.click(
+        fn=user,
+        inputs=[msg, chatbot],
+        outputs=[msg, chatbot],
+        queue=False,
+    ).then(
+        fn=bot,
+        inputs=[chatbot, slider_temp, slider_top_p, slider_context_times],
+        outputs=chatbot
     )
-    re_generate.click(bot, [chatbot, slider_temp,
-                      slider_top_p, slider_context_times], chatbot)
-    clear.click(lambda: [], None, chatbot, queue=False)
+
+    re_generate.click(
+        fn=bot,
+        inputs=[chatbot, slider_temp, slider_top_p, slider_context_times],
+        outputs=chatbot)
+
+    clear.click(
+        fn=lambda: [],
+        inputs=None,
+        outputs=chatbot,
+        queue=False)
 
 
 if __name__ == "__main__":
@@ -115,7 +150,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     tokenizer = AutoTokenizer.from_pretrained(
-        args.model_name_or_path,
+        pretrained_model_name_or_path=args.model_name_or_path,
         trust_remote_code=True,
         use_fast=False)
     tokenizer.pad_token = tokenizer.eos_token
@@ -124,7 +159,7 @@ if __name__ == "__main__":
     # Load the model
     if args.quant == 4:
         model = AutoModelForCausalLM.from_pretrained(
-            args.model_name_or_path,
+            pretrained_model_name_or_path=args.model_name_or_path,
             device_map="auto",
             torch_dtype=args.torch_dtype,
             trust_remote_code=True,
@@ -140,7 +175,7 @@ if __name__ == "__main__":
         )
     elif args.quant == 8:
         model = AutoModelForCausalLM.from_pretrained(
-            args.model_name_or_path,
+            pretrained_model_name_or_path=args.model_name_or_path,
             device_map="auto",
             torch_dtype=args.torch_dtype,
             trust_remote_code=True,
@@ -153,7 +188,7 @@ if __name__ == "__main__":
         )
     else:
         model = AutoModelForCausalLM.from_pretrained(
-            args.model_name_or_path,
+            pretrained_model_name_or_path=args.model_name_or_path,
             device_map="auto",
             torch_dtype=args.torch_dtype,
             trust_remote_code=True
@@ -162,7 +197,9 @@ if __name__ == "__main__":
     model.eval()
     print(model)
 
-    streamer = TextIteratorStreamer(tokenizer, skip_prompt=True)
+    streamer = TextIteratorStreamer(
+        tokenizer=tokenizer,
+        skip_prompt=True)
 
     if torch.__version__ >= "2" and sys.platform != "win32":
         model = torch.compile(model)
