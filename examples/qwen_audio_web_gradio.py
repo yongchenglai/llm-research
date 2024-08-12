@@ -225,7 +225,9 @@ def _launch_demo(args, model, tokenizer):
                              height=400)
         query = gr.Textbox(lines=2, label='Input')
         task_history = gr.State([])
-        mic = gr.Audio(sources="microphone", type="filepath")
+        mic = gr.Audio(
+            sources="microphone",
+            type="filepath")
 
         with gr.Row():
             empty_bin = gr.Button("Clear History(清除历史)")
@@ -260,19 +262,19 @@ def _launch_demo(args, model, tokenizer):
             fn=reset_state,
             inputs=[task_history],
             outputs=[chatbot],
-            show_progress=True)
+            show_progress="full")
 
         regen_btn.click(
             fn=regenerate,
             inputs=[chatbot, task_history],
             outputs=[chatbot],
-            show_progress=True)
+            show_progress="full")
 
         addfile_btn.upload(
             fn=add_file,
             inputs=[chatbot, task_history, addfile_btn],
             outputs=[chatbot, task_history],
-            show_progress=True,
+            show_progress="full",
         )
 
 
