@@ -3,6 +3,12 @@
   "architectures": [
     "LlamaForCausalLM"
   ],
+  "auto_map": {
+    "AutoConfig": "configuration_llama.LlamaConfig",
+    "AutoModel": "modeling_llama.LlamaForCausalLM",
+    "AutoModelForCausalLM": "modeling_llama.LlamaForCausalLM",
+    "AutoModelForSequenceClassification": "modeling_llama.LlamaForSequenceClassification"
+  },
   "attention_bias": false,
   "attention_dropout": 0.0,
   "bos_token_id": 128000,
