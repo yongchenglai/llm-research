@@ -222,7 +222,7 @@ def _launch_demo(args, model, tokenizer):
 
         chatbot = gr.Chatbot(label='Qwen-Audio-Chat',
                              elem_classes="control-height",
-                             height=450)
+                             height=400)
         query = gr.Textbox(lines=2, label='Input')
         task_history = gr.State([])
         mic = gr.Audio(sources="microphone", type="filepath")
