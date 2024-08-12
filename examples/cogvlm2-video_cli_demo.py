@@ -22,9 +22,9 @@ def load_video(video_path, strategy='chat'):
     num_frames = 24
 
     if mp4_stream is not None:
-        decord_vr = VideoReader(io.BytesIO(mp4_stream), ctx=cpu(0))
+        decord_vr = VideoReader(uri=io.BytesIO(mp4_stream), ctx=cpu(0))
     else:
-        decord_vr = VideoReader(video_path, ctx=cpu(0))
+        decord_vr = VideoReader(uri=video_path, ctx=cpu(0))
 
     frame_id_list = None
     total_frames = len(decord_vr)
