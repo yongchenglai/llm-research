@@ -225,8 +225,10 @@ def _launch_demo(args, model, tokenizer):
         query = gr.Textbox(lines=2, label='Input')
         task_history = gr.State([])
 
+        # Creates an audio component that can be used to
+        # upload/record audio (as an input) or display audio (as an output).
         mic = gr.Audio(
-            sources="microphone",
+            sources=["microphone"],
             type="filepath")
 
         with gr.Row():
