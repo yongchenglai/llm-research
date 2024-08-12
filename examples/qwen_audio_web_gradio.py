@@ -113,9 +113,8 @@ def _parse_text(text):
 
 
 def _launch_demo(args, model, tokenizer):
-    uploaded_file_dir = os.environ.get("GRADIO_TEMP_DIR") or str(
-        Path(tempfile.gettempdir()) / "gradio"
-    )
+    uploaded_file_dir = os.environ.get("GRADIO_TEMP_DIR") or \
+                        str(Path(tempfile.gettempdir()) / "gradio")
 
     def predict(_chatbot, task_history):
         query = task_history[-1][0]
