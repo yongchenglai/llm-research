@@ -2,6 +2,12 @@
   "architectures": [
     "Gemma2ForCausalLM"
   ],
+  "auto_map": {
+    "AutoConfig": "configuration_gemma2.Gemma2Config",
+    "AutoModel": "modeling_gemma2.Gemma2ForCausalLM",
+    "AutoModelForCausalLM": "modeling_gemma2.Gemma2ForCausalLM",
+    "AutoModelForSequenceClassification": "modeling_gemma2.Gemma2ForSequenceClassification"
+  },
   "attention_bias": false,
   "attention_dropout": 0.0,
   "attn_logit_softcapping": 50.0,
