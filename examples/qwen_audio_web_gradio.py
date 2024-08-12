@@ -224,6 +224,7 @@ def _launch_demo(args, model, tokenizer):
                              height=400)
         query = gr.Textbox(lines=2, label='Input')
         task_history = gr.State([])
+
         mic = gr.Audio(
             sources="microphone",
             type="filepath")
