@@ -112,25 +112,51 @@ def main():
                                                 interactive=False,
                                                 container=False)
                     with gr.Column(scale=0.15, min_width=0):
-                        run = gr.Button("💭Send")
+                        run = gr.Button("Send")
                     with gr.Column(scale=0.15, min_width=0):
-                        clear = gr.Button("🔄Clear")
+                        clear = gr.Button("Clear")
 
-        upload_button.click(upload_video, [up_video],
-                            [up_video, text_input, upload_button])
+        upload_button.click(
+            fn=upload_video,
+            inputs=[up_video],
+            outputs=[up_video, text_input, upload_button])
 
-        text_input.submit(gradio_ask, [text_input, chatbot],
-                          [text_input, chatbot]).then(
-            gradio_answer, [up_video, chatbot, num_beams, temperature], [chatbot]
+        text_input.submit(
+            fn=gradio_ask,
+            inputs=[text_input, chatbot],
+            outputs=[text_input, chatbot]
+        ).then(
+            gradio_answer,
+            inputs=[up_video, chatbot, num_beams, temperature],
+            outputs=[chatbot]
         )
-        run.click(gradio_ask, [text_input, chatbot], [text_input, chatbot]).then(
-            gradio_answer, [up_video, chatbot, num_beams, temperature], [chatbot]
+
+        run.click(
+            fn=gradio_ask,
+            inputs=[text_input, chatbot],
+            outputs=[text_input, chatbot]
+        ).then(
+            fn=gradio_answer,
+            inputs=[up_video, chatbot, num_beams, temperature],
+            outputs=[chatbot]
         )
-        run.click(lambda: "", None, text_input)
-        clear.click(gradio_reset, [],
-                    [chatbot, up_video, text_input, upload_button], queue=False)
-    demo.launch(server_name="0.0.0.0",
-                server_port=7868)
+
+        run.click(
+            fn=lambda: "",
+            inputs=None,
+            outputs=text_input,
+        )
+
+        clear.click(
+            fn=gradio_reset,
+            inputs=[],
+            outputs=[chatbot, up_video, text_input, upload_button],
+            queue=False,
+        )
+
+    demo.launch(
+        server_name="0.0.0.0",
+        server_port=7860)
 
 
 if __name__ == '__main__':
