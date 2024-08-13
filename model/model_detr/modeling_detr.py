@@ -1385,7 +1385,8 @@ class DetrModel(DetrPreTrainedModel):
         if mask is None:
             raise ValueError("Backbone does not return downsampled pixel mask")
 
-        # Second, apply 1x1 convolution to reduce the channel dimension to d_model (256 by default)
+        # Second, apply 1x1 convolution to reduce the
+        # channel dimension to d_model (256 by default)
         projected_feature_map = self.input_projection(feature_map)
 
         # Third, flatten the feature map + position embeddings of shape
