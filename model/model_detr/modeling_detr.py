@@ -334,12 +334,10 @@ def replace_batch_norm(model):
 
 class DetrConvEncoder(nn.Module):
     """
-    Convolutional backbone, using either the AutoBackbone API or one from the timm library.
-
+    Convolutional backbone, using either the AutoBackbone API
+    or one from the timm library.
     nn.BatchNorm2d layers are replaced by DetrFrozenBatchNorm2d as defined above.
-
     """
-
     def __init__(self, config):
         super().__init__()
 
@@ -384,25 +382,32 @@ class DetrConvEncoder(nn.Module):
         elif config.backbone_config is not None:
             backbone_model_type = config.backbone_config.model_type
         else:
-            raise ValueError("Either `backbone` or `backbone_config` should be provided in the config")
+            raise ValueError("Either `backbone` or `backbone_config` "
+                             "should be provided in the config")
 
         if "resnet" in backbone_model_type:
             for name, parameter in self.model.named_parameters():
                 if config.use_timm_backbone:
-                    if "layer2" not in name and "layer3" not in name and "layer4" not in name:
+                    if "layer2" not in name and "layer3" not in name \
+                            and "layer4" not in name:
                         parameter.requires_grad_(False)
                 else:
-                    if "stage.1" not in name and "stage.2" not in name and "stage.3" not in name:
+                    if "stage.1" not in name and "stage.2" not in name \
+                            and "stage.3" not in name:
                         parameter.requires_grad_(False)
 
     def forward(self, pixel_values: torch.Tensor, pixel_mask: torch.Tensor):
         # send pixel_values through the model to get list of feature maps
-        features = self.model(pixel_values) if self.config.use_timm_backbone else self.model(pixel_values).feature_maps
+        features = self.model(pixel_values) \
+            if self.config.use_timm_backbone \
+            else self.model(pixel_values).feature_maps
 
         out = []
         for feature_map in features:
             # downsample pixel_mask to match shape of corresponding feature_map
-            mask = nn.functional.interpolate(pixel_mask[None].float(), size=feature_map.shape[-2:]).to(torch.bool)[0]
+            mask = nn.functional.interpolate(
+                pixel_mask[None].float(),
+                size=feature_map.shape[-2:]).to(torch.bool)[0]
             out.append((feature_map, mask))
         return out
 
