@@ -6,14 +6,16 @@ import requests
 
 url = "http://images.cocodataset.org/val2017/000000039769.jpg"
 image = Image.open(requests.get(url, stream=True).raw)
+model_path = "./facebook/detr-resnet-50"
+
 
 # you can specify the revision tag if you don't want the timm dependency
 processor = DetrImageProcessor.from_pretrained(
-    "facebook/detr-resnet-50",
+    pretrained_model_name_or_path=model_path,
     revision="no_timm")
 
 model = DetrForObjectDetection.from_pretrained(
-    "facebook/detr-resnet-50",
+    pretrained_model_name_or_path=model_path,
     revision="no_timm")
 
 print(model)
