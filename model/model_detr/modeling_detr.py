@@ -1088,14 +1088,17 @@ class DetrEncoder(DetrPreTrainedModel):
 
 class DetrDecoder(DetrPreTrainedModel):
     """
-    Transformer decoder consisting of *config.decoder_layers* layers. Each layer is a [`DetrDecoderLayer`].
+    Transformer decoder consisting of *config.decoder_layers* layers.
+    Each layer is a [`DetrDecoderLayer`].
 
-    The decoder updates the query embeddings through multiple self-attention and cross-attention layers.
+    The decoder updates the query embeddings through multiple self-attention
+    and cross-attention layers.
 
     Some small tweaks for DETR:
 
     - object_queries and query_position_embeddings are added to the forward pass.
-    - if self.config.auxiliary_loss is set to True, also returns a stack of activations from all decoding layers.
+    - if self.config.auxiliary_loss is set to True, also returns a stack of
+    activations from all decoding layers.
 
     Args:
         config: DetrConfig
