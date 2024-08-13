@@ -551,14 +551,17 @@ class DetrAttention(nn.Module):
         key_value_states: Optional[torch.Tensor] = None,
         spatial_position_embeddings: Optional[torch.Tensor] = None,
         output_attentions: bool = False,
-    ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
+    ) -> Tuple[torch.Tensor,
+               Optional[torch.Tensor],
+               Optional[Tuple[torch.Tensor]]]:
         """Input shape: Batch x Time x Channel"""
-        # if key_value_states are provided this layer is used as a cross-attention layer
-        # for the decoder
+        # if key_value_states are provided this layer is used as
+        # a cross-attention layer for the decoder
         is_cross_attention = key_value_states is not None
         batch_size, target_len, embed_dim = hidden_states.size()
 
-        # add position embeddings to the hidden states before projecting to queries and keys
+        # add position embeddings to the hidden states
+        # before projecting to queries and keys
         if object_queries is not None:
             hidden_states_original = hidden_states
             hidden_states = self.with_pos_embed(hidden_states, object_queries)
@@ -566,7 +569,9 @@ class DetrAttention(nn.Module):
         # add key-value position embeddings to the key value states
         if spatial_position_embeddings is not None:
             key_value_states_original = key_value_states
-            key_value_states = self.with_pos_embed(key_value_states, spatial_position_embeddings)
+            key_value_states = self.with_pos_embed(
+                key_value_states,
+                spatial_position_embeddings)
 
         # get query proj
         query_states = self.q_proj(hidden_states) * self.scaling
