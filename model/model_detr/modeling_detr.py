@@ -23,7 +23,8 @@ from torch import Tensor, nn
 
 from transformers.activations import ACT2FN
 from transformers.modeling_attn_mask_utils import _prepare_4d_attention_mask
-from transformers.modeling_outputs import BaseModelOutput, BaseModelOutputWithCrossAttentions, Seq2SeqModelOutput
+from transformers.modeling_outputs import BaseModelOutput, \
+    BaseModelOutputWithCrossAttentions, Seq2SeqModelOutput
 from transformers.modeling_utils import PreTrainedModel
 from transformers.utils import (
     ModelOutput,
