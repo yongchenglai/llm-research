@@ -1561,7 +1561,9 @@ class DetrForObjectDetection(DetrPreTrainedModel):
         if labels is not None:
             # First: create the matcher
             matcher = DetrHungarianMatcher(
-                class_cost=self.config.class_cost, bbox_cost=self.config.bbox_cost, giou_cost=self.config.giou_cost
+                class_cost=self.config.class_cost,
+                bbox_cost=self.config.bbox_cost,
+                giou_cost=self.config.giou_cost
             )
             # Second: create the criterion
             losses = ["labels", "boxes", "cardinality"]
