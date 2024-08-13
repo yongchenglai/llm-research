@@ -663,7 +663,10 @@ class DetrAttention(nn.Module):
                 f" {attn_output.size()}"
             )
 
-        attn_output = attn_output.view(batch_size, self.num_heads, target_len, self.head_dim)
+        attn_output = attn_output.view(batch_size,
+                                       self.num_heads,
+                                       target_len,
+                                       self.head_dim)
         attn_output = attn_output.transpose(1, 2)
         attn_output = attn_output.reshape(batch_size, target_len, embed_dim)
 
@@ -956,8 +959,8 @@ DETR_INPUTS_DOCSTRING = r"""
 
 class DetrEncoder(DetrPreTrainedModel):
     """
-    Transformer encoder consisting of *config.encoder_layers* self attention layers. Each layer is a
-    [`DetrEncoderLayer`].
+    Transformer encoder consisting of *config.encoder_layers* self attention layers.
+    Each layer is a  [`DetrEncoderLayer`].
 
     The encoder updates the flattened feature map through multiple self-attention layers.
 
