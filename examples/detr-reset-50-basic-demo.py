@@ -1,4 +1,11 @@
 # detr-reset-50-basic-demo.py
+"""
+export HF_ENDPOINT=https://hf-mirror.com
+python detr-reset-50-basic-demo.py
+python detr-reset-50-basic-demo.py \
+--model_name_or_path="facebook/detr-resnet-50"
+--image_patch_or_url="http://images.cocodataset.org/val2017/000000039769.jpg"
+"""
 from transformers import DetrImageProcessor, DetrForObjectDetection
 import torch
 from PIL import Image
