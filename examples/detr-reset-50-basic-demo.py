@@ -12,14 +12,16 @@ model_path = "./facebook/detr-resnet-50"
 # you can specify the revision tag if you don't want the timm dependency
 processor = DetrImageProcessor.from_pretrained(
     pretrained_model_name_or_path=model_path,
-    local_files_only=True,
-    # revision="no_timm",
+    cache_dir="/home/xiaolai/meta-llama",
+    # local_files_only=True,
+    revision="no_timm",
 )
 
 model = DetrForObjectDetection.from_pretrained(
     pretrained_model_name_or_path=model_path,
-    local_files_only=True,
-    # revision="no_timm",
+    cache_dir="/home/xiaolai/meta-llama",
+    # local_files_only=True,
+    revision="no_timm",
 )
 
 print(model)
