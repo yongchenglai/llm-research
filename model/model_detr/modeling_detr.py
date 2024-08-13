@@ -698,15 +698,17 @@ class DetrEncoderLayer(nn.Module):
     ):
         """
         Args:
-            hidden_states (`torch.FloatTensor`): input to the layer of shape `(batch, seq_len, embed_dim)`
+            hidden_states (`torch.FloatTensor`): input to the layer of shape
+            `(batch, seq_len, embed_dim)`
             attention_mask (`torch.FloatTensor`): attention mask of size
-                `(batch, 1, target_len, source_len)` where padding elements are indicated by very large negative
-                values.
+                `(batch, 1, target_len, source_len)` where padding elements
+                are indicated by very large negative values.
             object_queries (`torch.FloatTensor`, *optional*):
-                Object queries (also called content embeddings), to be added to the hidden states.
+                Object queries (also called content embeddings),
+                to be added to the hidden states.
             output_attentions (`bool`, *optional*):
-                Whether or not to return the attentions tensors of all attention layers. See `attentions` under
-                returned tensors for more detail.
+                Whether or not to return the attentions tensors of all attention layers.
+                See `attentions` under returned tensors for more detail.
         """
         residual = hidden_states
         hidden_states, attn_weights = self.self_attn(
