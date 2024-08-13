@@ -359,7 +359,7 @@ class DetrConvEncoder(nn.Module):
             if config.dilation:
                 kwargs["output_stride"] = kwargs.get("output_stride", 16)
             backbone = create_model(
-                config.backbone,
+                model_name=config.backbone,
                 pretrained=config.use_pretrained_backbone,
                 features_only=True,
                 out_indices=out_indices,
