@@ -1363,7 +1363,9 @@ class DetrForObjectDetection(DetrPreTrainedModel):
             config.d_model, config.num_labels + 1
         )  # We add one for the "no object" class
         self.bbox_predictor = DetrMLPPredictionHead(
-            input_dim=config.d_model, hidden_dim=config.d_model, output_dim=4, num_layers=3
+            input_dim=config.d_model,
+            hidden_dim=config.d_model,
+            output_dim=4, num_layers=3
         )
 
         # Initialize weights and apply final processing
