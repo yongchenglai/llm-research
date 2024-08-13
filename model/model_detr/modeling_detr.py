@@ -1304,7 +1304,8 @@ class DetrModel(DetrPreTrainedModel):
             param.requires_grad_(True)
 
     @add_start_docstrings_to_model_forward(DETR_INPUTS_DOCSTRING)
-    @replace_return_docstrings(output_type=DetrModelOutput, config_class=_CONFIG_FOR_DOC)
+    @replace_return_docstrings(output_type=DetrModelOutput,
+                               config_class=_CONFIG_FOR_DOC)
     def forward(
         self,
         pixel_values: torch.FloatTensor,
