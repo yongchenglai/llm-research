@@ -25,28 +25,27 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     image = Image.open(requests.get(args.image_url, stream=True).raw)
-    model_path = args.model_name_or_path
 
     # you can specify the revision tag if you don't want the timm dependency
-    processor = DetrImageProcessor.from_pretrained(
-        pretrained_model_name_or_path=model_path,
+    image_processor = DetrImageProcessor.from_pretrained(
+        pretrained_model_name_or_path=args.model_name_or_path,
         revision="no_timm",
     )
 
     model = DetrForObjectDetection.from_pretrained(
-        pretrained_model_name_or_path=model_path,
+        pretrained_model_name_or_path=args.model_name_or_path,
         revision="no_timm",
     )
 
     print(model)
 
-    inputs = processor(images=image, return_tensors="pt")
+    inputs = image_processor(images=image, return_tensors="pt")
     outputs = model(**inputs)
 
     # convert outputs (bounding boxes and class logits) to COCO API
     # let's only keep detections with score > 0.9
     target_sizes = torch.tensor([image.size[::-1]])
-    results = processor.post_process_object_detection(
+    results = image_processor.post_process_object_detection(
         outputs,
         target_sizes=target_sizes,
         threshold=0.9)[0]
