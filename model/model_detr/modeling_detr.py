@@ -1021,9 +1021,9 @@ class DetrEncoder(DetrPreTrainedModel):
         output_attentions = output_attentions \
             if output_attentions is not None \
             else self.config.output_attentions
+
         output_hidden_states = (
-            output_hidden_states
-            if output_hidden_states is not None
+            output_hidden_states if output_hidden_states is not None
             else self.config.output_hidden_states
         )
         return_dict = return_dict \
@@ -1037,7 +1037,8 @@ class DetrEncoder(DetrPreTrainedModel):
         # expand attention_mask
         if attention_mask is not None:
             # [batch_size, seq_len] -> [batch_size, 1, target_seq_len, source_seq_len]
-            attention_mask = _prepare_4d_attention_mask(attention_mask, inputs_embeds.dtype)
+            attention_mask = _prepare_4d_attention_mask(attention_mask,
+                                                        inputs_embeds.dtype)
 
         encoder_states = () if output_hidden_states else None
         all_attentions = () if output_attentions else None
