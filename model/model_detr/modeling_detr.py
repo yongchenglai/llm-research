@@ -501,7 +501,8 @@ class DetrAttention(nn.Module):
     """
     Multi-headed attention from 'Attention Is All You Need' paper.
 
-    Here, we add position embeddings to the queries and keys (as explained in the DETR paper).
+    Here, we add position embeddings to the queries and keys
+    (as explained in the DETR paper).
     """
 
     def __init__(
@@ -518,7 +519,8 @@ class DetrAttention(nn.Module):
         self.head_dim = embed_dim // num_heads
         if self.head_dim * num_heads != self.embed_dim:
             raise ValueError(
-                f"embed_dim must be divisible by num_heads (got `embed_dim`: {self.embed_dim} and `num_heads`:"
+                f"embed_dim must be divisible by num_heads "
+                f"(got `embed_dim`: {self.embed_dim} and `num_heads`:"
                 f" {num_heads})."
             )
         self.scaling = self.head_dim**-0.5
@@ -529,9 +531,16 @@ class DetrAttention(nn.Module):
         self.out_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
 
     def _shape(self, tensor: torch.Tensor, seq_len: int, batch_size: int):
-        return tensor.view(batch_size, seq_len, self.num_heads, self.head_dim).transpose(1, 2).contiguous()
+        return tensor.view(batch_size,
+                           seq_len,
+                           self.num_heads,
+                           self.head_dim).transpose(1, 2).contiguous()
 
-    def with_pos_embed(self, tensor: torch.Tensor, object_queries: Optional[Tensor]):
+    def with_pos_embed(
+        self,
+        tensor: torch.Tensor,
+        object_queries: Optional[Tensor],
+    ):
         return tensor if object_queries is None else tensor + object_queries
 
     def forward(
