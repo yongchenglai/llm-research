@@ -596,18 +596,23 @@ class DetrAttention(nn.Module):
 
         if attn_weights.size() != (batch_size * self.num_heads, target_len, source_len):
             raise ValueError(
-                f"Attention weights should be of size {(batch_size * self.num_heads, target_len, source_len)}, but is"
+                f"Attention weights should be of size "
+                f" {(batch_size * self.num_heads, target_len, source_len)}, but is"
                 f" {attn_weights.size()}"
             )
 
         if attention_mask is not None:
             if attention_mask.size() != (batch_size, 1, target_len, source_len):
                 raise ValueError(
-                    f"Attention mask should be of size {(batch_size, 1, target_len, source_len)}, but is"
+                    f"Attention mask should be of size "
+                    f" {(batch_size, 1, target_len, source_len)}, but is"
                     f" {attention_mask.size()}"
                 )
-            attn_weights = attn_weights.view(batch_size, self.num_heads, target_len, source_len) + attention_mask
-            attn_weights = attn_weights.view(batch_size * self.num_heads, target_len, source_len)
+            attn_weights = attn_weights.view(
+                batch_size, self.num_heads, target_len, source_len) + attention_mask
+
+            attn_weights = attn_weights.view(
+                batch_size * self.num_heads, target_len, source_len)
 
         attn_weights = nn.functional.softmax(attn_weights, dim=-1)
 
@@ -616,18 +621,23 @@ class DetrAttention(nn.Module):
             # make sure that attn_weights keeps its gradient.
             # In order to do so, attn_weights have to reshaped
             # twice and have to be reused in the following
-            attn_weights_reshaped = attn_weights.view(batch_size, self.num_heads, target_len, source_len)
-            attn_weights = attn_weights_reshaped.view(batch_size * self.num_heads, target_len, source_len)
+            attn_weights_reshaped = attn_weights.view(
+                batch_size, self.num_heads, target_len, source_len)
+            attn_weights = attn_weights_reshaped.view(
+                batch_size * self.num_heads, target_len, source_len)
         else:
             attn_weights_reshaped = None
 
-        attn_probs = nn.functional.dropout(attn_weights, p=self.dropout, training=self.training)
+        attn_probs = nn.functional.dropout(attn_weights,
+                                           p=self.dropout,
+                                           training=self.training)
 
         attn_output = torch.bmm(attn_probs, value_states)
 
         if attn_output.size() != (batch_size * self.num_heads, target_len, self.head_dim):
             raise ValueError(
-                f"`attn_output` should be of size {(batch_size, self.num_heads, target_len, self.head_dim)}, but is"
+                f"`attn_output` should be of size "
+                f"{(batch_size, self.num_heads, target_len, self.head_dim)}, but is"
                 f" {attn_output.size()}"
             )
 
