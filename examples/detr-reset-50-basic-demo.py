@@ -2,9 +2,10 @@
 """
 export HF_ENDPOINT=https://hf-mirror.com
 python detr-reset-50-basic-demo.py
+
 python detr-reset-50-basic-demo.py \
---model_name_or_path="facebook/detr-resnet-50"
---image_patch_or_url="http://images.cocodataset.org/val2017/000000039769.jpg"
+--model_name_or_path="facebook/detr-resnet-50" \
+--image_url="http://images.cocodataset.org/val2017/000000039769.jpg"
 """
 from transformers import DetrImageProcessor, DetrForObjectDetection
 import torch
@@ -19,11 +20,11 @@ if __name__ == "__main__":
     parser.add_argument("--model_name_or_path", type=str,
                         default="facebook/detr-resnet-50")
     parser.add_argument(
-        "--image_patch_or_url", type=str,
+        "--image_url", type=str,
         default="http://images.cocodataset.org/val2017/000000039769.jpg")
     args = parser.parse_args()
 
-    image = Image.open(requests.get(args.image_patch_or_url, stream=True).raw)
+    image = Image.open(requests.get(args.image_url, stream=True).raw)
     model_path = args.model_name_or_path
 
     # you can specify the revision tag if you don't want the timm dependency
