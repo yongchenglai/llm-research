@@ -973,9 +973,11 @@ class DetrEncoder(DetrPreTrainedModel):
         self.dropout = config.dropout
         self.layerdrop = config.encoder_layerdrop
 
-        self.layers = nn.ModuleList([DetrEncoderLayer(config) for _ in range(config.encoder_layers)])
+        self.layers = nn.ModuleList(
+            [DetrEncoderLayer(config) for _ in range(config.encoder_layers)])
 
-        # in the original DETR, no layernorm is used at the end of the encoder, as "normalize_before" is set to False by default
+        # in the original DETR, no layernorm is used at the end of the encoder,
+        # as "normalize_before" is set to False by default
 
         # Initialize weights and apply final processing
         self.post_init()
@@ -991,37 +993,46 @@ class DetrEncoder(DetrPreTrainedModel):
     ):
         r"""
         Args:
-            inputs_embeds (`torch.FloatTensor` of shape `(batch_size, sequence_length, hidden_size)`):
-                Flattened feature map (output of the backbone + projection layer) that is passed to the encoder.
+            inputs_embeds (`torch.FloatTensor` of shape `(batch_size,
+                sequence_length, hidden_size)`):
+                Flattened feature map (output of the backbone + projection layer)
+                that is passed to the encoder.
 
             attention_mask (`torch.Tensor` of shape `(batch_size, sequence_length)`, *optional*):
-                Mask to avoid performing attention on padding pixel features. Mask values selected in `[0, 1]`:
-
+                Mask to avoid performing attention on padding pixel features.
+                Mask values selected in `[0, 1]`:
                 - 1 for pixel features that are real (i.e. **not masked**),
                 - 0 for pixel features that are padding (i.e. **masked**).
-
                 [What are attention masks?](../glossary#attention-mask)
 
-            object_queries (`torch.FloatTensor` of shape `(batch_size, sequence_length, hidden_size)`):
+            object_queries (`torch.FloatTensor` of shape
+                `(batch_size, sequence_length, hidden_size)`):
                 Object queries that are added to the queries in each self-attention layer.
 
             output_attentions (`bool`, *optional*):
-                Whether or not to return the attentions tensors of all attention layers. See `attentions` under
-                returned tensors for more detail.
+                Whether or not to return the attentions tensors of all attention layers.
+                See `attentions` under returned tensors for more detail.
             output_hidden_states (`bool`, *optional*):
-                Whether or not to return the hidden states of all layers. See `hidden_states` under returned tensors
-                for more detail.
+                Whether or not to return the hidden states of all layers.
+                See `hidden_states` under returned tensors for more detail.
             return_dict (`bool`, *optional*):
                 Whether or not to return a [`~utils.ModelOutput`] instead of a plain tuple.
         """
-        output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
+        output_attentions = output_attentions \
+            if output_attentions is not None \
+            else self.config.output_attentions
         output_hidden_states = (
-            output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
+            output_hidden_states
+            if output_hidden_states is not None
+            else self.config.output_hidden_states
         )
-        return_dict = return_dict if return_dict is not None else self.config.use_return_dict
+        return_dict = return_dict \
+            if return_dict is not None else self.config.use_return_dict
 
         hidden_states = inputs_embeds
-        hidden_states = nn.functional.dropout(hidden_states, p=self.dropout, training=self.training)
+        hidden_states = nn.functional.dropout(hidden_states,
+                                              p=self.dropout,
+                                              training=self.training)
 
         # expand attention_mask
         if attention_mask is not None:
