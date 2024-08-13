@@ -1473,10 +1473,12 @@ class DetrForObjectDetection(DetrPreTrainedModel):
         # this is a workaround to make torchscript happy, as torchscript
         # doesn't support dictionary with non-homogeneous values, such
         # as a dict having both a Tensor and a list.
-        return [{"logits": a, "pred_boxes": b} for a, b in zip(outputs_class[:-1], outputs_coord[:-1])]
+        return [{"logits": a, "pred_boxes": b} for a, b in
+                zip(outputs_class[:-1], outputs_coord[:-1])]
 
     @add_start_docstrings_to_model_forward(DETR_INPUTS_DOCSTRING)
-    @replace_return_docstrings(output_type=DetrObjectDetectionOutput, config_class=_CONFIG_FOR_DOC)
+    @replace_return_docstrings(output_type=DetrObjectDetectionOutput,
+                               config_class=_CONFIG_FOR_DOC)
     def forward(
         self,
         pixel_values: torch.FloatTensor,
