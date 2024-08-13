@@ -1072,9 +1072,12 @@ class DetrEncoder(DetrPreTrainedModel):
             encoder_states = encoder_states + (hidden_states,)
 
         if not return_dict:
-            return tuple(v for v in [hidden_states, encoder_states, all_attentions] if v is not None)
+            return tuple(v for v in [hidden_states, encoder_states,
+                                     all_attentions] if v is not None)
         return BaseModelOutput(
-            last_hidden_state=hidden_states, hidden_states=encoder_states, attentions=all_attentions
+            last_hidden_state=hidden_states,
+            hidden_states=encoder_states,
+            attentions=all_attentions
         )
 
 
@@ -1242,8 +1245,8 @@ class DetrDecoder(DetrPreTrainedModel):
         if not return_dict:
             return tuple(
                 v
-                for v in [hidden_states, all_hidden_states, all_self_attns, all_cross_attentions, intermediate]
-                if v is not None
+                for v in [hidden_states, all_hidden_states, all_self_attns,
+                          all_cross_attentions, intermediate] if v is not None
             )
         return DetrDecoderOutput(
             last_hidden_state=hidden_states,
@@ -1271,9 +1274,14 @@ class DetrModel(DetrPreTrainedModel):
         self.backbone = DetrConvModel(backbone, object_queries)
 
         # Create projection layer
-        self.input_projection = nn.Conv2d(backbone.intermediate_channel_sizes[-1], config.d_model, kernel_size=1)
+        self.input_projection = nn.Conv2d(
+            backbone.intermediate_channel_sizes[-1],
+            config.d_model,
+            kernel_size=1)
 
-        self.query_position_embeddings = nn.Embedding(config.num_queries, config.d_model)
+        self.query_position_embeddings = nn.Embedding(
+            config.num_queries,
+            config.d_model)
 
         self.encoder = DetrEncoder(config)
         self.decoder = DetrDecoder(config)
