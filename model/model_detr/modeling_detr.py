@@ -414,7 +414,8 @@ class DetrConvEncoder(nn.Module):
 
 class DetrConvModel(nn.Module):
     """
-    This module adds 2D position embeddings to all intermediate feature maps of the convolutional encoder.
+    This module adds 2D position embeddings to all intermediate
+    feature maps of the convolutional encoder.
     """
 
     def __init__(self, conv_encoder, position_embedding):
@@ -423,23 +424,32 @@ class DetrConvModel(nn.Module):
         self.position_embedding = position_embedding
 
     def forward(self, pixel_values, pixel_mask):
-        # send pixel_values and pixel_mask through backbone to get list of (feature_map, pixel_mask) tuples
+        # send pixel_values and pixel_mask through backbone to
+        # get list of (feature_map, pixel_mask) tuples
         out = self.conv_encoder(pixel_values, pixel_mask)
         pos = []
         for feature_map, mask in out:
             # position encoding
-            pos.append(self.position_embedding(feature_map, mask).to(feature_map.dtype))
+            pos.append(self.position_embedding(
+                feature_map, mask).to(feature_map.dtype))
 
         return out, pos
 
 
 class DetrSinePositionEmbedding(nn.Module):
     """
-    This is a more standard version of the position embedding, very similar to the one used by the Attention is all you
+    This is a more standard version of the position embedding,
+    very similar to the one used by the Attention is all you
     need paper, generalized to work on images.
     """
 
-    def __init__(self, embedding_dim=64, temperature=10000, normalize=False, scale=None):
+    def __init__(
+        self,
+        embedding_dim=64,
+        temperature=10000,
+        normalize=False,
+        scale=None,
+    ):
         super().__init__()
         self.embedding_dim = embedding_dim
         self.temperature = temperature
@@ -459,8 +469,11 @@ class DetrSinePositionEmbedding(nn.Module):
             y_embed = y_embed / (y_embed[:, -1:, :] + 1e-6) * self.scale
             x_embed = x_embed / (x_embed[:, :, -1:] + 1e-6) * self.scale
 
-        dim_t = torch.arange(self.embedding_dim, dtype=torch.int64, device=pixel_values.device).float()
-        dim_t = self.temperature ** (2 * torch.div(dim_t, 2, rounding_mode="floor") / self.embedding_dim)
+        dim_t = torch.arange(self.embedding_dim,
+                             dtype=torch.int64,
+                             device=pixel_values.device).float()
+        dim_t = self.temperature ** (
+                2 * torch.div(dim_t, 2, rounding_mode="floor") / self.embedding_dim)
 
         pos_x = x_embed[:, :, :, None] / dim_t
         pos_y = y_embed[:, :, :, None] / dim_t
