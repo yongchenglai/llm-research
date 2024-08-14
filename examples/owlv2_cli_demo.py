@@ -5,7 +5,8 @@ python owlv2_cli_demo.py
 
 python owlv2_cli_demo.py \
 --model_name_or_path="google/owlvit-large-patch14" \
---image_url="http://images.cocodataset.org/val2017/000000039769.jpg"
+--image_url="http://images.cocodataset.org/val2017/000000039769.jpg" \
+--print_model
 """
 import requests
 from PIL import Image
