@@ -35,6 +35,7 @@ if __name__ == "__main__":
     # Define the text queries that you want the model to detect.
     # texts = [['face', 'rocket', 'nasa badge', 'star-spangled banner']]
     texts = [["a photo of a cat", "a photo of a dog"]]
+    # Prepare the image and text for the model using the processor.
     inputs = processor(text=texts, images=image, return_tensors="pt")
     outputs = model(**inputs)
 
