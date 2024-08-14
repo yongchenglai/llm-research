@@ -43,6 +43,9 @@ if __name__ == "__main__":
     processor = AutoProcessor.from_pretrained(args.model_name_or_path)
     model = Owlv2ForObjectDetection.from_pretrained(args.model_name_or_path)
 
+    if args.print_model:
+        print(model)
+
     image = Image.open(requests.get(args.image_url, stream=True).raw)
     texts = [["a photo of a cat", "a photo of a dog"]]
     inputs = processor(text=texts, images=image, return_tensors="pt")
@@ -54,17 +57,23 @@ if __name__ == "__main__":
     unnormalized_image = get_preprocessed_image(inputs.pixel_values)
 
     target_sizes = torch.Tensor([unnormalized_image.size[::-1]])
-    # Convert outputs (bounding boxes and class logits) to final bounding boxes and scores
+    # Convert outputs (bounding boxes and class logits)
+    # to final bounding boxes and scores
     results = processor.post_process_object_detection(
         outputs=outputs,
         threshold=0.2,
         target_sizes=target_sizes
     )
 
-    i = 0  # Retrieve predictions for the first image for the corresponding text queries
+    # Retrieve predictions for the first image
+    # for the corresponding text queries
+    i = 0
     text = texts[i]
-    boxes, scores, labels = results[i]["boxes"], results[i]["scores"], results[i]["labels"]
+    boxes, scores, labels = results[i]["boxes"], \
+                            results[i]["scores"], \
+                            results[i]["labels"]
 
     for box, score, label in zip(boxes, scores, labels):
         box = [round(i, 2) for i in box.tolist()]
-        print(f"Detected {text[label]} with confidence {round(score.item(), 3)} at location {box}")
+        print(f"Detected {text[label]} with confidence "
+              f"{round(score.item(), 3)} at location {box}")
