@@ -7,6 +7,7 @@ python owlv2_cli_demo_ensemble.py \
 """
 import requests
 from PIL import Image
+from PIL import ImageDraw
 import numpy as np
 import torch
 import argparse
@@ -55,6 +56,7 @@ if __name__ == "__main__":
 
     unnormalized_image = get_preprocessed_image(inputs.pixel_values)
 
+    # Convert model outputs to COCO API format.
     target_sizes = torch.Tensor([unnormalized_image.size[::-1]])
     # Convert outputs (bounding boxes and class logits)
     # to final bounding boxes and scores
@@ -72,7 +74,20 @@ if __name__ == "__main__":
                             results[i]["scores"], \
                             results[i]["labels"]
 
+
+    # Draw bounding boxes and labels on the image.
+    draw = ImageDraw.Draw(image)
+
     for box, score, label in zip(boxes, scores, labels):
         box = [round(i, 2) for i in box.tolist()]
         print(f"Detected {text[label]} with confidence "
               f"{round(score.item(), 3)} at location {box}")
+        x1, y1, x2, y2 = tuple(box)
+        draw.rectangle(xy=((x1, y1), (x2, y2)), outline="red")
+
+        draw.text(xy=(x1, y1), text=text[label])
+
+    # Display the image with bounding boxes and labels.
+    image.show()
+
+
