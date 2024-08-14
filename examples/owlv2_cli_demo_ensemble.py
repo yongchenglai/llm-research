@@ -48,6 +48,7 @@ if __name__ == "__main__":
     texts = [["a photo of a cat", "a photo of a dog"]]
     inputs = processor(text=texts, images=image, return_tensors="pt")
 
+    # Perform a forward pass through the model.
     # forward pass
     with torch.no_grad():
         outputs = model(**inputs)
