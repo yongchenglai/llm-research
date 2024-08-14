@@ -2,7 +2,7 @@
 """
 python owlv2_cli_demo_ensemble.py \
 --print_model \
---model_name_or_path="google/owlv2-large-patch14-ensemble" \
+--model_name_or_path="google/owlv2-base-patch16-ensemble" \
 --image_url="http://images.cocodataset.org/val2017/000000039769.jpg"
 """
 import requests
@@ -31,7 +31,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='demo')
     parser.add_argument("--model_name_or_path", type=str,
-                        default="google/owlv2-large-patch14-ensemble")
+                        default="google/owlv2-base-patch16-ensemble")
     parser.add_argument(
         "--image_url", type=str,
         default="http://images.cocodataset.org/val2017/000000039769.jpg")
