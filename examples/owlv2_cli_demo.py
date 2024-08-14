@@ -22,10 +22,15 @@ if __name__ == "__main__":
     parser.add_argument(
         "--image_url", type=str,
         default="http://images.cocodataset.org/val2017/000000039769.jpg")
+    parser.add_argument('--print_model', action='store_true', default=False,
+                        help='print model')
     args = parser.parse_args()
 
     processor = Owlv2Processor.from_pretrained(args.model_name_or_path)
     model = Owlv2ForObjectDetection.from_pretrained(args.model_name_or_path)
+
+    if args.print_model:
+        print(model)
 
     image = Image.open(requests.get(args.image_url, stream=True).raw)
     texts = [["a photo of a cat", "a photo of a dog"]]

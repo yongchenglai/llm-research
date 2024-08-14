@@ -5,7 +5,8 @@ python owlvit_cli_demo.py
 
 python owlvit_cli_demo.py \
 --model_name_or_path="google/owlvit-large-patch14" \
---image_url="http://images.cocodataset.org/val2017/000000039769.jpg"
+--image_url="http://images.cocodataset.org/val2017/000000039769.jpg" \
+--print_model
 """
 import requests
 from PIL import Image
@@ -22,10 +23,15 @@ if __name__ == "__main__":
     parser.add_argument(
         "--image_url", type=str,
         default="http://images.cocodataset.org/val2017/000000039769.jpg")
+    parser.add_argument('--print_model', action='store_true', default=False,
+                        help='print model')
     args = parser.parse_args()
 
     processor = OwlViTProcessor.from_pretrained(args.model_name_or_path)
     model = OwlViTForObjectDetection.from_pretrained(args.model_name_or_path)
+
+    if args.print_model:
+        print(model)
 
     image = Image.open(requests.get(args.image_url, stream=True).raw)
     texts = [["a photo of a cat", "a photo of a dog"]]
