@@ -1,12 +1,10 @@
 # owlv2_cli_demo_ensemble.py
-
 """
 python owlv2_cli_demo_ensemble.py \
 --print_model \
 --model_name_or_path="google/owlv2-large-patch14-ensemble" \
 --image_url="http://images.cocodataset.org/val2017/000000039769.jpg"
 """
-
 import requests
 from PIL import Image
 import numpy as np
