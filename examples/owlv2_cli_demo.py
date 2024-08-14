@@ -2,7 +2,7 @@
 """
 python owlv2_cli_demo.py \
 --print_model \
---model_name_or_path="google/owlvit-large-patch14" \
+--model_name_or_path="google/owlv2-large-patch14-finetuned" \
 --image_url="http://images.cocodataset.org/val2017/000000039769.jpg"
 """
 import requests
