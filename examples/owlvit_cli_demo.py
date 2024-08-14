@@ -1,12 +1,9 @@
 # owlvit_cli_demo.py
 """
-export HF_ENDPOINT=https://hf-mirror.com
-python owlvit_cli_demo.py
-
 python owlvit_cli_demo.py \
+--print_model \
 --model_name_or_path="google/owlvit-large-patch14" \
---image_url="http://images.cocodataset.org/val2017/000000039769.jpg" \
---print_model
+--image_url="http://images.cocodataset.org/val2017/000000039769.jpg"
 """
 import requests
 from PIL import Image
