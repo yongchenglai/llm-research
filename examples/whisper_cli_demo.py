@@ -1,5 +1,8 @@
 # whisper_cli_demo.py
-# python whisper_cli_demo.py
+"""
+cd /home/xiaolai/meta-llama/
+python whisper_cli_demo.py
+"""
 import torch
 from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
 from transformers import BitsAndBytesConfig
@@ -40,7 +43,7 @@ if __name__ == "__main__":
         tokenizer=processor.tokenizer,
         feature_extractor=processor.feature_extractor,
         torch_dtype=torch_dtype,
-        device=device,
+        # device=device,
     )
 
     # dataset = load_dataset("distil-whisper/librispeech_long", "clean", split="validation")
