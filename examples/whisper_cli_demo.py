@@ -9,14 +9,17 @@ if __name__ == "__main__":
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
     torch_dtype = torch.float16 if torch.cuda.is_available() else torch.float32
 
-    model_id = "openai/whisper-large-v3"
+    model_path = "openai/whisper-large-v3"
 
     model = AutoModelForSpeechSeq2Seq.from_pretrained(
-        model_id, torch_dtype=torch_dtype, low_cpu_mem_usage=True, use_safetensors=True
+        model_path,
+        torch_dtype=torch_dtype,
+        low_cpu_mem_usage=True,
+        use_safetensors=True
     )
     model.to(device)
 
-    processor = AutoProcessor.from_pretrained(model_id)
+    processor = AutoProcessor.from_pretrained(model_path)
 
     pipe = pipeline(
         "automatic-speech-recognition",
@@ -27,10 +30,11 @@ if __name__ == "__main__":
         device=device,
     )
 
-    dataset = load_dataset("distil-whisper/librispeech_long", "clean", split="validation")
-    sample = dataset[0]["audio"]
+    # dataset = load_dataset("distil-whisper/librispeech_long", "clean", split="validation")
+    # sample = dataset[0]["audio"]
 
-    result = pipe(sample)
+    # result = pipe(sample)
+    result = pipe("./audio/es.mp3")
     print(result["text"])
 
 
