@@ -59,13 +59,9 @@ RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
     chmod 755 /opt/conda/lib/python3.10/site-packages/gradio/frpc_linux_amd64_v0.2
 
 WORKDIR /app
-#RUN openssl req -x509 -days 3650 -nodes -newkey rsa:4096  \
-#    -keyout ./key.pem -out ./cert.pem  -sha256
+
 RUN openssl req -x509 -days 3650 -nodes -newkey rsa  \
     -keyout ./key.pem -out ./cert.pem -subj "/CN=ChatTTS"
-
-COPY . /app/
-RUN chmod 775 /app/audio-audio-chatbot.py
 
 EXPOSE 7860
 
