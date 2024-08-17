@@ -31,28 +31,10 @@ RUN pip install --no-cache-dir  \
         datasets>=2.16.0 \
         torch==2.1.0 \
         torchaudio \
+        numpy  \
         # trl>=0.8.6 \
         gradio>=4.0.0 \
-        openai \
-        #jieba \
-        # matplotlib>=3.7.0 \
-        numpy  \
-        numba \
-
-        #tqdm \
-        #vector_quantize_pytorch \
-        #vocos  \
-        #IPython \
-        pybase16384 \
-        #pynini==2.1.5 \
-        #WeTextProcessing \
-        #nemo_text_processing \
-        # pynini==2.1.5; sys_platform == 'linux' \
-        # WeTextProcessing; sys_platform == 'linux' \
-        # nemo_text_processing; sys_platform == 'linux' \
-        av \
-        pydub
-
+        openai
 
 RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
     mv frpc_linux_amd64 frpc_linux_amd64_v0.2 && \
