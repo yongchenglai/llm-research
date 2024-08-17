@@ -1,6 +1,7 @@
 # whisper_cli_demo.py
 import torch
 from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
+from transformers import BitsAndBytesConfig
 from datasets import load_dataset
 
 
@@ -12,12 +13,23 @@ if __name__ == "__main__":
     model_path = "openai/whisper-large-v3"
 
     model = AutoModelForSpeechSeq2Seq.from_pretrained(
-        model_path,
+        pretrained_model_name_or_path=model_path,
+        device_map=device,
         torch_dtype=torch_dtype,
+        trust_remote_code=True,
+        use_safetensors=True,
+        attn_implementation="flash_attention_2",
+        quantization_config=BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_compute_dtype=torch_dtype,
+            llm_int8_skip_modules=["out_proj", "kv_proj", "lm_head"],
+        ),
         low_cpu_mem_usage=True,
-        use_safetensors=True
     )
-    model.to(device)
+    model.eval()
+    print(model)
 
     processor = AutoProcessor.from_pretrained(model_path)
 
