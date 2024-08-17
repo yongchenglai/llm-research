@@ -23,7 +23,7 @@ if __name__ == "__main__":
         trust_remote_code=True,
         use_safetensors=True,
         attn_implementation="flash_attention_2",
-        #quantization_config=BitsAndBytesConfig(
+        # quantization_config=BitsAndBytesConfig(
         #    load_in_4bit=True,
         #    bnb_4bit_quant_type="nf4",
         #    bnb_4bit_use_double_quant=True,
