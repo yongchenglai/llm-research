@@ -4,31 +4,33 @@ from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
 from datasets import load_dataset
 
 
-device = "cuda:0" if torch.cuda.is_available() else "cpu"
-torch_dtype = torch.float16 if torch.cuda.is_available() else torch.float32
+if __name__ == "__main__":
 
-model_id = "openai/whisper-large-v3"
+    device = "cuda:0" if torch.cuda.is_available() else "cpu"
+    torch_dtype = torch.float16 if torch.cuda.is_available() else torch.float32
 
-model = AutoModelForSpeechSeq2Seq.from_pretrained(
-    model_id, torch_dtype=torch_dtype, low_cpu_mem_usage=True, use_safetensors=True
-)
-model.to(device)
+    model_id = "openai/whisper-large-v3"
 
-processor = AutoProcessor.from_pretrained(model_id)
+    model = AutoModelForSpeechSeq2Seq.from_pretrained(
+        model_id, torch_dtype=torch_dtype, low_cpu_mem_usage=True, use_safetensors=True
+    )
+    model.to(device)
 
-pipe = pipeline(
-    "automatic-speech-recognition",
-    model=model,
-    tokenizer=processor.tokenizer,
-    feature_extractor=processor.feature_extractor,
-    torch_dtype=torch_dtype,
-    device=device,
-)
+    processor = AutoProcessor.from_pretrained(model_id)
 
-dataset = load_dataset("distil-whisper/librispeech_long", "clean", split="validation")
-sample = dataset[0]["audio"]
+    pipe = pipeline(
+        "automatic-speech-recognition",
+        model=model,
+        tokenizer=processor.tokenizer,
+        feature_extractor=processor.feature_extractor,
+        torch_dtype=torch_dtype,
+        device=device,
+    )
 
-result = pipe(sample)
-print(result["text"])
+    dataset = load_dataset("distil-whisper/librispeech_long", "clean", split="validation")
+    sample = dataset[0]["audio"]
+
+    result = pipe(sample)
+    print(result["text"])
 
 
