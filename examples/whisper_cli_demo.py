@@ -1,8 +1,9 @@
 # whisper_cli_demo.py
+# python whisper_cli_demo.py
 import torch
 from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
 from transformers import BitsAndBytesConfig
-from datasets import load_dataset
+# from datasets import load_dataset
 
 
 if __name__ == "__main__":
