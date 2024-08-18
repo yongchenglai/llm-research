@@ -101,12 +101,14 @@ with gr.Blocks(css=css) as block:
 
     inputs = [input_text, description]
     outputs = [audio_out]
+    
     gr.Examples(
         examples=examples,
         fn=gen_tts,
         inputs=inputs,
         outputs=outputs,
         cache_examples=True)
+
     run_button.click(
         fn=gen_tts,
         inputs=inputs,
