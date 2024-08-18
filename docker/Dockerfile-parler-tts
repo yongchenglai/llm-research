@@ -45,6 +45,8 @@ RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
     chmod 755 /opt/conda/lib/python3.10/site-packages/gradio/frpc_linux_amd64_v0.2
 
 WORKDIR /app
+# Inference and training library for high-quality TTS models.
+# pip install git+https://github.com/huggingface/parler-tts.git
 COPY ../model/parler_tts /app/parler_tts/
 # RUN chmod u+x /app/qwen_audio_web_gradio.py
 
