@@ -1,7 +1,7 @@
 # parler_tts_cli_demo.py
 """
 docker exec -it parler-tts bash
-python3 /app/parler_tts_cli_demo.py
+python3 parler_tts_cli_demo.py
 """
 import torch
 from parler_tts import ParlerTTSForConditionalGeneration
