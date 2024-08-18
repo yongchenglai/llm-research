@@ -6,8 +6,6 @@ import argparse
 from parler_tts import ParlerTTSForConditionalGeneration
 
 
-
-
 default_text = "Please surprise me and speak in whatever voice you enjoy."
 
 title = "# Parler-TTS </div>"
@@ -129,23 +127,34 @@ if __name__ == "__main__":
     parser.add_argument('--quant', type=int, choices=[4, 8], default=0,
                         help='Enable 4-bit or 8-bit precision loading')
     # parser.add_argument('--device', type=str, default='cuda', help='cuda or mps')
-    parser.add_argument('--device', type=str, default='cuda', help='cuda or mps')
-    parser.add_argument('--multi-gpus', action='store_true', default=False,
-                        help='use multi-gpus')
     parser.add_argument("--share", action="store_true", default=False,
                         help="Create a publicly shareable link for the interface.")
+    parser.add_argument("--inbrowser", action="store_true", default=False,
+                        help="Automatically launch the interface "
+                             "in a new tab on the default browser.")
     args = parser.parse_args()
 
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
     repo_id = "parler-tts/parler_tts_mini_v0.1"
 
-    model = ParlerTTSForConditionalGeneration.from_pretrained(repo_id).to(device)
-    tokenizer = AutoTokenizer.from_pretrained(repo_id)
-    feature_extractor = AutoFeatureExtractor.from_pretrained(repo_id)
+    model = ParlerTTSForConditionalGeneration.from_pretrained(args.model_name_or_path).to(device)
+    tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
+    feature_extractor = AutoFeatureExtractor.from_pretrained(args.model_name_or_path)
 
     SAMPLE_RATE = feature_extractor.sampling_rate
     SEED = 41
 
-    block.queue()
-    block.launch(share=True)
+    # block.queue()
+    # block.launch(share=True)
+    block.queue().launch(
+        share=args.share,
+        debug=True,
+        show_api=False,
+        inbrowser=args.inbrowser,
+        server_port=args.server_port,
+        server_name=args.server_name,
+        ssl_certfile="cert.pem",
+        ssl_keyfile="key.pem",
+        ssl_verify=False,
+    )
