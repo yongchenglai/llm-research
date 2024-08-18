@@ -1,0 +1,94 @@
+# Dockerfile-qwen2-audio
+FROM pytorch/pytorch:2.1.2-cuda12.1-cudnn8-devel
+#FROM nvidia/cuda:12.2.0-devel-ubuntu22.04
+
+# Install the timezone data package
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" \
+        apt-get install -y tzdata && \
+        rm -rf /var/lib/apt/lists/*
+
+# Set the timezone to Asia/Shanghai
+ENV TZ=Asia/Shanghai
+# Copy the local time file to the container
+RUN cp /usr/share/zoneinfo/$TZ /etc/localtime \
+        && echo $TZ > /etc/timezone
+
+#RUN apt-get install -y git tmux htop vim pip wget \
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" \
+    apt-get install -y git tmux htop vim git-lfs pip wget && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN pip install --no-cache-dir  \
+        -i https://pypi.tuna.tsinghua.edu.cn/simple  \
+        --trusted-host pypi.tuna.tsinghua.edu.cn \
+        bitsandbytes==0.42.0 \
+        transformers>=4.44.0 \
+        peft>=0.11.1  \
+        accelerate>=0.30.1  \
+        deepspeed==0.14.0 \
+        datasets>=2.16.0 \
+        trl>=0.8.6 \
+        gradio>=4.0.0 \
+        matplotlib>=3.7.0
+
+# RUN pip install git+https://github.com/huggingface/transformers.git
+
+#RUN pip install --no-cache-dir xformers==0.0.23 \
+#        --index-url https://download.pytorch.org/whl/cu121
+
+RUN pip install -U flash-attn --no-build-isolation --use-pep517
+
+RUN pip install --no-cache-dir  \
+        -i https://pypi.tuna.tsinghua.edu.cn/simple  \
+        --trusted-host pypi.tuna.tsinghua.edu.cn \
+        packaging==23.2 \
+        addict==2.4.0 \
+        editdistance==0.6.2 \
+        einops==0.7.0 \
+        fairscale==0.4.0 \
+        jsonlines==4.0.0 \
+        markdown2==2.4.10 \
+        more_itertools==10.1.0 \
+        nltk==3.8.1 \
+        numpy==1.24.4 \
+        #opencv_python_headless==4.5.5.64 \
+        #openpyxl==3.1.2 \
+        #Pillow==10.1.0 \
+        sacrebleu==2.3.2 \
+        seaborn==0.13.0 \
+        shortuuid==1.0.11 \
+        spacy==3.7.2 \
+        timm==0.9.10 \
+        torch==2.1.2 \
+        torchvision==0.16.2 \
+        tqdm==4.66.1 \
+        protobuf==4.25.0 \
+        typing_extensions==4.8.0 \
+        #uvicorn==0.24.0.post1 \
+        sentencepiece==0.1.99 \
+        socksio==1.0.0 \
+        #gradio==4.38.1 \
+        #gradio_client==1.1.0 \
+        #gradio==4.31.3 \
+        gradio \
+        gradio_client \
+        streamlit \
+        gguf \
+        GPUtil \
+        tiktoken \
+        transformers_stream_generator \
+        pydub \
+        modelscope_studio \
+        decord \
+        librosa
+
+WORKDIR /app
+EXPOSE 7860
+
+RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
+    mv frpc_linux_amd64 frpc_linux_amd64_v0.2 && \
+    mv frpc_linux_amd64_v0.2 /opt/conda/lib/python3.10/site-packages/gradio/ && \
+    chmod 755 /opt/conda/lib/python3.10/site-packages/gradio/frpc_linux_amd64_v0.2
+
+
+
