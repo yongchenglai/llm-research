@@ -51,7 +51,7 @@ WORKDIR /app
 # Inference and training library for high-quality TTS models.
 # RUN pip install git+https://github.com/huggingface/parler-tts.git
 #COPY ../model/parler_tts /app/parler_tts/
-COPY tts/parler_tts/* /app/parler_tts/
+COPY ../tts/parler_tts/* /app/parler_tts/
 RUN pip install /app/parler_tts
 
 COPY examples/parler_tts_cli_demo.py /app
