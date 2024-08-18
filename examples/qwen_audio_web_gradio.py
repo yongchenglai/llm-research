@@ -232,11 +232,10 @@ def _launch_demo(args, model, tokenizer):
             type="filepath")
 
         with gr.Row():
-            empty_bin = gr.Button("Clear History(清除历史)")
             submit_btn = gr.Button("Submit(发送)")
             regen_btn = gr.Button("Regenerate(重试)")
-            addfile_btn = gr.UploadButton("Upload(上传文件)",
-                                          file_types=["audio"])
+            empty_bin = gr.Button("Clear History(清除历史)")
+            addfile_btn = gr.UploadButton("Upload(上传文件)", file_types=["audio"])
 
         mic.change(
             fn=add_mic,
