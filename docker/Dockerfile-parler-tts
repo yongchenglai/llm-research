@@ -49,7 +49,7 @@ RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
 
 WORKDIR /app
 # Inference and training library for high-quality TTS models.
-RUN pip install git+https://github.com/huggingface/parler-tts.git
+# RUN pip install git+https://github.com/huggingface/parler-tts.git
 #COPY ../model/parler_tts /app/parler_tts/
 COPY examples/parler_tts_cli_demo.py /app
 RUN chmod u+x /app/parler_tts_cli_demo.py
