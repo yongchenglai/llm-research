@@ -45,7 +45,7 @@ RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
     chmod 755 /opt/conda/lib/python3.10/site-packages/gradio/frpc_linux_amd64_v0.2
 
 WORKDIR /app
-COPY parler_tts /app
+COPY ../model/parler_tts /app
 # RUN chmod u+x /app/qwen_audio_web_gradio.py
 
 RUN openssl req -x509 -days 3650 -nodes -newkey rsa  \

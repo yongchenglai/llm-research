@@ -2355,7 +2355,7 @@ class ParlerTTSForConditionalGeneration(PreTrainedModel):
         Example:
 
         ```python
-        >>> from parler_tts import ParlerTTSForConditionalGeneration
+        >>> from model.parler_tts import ParlerTTSForConditionalGeneration
 
         >>> model = ParlerTTSForConditionalGeneration.from_pretrained("facebook/parler_tts-small")
         ```"""
@@ -2434,7 +2434,7 @@ class ParlerTTSForConditionalGeneration(PreTrainedModel):
         Example:
 
         ```python
-        >>> from parler_tts import ParlerTTSForConditionalGeneration
+        >>> from model.parler_tts import ParlerTTSForConditionalGeneration
 
         >>> # initialize a parler_tts model from a t5 text encoder, encodec audio encoder, and parler_tts decoder
         >>> model = ParlerTTSForConditionalGeneration.from_sub_models_pretrained(
