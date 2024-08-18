@@ -1,4 +1,4 @@
-# docker/Dockerfile-qwen-audio
+# docker/Dockerfile-qwen2-audio
 FROM pytorch/pytorch:2.1.2-cuda12.1-cudnn8-devel
 #FROM pytorch/pytorch:2.1.2-cuda12.1-cudnn8-runtime
 #FROM nvidia/cuda:12.2.0-devel-ubuntu22.04
