@@ -22,7 +22,13 @@ class DACModel(PreTrainedModel):
         )
 
     def encode(
-        self, input_values, padding_mask=None, bandwidth=None, return_dict=None, n_quantizers=None, sample_rate=None
+        self,
+        input_values,
+        padding_mask=None,
+        bandwidth=None,
+        return_dict=None,
+        n_quantizers=None,
+        sample_rate=None
     ):
         """
         Encodes the input audio waveform into discrete codes.
