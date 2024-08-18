@@ -285,6 +285,9 @@ def _launch_demo(args, model, tokenizer):
         inbrowser=args.inbrowser,
         server_port=args.server_port,
         server_name=args.server_name,
+        ssl_certfile="cert.pem",
+        ssl_keyfile="key.pem",
+        ssl_verify=False,
         # file_directories=["/tmp/"]
     )
 
