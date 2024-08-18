@@ -26,6 +26,6 @@ if __name__ == "__main__":
 
     generation = model.generate(input_ids=input_ids, prompt_input_ids=prompt_input_ids)
     audio_arr = generation.cpu().numpy().squeeze()
-    sf.write("parler_tts_out.wav", audio_arr, model.config.sampling_rate)
+    sf.write("/models/parler_tts_out.wav", audio_arr, model.config.sampling_rate)
 
 
