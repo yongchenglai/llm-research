@@ -80,7 +80,8 @@ class DACModel(PreTrainedModel):
         step = chunk_length - stride
         if (input_length % stride) - step != 0:
             raise ValueError(
-                "The input length is not properly padded for batched chunked decoding. Make sure to pad the input correctly."
+                "The input length is not properly padded for batched chunked decoding. "
+                "Make sure to pad the input correctly."
             )
 
         for offset in range(0, input_length - step, stride):
@@ -110,8 +111,8 @@ class DACModel(PreTrainedModel):
         """
         Decodes the given frames into an output audio waveform.
 
-        Note that the output might be a bit bigger than the input. In that case, any extra steps at the end can be
-        trimmed.
+        Note that the output might be a bit bigger than the input.
+        In that case, any extra steps at the end can be trimmed.
 
         Args:
             audio_codes (`torch.FloatTensor`  of shape `(batch_size, nb_chunks, chunk_length)`, *optional*):
