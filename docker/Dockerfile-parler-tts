@@ -53,7 +53,3 @@ RUN openssl req -x509 -days 3650 -nodes -newkey rsa  \
 
 EXPOSE 7860
 
-
-
-
-
