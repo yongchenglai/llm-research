@@ -46,6 +46,12 @@ RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
     chmod 755 /opt/conda/lib/python3.10/site-packages/gradio/frpc_linux_amd64_v0.2
 
 WORKDIR /app
+# The code of Qwen2-Audio has been in the latest Hugging face transformers
+# and we advise you to build from source
+# RUN pip install git+https://github.com/huggingface/transformers
+COPY ../transformers-main-20240811 /app/transformers/
+RUN pip install /app/transformers
+
 COPY examples/qwen2_audio_web_gradio.py /app
 RUN chmod u+x /app/qwen2_audio_web_gradio.py
 
