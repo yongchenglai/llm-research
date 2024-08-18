@@ -37,7 +37,8 @@ RUN pip install --no-cache-dir  \
         tiktoken \
         transformers_stream_generator \
         pydub \
-        soundfile
+        soundfile \
+        dac
 
 RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
     mv frpc_linux_amd64 frpc_linux_amd64_v0.2 && \
