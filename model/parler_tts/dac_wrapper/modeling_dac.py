@@ -1,5 +1,5 @@
 import torch
-# from dac.model import DAC
+from dac.model import DAC
 from transformers import PreTrainedModel
 from transformers.models.encodec.modeling_encodec import EncodecDecoderOutput, EncodecEncoderOutput
 
