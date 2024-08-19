@@ -146,7 +146,7 @@ if __name__ == "__main__":
         trust_remote_code=True)
     model.to(device)
     print(model)
-    
+
     tokenizer = AutoTokenizer.from_pretrained(
         args.model_name_or_path,
         trust_remote_code=True)
