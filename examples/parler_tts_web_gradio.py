@@ -27,7 +27,7 @@ examples = [
 
 
 def gen_tts(text, description):
-    
+
     inputs = tokenizer(description, return_tensors="pt").to(device)
     prompt = tokenizer(text, return_tensors="pt").to(device)
 
@@ -142,10 +142,14 @@ if __name__ == "__main__":
     # repo_id = "parler-tts/parler-tts-large-v1"
 
     model = ParlerTTSForConditionalGeneration.from_pretrained(
-        args.model_name_or_path).to(device)
-
+        args.model_name_or_path,
+        trust_remote_code=True)
+    model.to(device)
+    print(model)
+    
     tokenizer = AutoTokenizer.from_pretrained(
-        args.model_name_or_path)
+        args.model_name_or_path,
+        trust_remote_code=True)
 
     feature_extractor = AutoFeatureExtractor.from_pretrained(
         args.model_name_or_path)
