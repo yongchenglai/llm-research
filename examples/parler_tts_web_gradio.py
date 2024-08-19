@@ -81,7 +81,7 @@ if __name__ == "__main__":
     parser.add_argument("--server_port", type=int, default=7860)
     parser.add_argument('--quant', type=int, choices=[4, 8], default=0,
                         help='Enable 4-bit or 8-bit precision loading')
-    # parser.add_argument('--device', type=str, default='cuda', help='cuda or mps')
+    parser.add_argument('--device', type=str, default='cuda', help='cuda or mps')
     parser.add_argument("--share", action="store_true", default=False,
                         help="Create a publicly shareable link for the interface.")
     parser.add_argument("--inbrowser", action="store_true", default=False,
@@ -89,8 +89,8 @@ if __name__ == "__main__":
                              "in a new tab on the default browser.")
     args = parser.parse_args()
 
-    device = "cuda:0" if torch.cuda.is_available() else "cpu"
-
+    # device = "cuda:0" if torch.cuda.is_available() else "cpu"
+    device = args.device
     tokenizer = AutoTokenizer.from_pretrained(
         args.model_name_or_path,
         trust_remote_code=True)
