@@ -101,45 +101,9 @@ if __name__ == "__main__":
     SAMPLE_RATE = feature_extractor.sampling_rate
     SEED = 41
 
-    if args.quant == 4:
-        model = ParlerTTSForConditionalGeneration.from_pretrained(
-            pretrained_model_name_or_path=args.model_name_or_path,
-            device_map=device,
-            trust_remote_code=True,
-            torch_dtype=args.torch_dtype,
-            attn_implementation="flash_attention_2",
-            quantization_config=BitsAndBytesConfig(
-                load_in_4bit=True,
-                bnb_4bit_quant_type="nf4",
-                bnb_4bit_use_double_quant=True,
-                bnb_4bit_compute_dtype=args.torch_dtype,
-                llm_int8_skip_modules=["out_proj", "kv_proj", "lm_head"],
-            ),
-            low_cpu_mem_usage=True,
-        )
-    elif args.quant == 8:
-        model = ParlerTTSForConditionalGeneration.from_pretrained(
-            pretrained_model_name_or_path=args.model_name_or_path,
-            device_map=device,
-            torch_dtype=args.torch_dtype,
-            trust_remote_code=True,
-            attn_implementation="flash_attention_2",
-            quantization_config=BitsAndBytesConfig(
-                load_in_8bit=True,
-                bnb_4bit_compute_dtype=args.torch_dtype,
-            ),
-            low_cpu_mem_usage=True
-        )
-    else:
-        model = ParlerTTSForConditionalGeneration.from_pretrained(
-            pretrained_model_name_or_path=args.model_name_or_path,
-            # device_map=device,
-            # torch_dtype=args.torch_dtype,
-            # trust_remote_code=True
-        )
-        model.to(device)
-
-    #model.eval()
+    model = ParlerTTSForConditionalGeneration.from_pretrained(
+            pretrained_model_name_or_path=args.model_name_or_path)
+    model.to(device)
     print(model)
 
     def gen_tts(text, description):
