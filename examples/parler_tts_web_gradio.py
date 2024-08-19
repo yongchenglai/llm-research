@@ -26,21 +26,7 @@ examples = [
 ]
 
 
-def gen_tts(text, description):
 
-    inputs = tokenizer(description, return_tensors="pt").to(device)
-    prompt = tokenizer(text, return_tensors="pt").to(device)
-
-    set_seed(SEED)
-    generation = model.generate(
-        input_ids=inputs.input_ids,
-        prompt_input_ids=prompt.input_ids,
-        do_sample=True,
-        temperature=1.0
-    )
-    audio_arr = generation.cpu().numpy().squeeze()
-
-    return (SAMPLE_RATE, audio_arr)
 
 
 css = """
@@ -81,42 +67,6 @@ css = """
 """
 
 
-with gr.Blocks(css=css) as demo:
-    gr.Markdown(title)
-    with gr.Row():
-        with gr.Column():
-            input_text = gr.Textbox(
-                label="Input Text",
-                lines=2,
-                value=default_text,
-                elem_id="input_text")
-            description = gr.Textbox(
-                label="Description", lines=2, value="",
-                elem_id="input_description")
-            run_button = gr.Button("Generate Audio", variant="primary")
-
-        with gr.Column():
-            audio_out = gr.Audio(
-                label="Parler-TTS generation", type="numpy",
-                elem_id="audio_out")
-
-    # inputs = [input_text, description]
-    # outputs = [audio_out]
-
-    gr.Examples(
-        examples=examples,
-        fn=gen_tts,
-        inputs=[input_text, description],
-        outputs=[audio_out],
-        cache_examples=True)
-
-    run_button.click(
-        fn=gen_tts,
-        inputs=[input_text, description],
-        outputs=[audio_out],
-        queue=True)
-
-
 if __name__ == "__main__":
 
     # Argparser
@@ -139,8 +89,6 @@ if __name__ == "__main__":
 
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
-    # repo_id = "parler-tts/parler-tts-large-v1"
-
     model = ParlerTTSForConditionalGeneration.from_pretrained(
         args.model_name_or_path,
         trust_remote_code=True)
@@ -156,6 +104,58 @@ if __name__ == "__main__":
 
     SAMPLE_RATE = feature_extractor.sampling_rate
     SEED = 41
+
+
+    def gen_tts(text, description):
+        inputs = tokenizer(description, return_tensors="pt").to(device)
+        prompt = tokenizer(text, return_tensors="pt").to(device)
+
+        set_seed(SEED)
+        generation = model.generate(
+            input_ids=inputs.input_ids,
+            prompt_input_ids=prompt.input_ids,
+            do_sample=True,
+            temperature=1.0
+        )
+        audio_arr = generation.cpu().numpy().squeeze()
+
+        return (SAMPLE_RATE, audio_arr)
+
+
+    with gr.Blocks(css=css) as demo:
+        gr.Markdown(title)
+        with gr.Row():
+            with gr.Column():
+                input_text = gr.Textbox(
+                    label="Input Text",
+                    lines=2,
+                    value=default_text,
+                    elem_id="input_text")
+                description = gr.Textbox(
+                    label="Description", lines=2, value="",
+                    elem_id="input_description")
+                run_button = gr.Button("Generate Audio", variant="primary")
+
+            with gr.Column():
+                audio_out = gr.Audio(
+                    label="Parler-TTS generation", type="numpy",
+                    elem_id="audio_out")
+
+        # inputs = [input_text, description]
+        # outputs = [audio_out]
+
+        gr.Examples(
+            examples=examples,
+            fn=gen_tts,
+            inputs=[input_text, description],
+            outputs=[audio_out],
+            cache_examples=True)
+
+        run_button.click(
+            fn=gen_tts,
+            inputs=[input_text, description],
+            outputs=[audio_out],
+            queue=True)
 
     # block.queue()
     # block.launch(share=True)
