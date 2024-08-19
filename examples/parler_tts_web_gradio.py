@@ -80,7 +80,7 @@ css = """
 """
 
 
-with gr.Blocks(css=css) as block:
+with gr.Blocks(css=css) as demo:
     gr.Markdown(title)
     with gr.Row():
         with gr.Column():
@@ -149,7 +149,7 @@ if __name__ == "__main__":
 
     # block.queue()
     # block.launch(share=True)
-    block.queue().launch(
+    demo.queue().launch(
         share=args.share,
         debug=True,
         show_api=False,
