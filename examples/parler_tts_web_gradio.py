@@ -104,9 +104,9 @@ if __name__ == "__main__":
     if args.quant == 4:
         model = ParlerTTSForConditionalGeneration.from_pretrained(
             pretrained_model_name_or_path=args.model_name_or_path,
-            # device_map=device,
-            # trust_remote_code=True,
-            # torch_dtype=args.torch_dtype,
+            device_map=device,
+            trust_remote_code=True,
+            torch_dtype=args.torch_dtype,
             attn_implementation="flash_attention_2",
             quantization_config=BitsAndBytesConfig(
                 load_in_4bit=True,
@@ -120,9 +120,9 @@ if __name__ == "__main__":
     elif args.quant == 8:
         model = ParlerTTSForConditionalGeneration.from_pretrained(
             pretrained_model_name_or_path=args.model_name_or_path,
-            # device_map=device,
-            # torch_dtype=args.torch_dtype,
-            # trust_remote_code=True,
+            device_map=device,
+            torch_dtype=args.torch_dtype,
+            trust_remote_code=True,
             attn_implementation="flash_attention_2",
             quantization_config=BitsAndBytesConfig(
                 load_in_8bit=True,
@@ -137,8 +137,8 @@ if __name__ == "__main__":
             # torch_dtype=args.torch_dtype,
             # trust_remote_code=True
         )
+        model.to(device)
 
-    model.to(device)
     #model.eval()
     print(model)
 
