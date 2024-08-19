@@ -99,14 +99,14 @@ with gr.Blocks(css=css) as demo:
                 label="Parler-TTS generation", type="numpy",
                 elem_id="audio_out")
 
-    inputs = [input_text, description]
-    outputs = [audio_out]
+    # inputs = [input_text, description]
+    # outputs = [audio_out]
 
     gr.Examples(
         examples=examples,
         fn=gen_tts,
-        inputs=inputs,
-        outputs=outputs,
+        inputs=[input_text, description],
+        outputs=[audio_out],
         cache_examples=True)
 
     run_button.click(
@@ -140,9 +140,14 @@ if __name__ == "__main__":
 
     # repo_id = "parler-tts/parler-tts-large-v1"
 
-    model = ParlerTTSForConditionalGeneration.from_pretrained(args.model_name_or_path).to(device)
-    tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
-    feature_extractor = AutoFeatureExtractor.from_pretrained(args.model_name_or_path)
+    model = ParlerTTSForConditionalGeneration.from_pretrained(
+        args.model_name_or_path).to(device)
+
+    tokenizer = AutoTokenizer.from_pretrained(
+        args.model_name_or_path)
+
+    feature_extractor = AutoFeatureExtractor.from_pretrained(
+        args.model_name_or_path)
 
     SAMPLE_RATE = feature_extractor.sampling_rate
     SEED = 41
