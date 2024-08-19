@@ -111,8 +111,8 @@ with gr.Blocks(css=css) as demo:
 
     run_button.click(
         fn=gen_tts,
-        inputs=inputs,
-        outputs=outputs,
+        inputs=[input_text, description],
+        outputs=[audio_out],
         queue=True)
 
 
