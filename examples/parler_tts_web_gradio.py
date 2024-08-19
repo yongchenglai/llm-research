@@ -104,7 +104,7 @@ if __name__ == "__main__":
     if args.quant == 4:
         model = ParlerTTSForConditionalGeneration.from_pretrained(
             pretrained_model_name_or_path=args.model_name_or_path,
-            device_map=device,
+            # device_map=device,
             trust_remote_code=True,
             torch_dtype=args.torch_dtype,
             attn_implementation="flash_attention_2",
@@ -117,10 +117,11 @@ if __name__ == "__main__":
             ),
             low_cpu_mem_usage=True,
         )
+        model.to(device)
     elif args.quant == 8:
         model = ParlerTTSForConditionalGeneration.from_pretrained(
             pretrained_model_name_or_path=args.model_name_or_path,
-            device_map=device,
+            # device_map=device,
             torch_dtype=args.torch_dtype,
             trust_remote_code=True,
             attn_implementation="flash_attention_2",
@@ -130,6 +131,7 @@ if __name__ == "__main__":
             ),
             low_cpu_mem_usage=True
         )
+        model.to(device)
     else:
         model = ParlerTTSForConditionalGeneration.from_pretrained(
             pretrained_model_name_or_path=args.model_name_or_path,
