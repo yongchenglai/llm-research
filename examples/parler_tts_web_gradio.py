@@ -133,10 +133,11 @@ if __name__ == "__main__":
     else:
         model = ParlerTTSForConditionalGeneration.from_pretrained(
             pretrained_model_name_or_path=args.model_name_or_path,
-            device_map=device,
+            # device_map=device,
             # torch_dtype=args.torch_dtype,
             # trust_remote_code=True
         )
+        model.to(device)
 
     #model.eval()
     print(model)
