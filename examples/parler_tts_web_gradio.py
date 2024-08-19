@@ -1,9 +1,9 @@
 # parler_tts_web_gradio.py
 import gradio as gr
 import torch
+from parler_tts import ParlerTTSForConditionalGeneration
 from transformers import AutoFeatureExtractor, AutoTokenizer, set_seed
 import argparse
-from parler_tts import ParlerTTSForConditionalGeneration
 
 
 default_text = "Please surprise me and speak in whatever voice you enjoy."
