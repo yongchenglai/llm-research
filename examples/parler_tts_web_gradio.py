@@ -101,7 +101,7 @@ with gr.Blocks(css=css) as block:
 
     inputs = [input_text, description]
     outputs = [audio_out]
-    
+
     gr.Examples(
         examples=examples,
         fn=gen_tts,
@@ -121,7 +121,7 @@ if __name__ == "__main__":
     # Argparser
     parser = argparse.ArgumentParser(description='demo')
     parser.add_argument("--model_name_or_path", type=str,
-                        default="openbmb/MiniCPM-V-2_6")
+                        default="parler-tts/parler-tts-large-v1")
     parser.add_argument("--torch_dtype", type=str, default="bfloat16",
                         choices=["float32", "bfloat16", "float16"])
     parser.add_argument("--server_name", type=str, default="0.0.0.0")
@@ -138,7 +138,7 @@ if __name__ == "__main__":
 
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
-    repo_id = "parler-tts/parler_tts_mini_v0.1"
+    # repo_id = "parler-tts/parler-tts-large-v1"
 
     model = ParlerTTSForConditionalGeneration.from_pretrained(args.model_name_or_path).to(device)
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
