@@ -105,7 +105,6 @@ if __name__ == "__main__":
     SAMPLE_RATE = feature_extractor.sampling_rate
     SEED = 41
 
-
     def gen_tts(text, description):
         inputs = tokenizer(description, return_tensors="pt").to(device)
         prompt = tokenizer(text, return_tensors="pt").to(device)
