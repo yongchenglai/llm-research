@@ -696,5 +696,8 @@ if __name__ == "__main__":
         show_api=False,
         server_port=args.server_port,
         server_name=args.server_name,
+        ssl_certfile="cert.pem",
+        ssl_keyfile="key.pem",
+        ssl_verify=False,
     )
 
