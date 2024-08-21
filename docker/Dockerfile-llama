@@ -67,11 +67,10 @@ RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
     chmod 755 /opt/conda/lib/python3.10/site-packages/gradio/frpc_linux_amd64_v0.2
 
 #设置工作目录
-WORKDIR /workspace
+WORKDIR /app
 
-COPY examples/llama_chat_gradio.py /workspace
-RUN chmod u+x /workspace/llama_chat_gradio.py
-
+COPY examples/llama_chat_gradio.py /app
+RUN chmod u+x /app/llama_chat_gradio.py
 
 #开启7860端口
 EXPOSE 7860
