@@ -32,6 +32,7 @@ RUN pip install --no-cache-dir \
     pytest \
     peft==0.10.0 \
     transformers==4.43.3 \
+    transformers_stream_generator \
     deepspeed==0.14.0 \
     scikit-learn \
     torch==2.1.2 \
@@ -70,12 +71,8 @@ RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
 WORKDIR /workspace
 
 COPY examples/llama_chat_gradio.py /workspace
-COPY examples/chatglm_chat_gradio.py /workspace
-COPY examples/chatglm3_chat_gradio.py /workspace
-
 RUN chmod u+x /workspace/llama_chat_gradio.py
-RUN chmod u+x /workspace/chatglm_chat_gradio.py
-RUN chmod u+x /workspace/chatglm3_chat_gradio.py
+
 
 #开启7860端口
 EXPOSE 7860
