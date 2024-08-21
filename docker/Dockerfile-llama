@@ -17,6 +17,9 @@ RUN apt-get update && DEBIAN_FRONTEND="noninteractive" \
     apt-get install -y git tmux htop vim git-lfs pip wget && \
     rm -rf /var/lib/apt/lists/*
 
+# RUN pip install --no-cache-dir flash_attn --no-build-isolation
+RUN pip install flash-attn --no-build-isolation --use-pep517
+
 RUN pip install --no-cache-dir \
     -i https://pypi.tuna.tsinghua.edu.cn/simple \
     --trusted-host pypi.tuna.tsinghua.edu.cn \
@@ -56,10 +59,6 @@ RUN pip install --no-cache-dir \
     chainlit \
     autoawq autoawq-kernels \
     auto_gptq optimum
-
-
-# RUN pip install --no-cache-dir flash_attn --no-build-isolation
-RUN pip install flash-attn --no-build-isolation --use-pep517
 
 
 RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
