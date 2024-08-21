@@ -12,12 +12,10 @@ ENV TZ=Asia/Shanghai
 RUN cp /usr/share/zoneinfo/$TZ /etc/localtime \
         && echo $TZ > /etc/timezone
 
-
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" \
     apt-get install -y git tmux htop vim git-lfs pip wget && \
     rm -rf /var/lib/apt/lists/*
 
-# RUN pip install --no-cache-dir flash_attn --no-build-isolation
 RUN pip install flash-attn --no-build-isolation --use-pep517
 
 RUN pip install --no-cache-dir \
