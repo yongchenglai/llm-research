@@ -131,11 +131,13 @@ if __name__ == "__main__":
                     lines=2,
                     value=default_text,
                     elem_id="input_text")
+
                 description = gr.Textbox(
                     label="Description",
                     lines=2,
                     value=default_description,
                     elem_id="input_description")
+
                 run_button = gr.Button("Generate Audio", variant="primary")
 
             with gr.Column():
@@ -143,13 +145,14 @@ if __name__ == "__main__":
                     label="Parler-TTS generation",
                     type="numpy",
                     elem_id="audio_out")
-
+        """
         gr.Examples(
             examples=examples,
             fn=gen_tts,
             inputs=[input_text, description],
             outputs=[audio_out],
             cache_examples=True)
+        """
 
         run_button.click(
             fn=gen_tts,
