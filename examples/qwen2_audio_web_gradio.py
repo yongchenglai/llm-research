@@ -72,8 +72,10 @@ def regenerate(chatbot, task_history):
     if task_history and task_history[-1]['role'] == 'assistant':
         task_history.pop()
         chatbot.pop()
+
     if task_history:
         chatbot, task_history = predict(chatbot, task_history)
+        
     return chatbot, task_history
 
 
@@ -116,7 +118,7 @@ def predict(chatbot, task_history):
         skip_special_tokens=True,
         clean_up_tokenization_spaces=False)[0]
     print(f"{response=}")
-    
+
     task_history.append({'role': 'assistant', 'content': response})
     chatbot.append((None, response))  # Add the response to chatbot
 
