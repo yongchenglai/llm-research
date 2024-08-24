@@ -109,8 +109,7 @@ def predict(chatbot, task_history):
         skip_special_tokens=True,
         clean_up_tokenization_spaces=False)[0]
     print(f"{response=}")
-    task_history.append({'role': 'assistant',
-                         'content': response})
+    task_history.append({'role': 'assistant', 'content': response})
     chatbot.append((None, response))  # Add the response to chatbot
 
     return chatbot, task_history
@@ -126,9 +125,8 @@ def _launch_demo(args):
         user_input = mgr.MultimodalInput(
             interactive=True,
             sources=['microphone', 'upload'],
-            submit_button_props=dict(value="🚀 Submit (发送)"),
-            upload_button_props=dict(value="📁 Upload (上传文件)",
-                                     show_progress=True),
+            submit_button_props=dict(value="Submit"),
+            upload_button_props=dict(value="Upload", show_progress=True),
         )
         task_history = gr.State([])
 
