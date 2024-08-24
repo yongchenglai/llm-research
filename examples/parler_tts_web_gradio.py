@@ -9,8 +9,6 @@ import argparse
 
 default_text = "Please surprise me and speak in whatever voice you enjoy."
 
-title = "# Parler-TTS </div>"
-
 examples = [
     [
         "Hey, how are you doing today?",
@@ -124,7 +122,7 @@ if __name__ == "__main__":
 
 
     with gr.Blocks(css=css) as demo:
-        gr.Markdown(title)
+        # gr.Markdown("# Parler-TTS </div>")
         with gr.Row():
             with gr.Column():
                 input_text = gr.Textbox(
