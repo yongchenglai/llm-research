@@ -142,9 +142,6 @@ if __name__ == "__main__":
                     label="Parler-TTS generation", type="numpy",
                     elem_id="audio_out")
 
-        # inputs = [input_text, description]
-        # outputs = [audio_out]
-
         gr.Examples(
             examples=examples,
             fn=gen_tts,
