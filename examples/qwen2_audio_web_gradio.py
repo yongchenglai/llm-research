@@ -81,6 +81,7 @@ def predict(chatbot, task_history):
     """Generate a response from the model."""
     print(f"{task_history=}")
     print(f"{chatbot=}")
+    
     text = processor.apply_chat_template(
         conversation=task_history,
         add_generation_prompt=True,
