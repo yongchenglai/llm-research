@@ -14,17 +14,17 @@ if __name__ == "__main__":
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
     model_name = "/models/parler-tts/parler-tts-large-v1"
 
-    model = ParlerTTSForConditionalGeneration.from_pretrained(model_name).to(device)
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    print(model)
+    tts_model = ParlerTTSForConditionalGeneration.from_pretrained(model_name).to(device)
+    tts_tokenizer = AutoTokenizer.from_pretrained(model_name)
+    print(tts_model)
 
     prompt = "Hey, how are you doing today?"
     description = "A female speaker delivers a slightly expressive and animated speech with a moderate speed and pitch. The recording is of very high quality, with the speaker's voice sounding clear and very close up."
 
-    input_ids = tokenizer(description, return_tensors="pt").input_ids.to(device)
-    prompt_input_ids = tokenizer(prompt, return_tensors="pt").input_ids.to(device)
+    input_ids = tts_tokenizer(description, return_tensors="pt").input_ids.to(device)
+    prompt_input_ids = tts_tokenizer(prompt, return_tensors="pt").input_ids.to(device)
 
-    generation = model.generate(input_ids=input_ids, prompt_input_ids=prompt_input_ids)
+    generation = tts_model.generate(input_ids=input_ids, prompt_input_ids=prompt_input_ids)
     audio_arr = generation.cpu().numpy().squeeze()
     sf.write("/models/parler_tts_out.wav", audio_arr, model.config.sampling_rate)
 
