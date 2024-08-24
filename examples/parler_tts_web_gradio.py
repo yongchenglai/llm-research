@@ -145,7 +145,8 @@ if __name__ == "__main__":
                 audio_out = gr.Audio(
                     label="Parler-TTS generation",
                     type="numpy",
-                    elem_id="audio_out")
+                    elem_id="audio_out",
+                    autoplay=True)
         """
         gr.Examples(
             examples=examples,
