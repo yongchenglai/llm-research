@@ -140,7 +140,8 @@ if __name__ == "__main__":
 
             with gr.Column():
                 audio_out = gr.Audio(
-                    label="Parler-TTS generation", type="numpy",
+                    label="Parler-TTS generation",
+                    type="numpy",
                     elem_id="audio_out")
 
         gr.Examples(
