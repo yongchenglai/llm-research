@@ -2,8 +2,8 @@
 import gradio as gr
 import modelscope_studio as mgr
 import librosa
-from transformers import AutoProcessor, Qwen2AudioForConditionalGeneration, BitsAndBytesConfig
-# from transformers import AutoModel, AutoProcessor, BitsAndBytesConfig
+from transformers import AutoProcessor, Qwen2AudioForConditionalGeneration
+from transformers import AutoModel, AutoProcessor, BitsAndBytesConfig
 import argparse
 
 
