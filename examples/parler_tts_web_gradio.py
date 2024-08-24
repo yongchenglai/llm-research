@@ -8,6 +8,7 @@ import argparse
 
 
 default_text = "Please surprise me and speak in whatever voice you enjoy."
+default_description = "A female speaker delivers a slightly expressive and animated speech with a moderate speed and pitch. The recording is of very high quality, with the speaker's voice sounding clear and very close up."
 
 examples = [
     [
@@ -131,7 +132,9 @@ if __name__ == "__main__":
                     value=default_text,
                     elem_id="input_text")
                 description = gr.Textbox(
-                    label="Description", lines=2, value="",
+                    label="Description",
+                    lines=2,
+                    value=default_description,
                     elem_id="input_description")
                 run_button = gr.Button("Generate Audio", variant="primary")
 
