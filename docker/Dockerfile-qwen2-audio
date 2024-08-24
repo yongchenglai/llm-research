@@ -49,8 +49,8 @@ WORKDIR /app
 # The code of Qwen2-Audio has been in the latest Hugging face transformers
 # and we advise you to build from source
 # RUN pip install git+https://github.com/huggingface/transformers
-COPY ../transformers-main-20240811 /app/transformers/
-RUN pip install /app/transformers
+#COPY ../transformers-main-20240811 /app/transformers/
+#RUN pip install /app/transformers
 
 COPY examples/qwen2_audio_web_gradio.py /app
 RUN chmod u+x /app/qwen2_audio_web_gradio.py
