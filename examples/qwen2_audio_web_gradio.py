@@ -24,7 +24,7 @@ def _get_args():
     parser.add_argument("--share", action="store_true", default=False,
                         help="Create a publicly shareable link for the interface.")
     parser.add_argument("--cpu-only", action="store_true", help="Run demo with CPU only")
-    parser.add_argument("--inbrowser", action="store_true", default=False,
+    parser.add_argument("--inbrowser", action="store_true", default=True,
                         help="Automatically launch the interface "
                              "in a new tab on the default browser.")
 
