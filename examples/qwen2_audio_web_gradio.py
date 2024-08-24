@@ -116,6 +116,7 @@ def predict(chatbot, task_history):
         skip_special_tokens=True,
         clean_up_tokenization_spaces=False)[0]
     print(f"{response=}")
+    
     task_history.append({'role': 'assistant', 'content': response})
     chatbot.append((None, response))  # Add the response to chatbot
 
