@@ -103,7 +103,7 @@ def predict(chatbot, task_history):
         audios=audios,
         return_tensors="pt",
         padding=True)
-    
+
     if not _get_args().cpu_only:
         inputs["input_ids"] = inputs.input_ids.to("cuda")
 
