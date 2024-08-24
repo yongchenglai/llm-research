@@ -75,7 +75,7 @@ def regenerate(chatbot, task_history):
 
     if task_history:
         chatbot, task_history = predict(chatbot, task_history)
-        
+
     return chatbot, task_history
 
 
@@ -149,9 +149,9 @@ def _launch_demo(args):
             inputs=[chatbot, task_history, user_input],
             outputs=[chatbot, task_history, user_input]
         ).then(
-            predict,
-            [chatbot, task_history],
-            [chatbot, task_history],
+            fn=predict,
+            inputs=[chatbot, task_history],
+            outputs=[chatbot, task_history],
             show_progress=True
         )
 
