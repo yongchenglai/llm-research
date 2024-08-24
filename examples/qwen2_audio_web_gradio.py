@@ -155,14 +155,16 @@ def _launch_demo(args):
             show_progress=True
         )
 
-        empty_bin.click(fn=reset_state,
-                        outputs=[chatbot, task_history],
-                        show_progress=True)
+        empty_bin.click(
+            fn=reset_state,
+            outputs=[chatbot, task_history],
+            show_progress=True)
 
-        regen_btn.click(fn=regenerate,
-                        inputs=[chatbot, task_history],
-                        outputs=[chatbot, task_history],
-                        show_progress=True)
+        regen_btn.click(
+            fn=regenerate,
+            inputs=[chatbot, task_history],
+            outputs=[chatbot, task_history],
+            show_progress=True)
 
     demo.queue().launch(
         share=args.share,
