@@ -141,7 +141,8 @@ if __name__ == "__main__":
 
                 run_button = gr.Button(
                     value="Generate Audio",
-                    variant="primary")
+                    variant="primary",
+                    visible=True)
 
             with gr.Column():
                 audio_out = gr.Audio(
