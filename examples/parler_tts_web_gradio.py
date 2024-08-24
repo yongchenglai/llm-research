@@ -139,7 +139,9 @@ if __name__ == "__main__":
                     value=default_description,
                     elem_id="input_description")
 
-                run_button = gr.Button("Generate Audio", variant="primary")
+                run_button = gr.Button(
+                    value="Generate Audio",
+                    variant="primary")
 
             with gr.Column():
                 audio_out = gr.Audio(
