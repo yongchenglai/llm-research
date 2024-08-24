@@ -192,7 +192,7 @@ if __name__ == "__main__":
             device_map=device_map,
             trust_remote_code=True,
             torch_dtype=args.torch_dtype,
-            attn_implementation="flash_attention_2",
+            # attn_implementation="flash_attention_2",
             quantization_config=BitsAndBytesConfig(
                 load_in_4bit=True,
                 bnb_4bit_quant_type="nf4",
@@ -208,7 +208,7 @@ if __name__ == "__main__":
             device_map=device_map,
             torch_dtype=args.torch_dtype,
             trust_remote_code=True,
-            attn_implementation="flash_attention_2",
+            # attn_implementation="flash_attention_2",
             quantization_config=BitsAndBytesConfig(
                 load_in_8bit=True,
                 bnb_4bit_compute_dtype=args.torch_dtype,
