@@ -129,7 +129,7 @@ if __name__ == "__main__":
             with gr.Column():
                 input_text = gr.Textbox(
                     label="Input Text",
-                    lines=2,
+                    lines=6,
                     value=default_text,
                     elem_id="input_text")
 
