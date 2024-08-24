@@ -82,7 +82,7 @@ def predict(chatbot, task_history):
     print(f"{task_history=}")
     print(f"{chatbot=}")
     text = processor.apply_chat_template(
-        messages=task_history,
+        conversation=task_history,
         add_generation_prompt=True,
         tokenize=False)
 
