@@ -6,6 +6,7 @@
     "AutoConfig": "configuration_qwen2_audio.Qwen2AudioConfig",
     "Qwen2AudioEncoderConfig": "configuration_qwen2_audio.Qwen2AudioEncoderConfig",
     "AutoModel": "modeling_qwen2_audio.Qwen2AudioForConditionalGeneration",
+    "Qwen2AudioForConditionalGeneration": "modeling_qwen2_audio.Qwen2AudioForConditionalGeneration",
     "AutoModelForCausalLM": "modeling_qwen2_audio.Qwen2AudioForConditionalGeneration"
   },
   "audio_config": {
