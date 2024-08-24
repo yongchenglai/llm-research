@@ -121,7 +121,7 @@ def _launch_demo(args):
         # gr.Markdown("""<center><font size=8>Qwen2-Audio-Instruct Bot</center>""")
         chatbot = mgr.Chatbot(label='Qwen2-Audio-7B-Instruct',
                               elem_classes="control-height",
-                              height=750)
+                              height=450)
 
         user_input = mgr.MultimodalInput(
             interactive=True,
