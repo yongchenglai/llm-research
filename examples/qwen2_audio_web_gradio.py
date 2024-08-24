@@ -89,10 +89,10 @@ def predict(chatbot, task_history):
     audios = []
     for message in task_history:
         if isinstance(message["content"], list):
-            for ele in message["content"]:
-                if ele["type"] == "audio":
+            for element in message["content"]:
+                if element["type"] == "audio":
                     audios.append(librosa.load(
-                        ele['audio_url'],
+                        element['audio_url'],
                         sr=processor.feature_extractor.sampling_rate)[0]
                     )
 
@@ -105,8 +105,9 @@ def predict(chatbot, task_history):
     generate_ids = model.generate(**inputs, max_length=256)
     generate_ids = generate_ids[:, inputs.input_ids.size(1):]
 
+    # Convert a list of lists of token ids into a list of strings by calling decode.
     response = processor.batch_decode(
-        generate_ids,
+        sequences=generate_ids,
         skip_special_tokens=True,
         clean_up_tokenization_spaces=False)[0]
     print(f"{response=}")
