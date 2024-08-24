@@ -85,7 +85,7 @@ def predict(chatbot, task_history):
         task_history,
         add_generation_prompt=True,
         tokenize=False)
-    
+
     audios = []
     for message in task_history:
         if isinstance(message["content"], list):
