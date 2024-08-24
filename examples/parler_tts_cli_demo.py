@@ -24,6 +24,7 @@ if __name__ == "__main__":
     tts_input_ids = tts_tokenizer(
         description,
         return_tensors="pt").input_ids.to(device)
+    
     tts_prompt_input_ids = tts_tokenizer(
         prompt,
         return_tensors="pt").input_ids.to(device)
@@ -31,6 +32,7 @@ if __name__ == "__main__":
     tts_generation = tts_model.generate(
         input_ids=tts_input_ids,
         prompt_input_ids=tts_prompt_input_ids)
+
     audio_arr = tts_generation.cpu().numpy().squeeze()
     sf.write("/models/parler_tts_out.wav",
              audio_arr,
