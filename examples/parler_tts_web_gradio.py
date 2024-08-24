@@ -122,6 +122,7 @@ if __name__ == "__main__":
         return (SAMPLE_RATE, audio_arr)
 
 
+    # with gr.Blocks(css=css) as demo:
     with gr.Blocks(css=css) as demo:
         # gr.Markdown("# Parler-TTS </div>")
         with gr.Row():
