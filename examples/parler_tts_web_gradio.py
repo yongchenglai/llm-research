@@ -158,8 +158,6 @@ if __name__ == "__main__":
             outputs=[audio_out],
             queue=True)
 
-    # block.queue()
-    # block.launch(share=True)
     demo.queue().launch(
         share=args.share,
         debug=True,
