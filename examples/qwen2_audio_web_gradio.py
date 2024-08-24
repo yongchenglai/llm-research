@@ -81,7 +81,7 @@ def predict(chatbot, task_history):
     """Generate a response from the model."""
     print(f"{task_history=}")
     print(f"{chatbot=}")
-    
+
     text = processor.apply_chat_template(
         conversation=task_history,
         add_generation_prompt=True,
@@ -98,8 +98,12 @@ def predict(chatbot, task_history):
                     )
 
     print(f"{text=}")
-    inputs = processor(text=text, audios=audios,
-                       return_tensors="pt", padding=True)
+    inputs = processor(
+        text=text,
+        audios=audios,
+        return_tensors="pt",
+        padding=True)
+    
     if not _get_args().cpu_only:
         inputs["input_ids"] = inputs.input_ids.to("cuda")
 
