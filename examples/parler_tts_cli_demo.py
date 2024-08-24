@@ -21,17 +21,19 @@ if __name__ == "__main__":
     prompt = "Hey, how are you doing today?"
     description = "A female speaker delivers a slightly expressive and animated speech with a moderate speed and pitch. The recording is of very high quality, with the speaker's voice sounding clear and very close up."
 
-    input_ids = tts_tokenizer(
+    tts_input_ids = tts_tokenizer(
         description,
         return_tensors="pt").input_ids.to(device)
-    prompt_input_ids = tts_tokenizer(
+    tts_prompt_input_ids = tts_tokenizer(
         prompt,
         return_tensors="pt").input_ids.to(device)
 
-    generation = tts_model.generate(
-        input_ids=input_ids,
-        prompt_input_ids=prompt_input_ids)
-    audio_arr = generation.cpu().numpy().squeeze()
-    sf.write("/models/parler_tts_out.wav", audio_arr, tts_model.config.sampling_rate)
+    tts_generation = tts_model.generate(
+        input_ids=tts_input_ids,
+        prompt_input_ids=tts_prompt_input_ids)
+    audio_arr = tts_generation.cpu().numpy().squeeze()
+    sf.write("/models/parler_tts_out.wav",
+             audio_arr,
+             tts_model.config.sampling_rate)
 
 
