@@ -24,7 +24,7 @@ if __name__ == "__main__":
     tts_input_ids = tts_tokenizer(
         description,
         return_tensors="pt").input_ids.to(device)
-    
+
     tts_prompt_input_ids = tts_tokenizer(
         prompt,
         return_tensors="pt").input_ids.to(device)
