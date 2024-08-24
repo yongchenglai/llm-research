@@ -120,7 +120,7 @@ def _launch_demo(args):
         # gr.Markdown("""<center><font size=8>Qwen2-Audio-Instruct Bot</center>""")
         chatbot = mgr.Chatbot(label='Qwen2-Audio-7B-Instruct',
                               elem_classes="control-height",
-                              height=450)
+                              height=400)
 
         user_input = mgr.MultimodalInput(
             interactive=True,
@@ -131,8 +131,8 @@ def _launch_demo(args):
         task_history = gr.State([])
 
         with gr.Row():
-            empty_bin = gr.Button("🧹 Clear History (清除历史)")
-            regen_btn = gr.Button("🤔️ Regenerate (重试)")
+            empty_bin = gr.Button("Clear History")
+            regen_btn = gr.Button("Regenerate")
 
         user_input.submit(
             fn=add_text,
