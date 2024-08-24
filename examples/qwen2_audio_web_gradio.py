@@ -112,6 +112,7 @@ def predict(chatbot, task_history):
     task_history.append({'role': 'assistant',
                          'content': response})
     chatbot.append((None, response))  # Add the response to chatbot
+    
     return chatbot, task_history
 
 
