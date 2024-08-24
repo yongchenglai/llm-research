@@ -2,8 +2,8 @@
 import gradio as gr
 import modelscope_studio as mgr
 import librosa
-# from transformers import AutoProcessor, Qwen2AudioForConditionalGeneration
-from transformers import AutoModel, AutoProcessor, BitsAndBytesConfig
+from transformers import AutoProcessor, Qwen2AudioForConditionalGeneration, BitsAndBytesConfig
+# from transformers import AutoModel, AutoProcessor, BitsAndBytesConfig
 import argparse
 
 
@@ -112,7 +112,7 @@ def predict(chatbot, task_history):
     task_history.append({'role': 'assistant',
                          'content': response})
     chatbot.append((None, response))  # Add the response to chatbot
-    
+
     return chatbot, task_history
 
 
@@ -187,7 +187,7 @@ if __name__ == "__main__":
     """
 
     if args.quant == 4:
-        model = AutoModel.from_pretrained(
+        model = Qwen2AudioForConditionalGeneration.from_pretrained(
             pretrained_model_name_or_path=args.model_name_or_path,
             device_map=device_map,
             trust_remote_code=True,
@@ -203,7 +203,7 @@ if __name__ == "__main__":
             low_cpu_mem_usage=True,
         )
     elif args.quant == 8:
-        model = AutoModel.from_pretrained(
+        model = Qwen2AudioForConditionalGeneration.from_pretrained(
             pretrained_model_name_or_path=args.model_name_or_path,
             device_map=device_map,
             torch_dtype=args.torch_dtype,
@@ -216,7 +216,7 @@ if __name__ == "__main__":
             low_cpu_mem_usage=True
         )
     else:
-        model = AutoModel.from_pretrained(
+        model = Qwen2AudioForConditionalGeneration.from_pretrained(
             pretrained_model_name_or_path=args.model_name_or_path,
             device_map=device_map,
             torch_dtype=args.torch_dtype,
