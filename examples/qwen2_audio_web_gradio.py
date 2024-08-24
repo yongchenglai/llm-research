@@ -118,7 +118,7 @@ def predict(chatbot, task_history):
 
 def _launch_demo(args):
     with gr.Blocks() as demo:
-        gr.Markdown("""<center><font size=8>Qwen2-Audio-Instruct Bot</center>""")
+        # gr.Markdown("""<center><font size=8>Qwen2-Audio-Instruct Bot</center>""")
         chatbot = mgr.Chatbot(label='Qwen2-Audio-7B-Instruct',
                               elem_classes="control-height",
                               height=750)
