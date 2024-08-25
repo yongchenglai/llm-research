@@ -127,7 +127,7 @@ if __name__ == "__main__":
         )
         audio_arr = generation.cpu().numpy().squeeze()
 
-        return (SAMPLE_RATE, audio_arr)
+        return (SAMPLE_RATE, float_to_int16(audio_arr).T)
 
 
     # with gr.Blocks(css=css) as demo:
