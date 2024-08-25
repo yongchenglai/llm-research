@@ -1,6 +1,7 @@
 # parler_tts_web_gradio.py
 import gradio as gr
 import math
+import numpy as np
 import torch
 from parler_tts import ParlerTTSForConditionalGeneration
 from transformers import AutoFeatureExtractor, AutoTokenizer, set_seed
