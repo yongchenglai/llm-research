@@ -95,7 +95,7 @@ def predict(chatbot, task_history):
             for element in message["content"]:
                 if element["type"] == "audio":
                     audios.append(librosa.load(
-                        element['audio_url'],
+                        path=element['audio_url'],
                         sr=processor.feature_extractor.sampling_rate)[0]
                     )
 
