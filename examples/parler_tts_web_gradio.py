@@ -123,7 +123,7 @@ if __name__ == "__main__":
             input_ids=inputs.input_ids,
             prompt_input_ids=prompt.input_ids,
             do_sample=True,
-            temperature=1.0
+            temperature=0.3
         )
         audio_arr = generation.cpu().numpy().squeeze()
 
