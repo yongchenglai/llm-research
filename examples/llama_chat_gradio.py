@@ -197,6 +197,10 @@ if __name__ == "__main__":
     model.eval()
     print(model)
 
+    # Streaming Mode
+    # Besides using TextStreamer, we can also use TextIteratorStreamer
+    # which stores print-ready text in a queue,
+    # to be used by a downstream application as an iterator:
     streamer = TextIteratorStreamer(
         tokenizer=tokenizer,
         skip_prompt=True)
