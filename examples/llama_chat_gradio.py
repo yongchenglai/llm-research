@@ -79,6 +79,9 @@ with gr.Blocks() as demo:
             "pad_token_id": tokenizer.pad_token_id
         }
 
+        # Use Thread to run generation in background
+        # Otherwise, the process is blocked until generation is complete
+        # and no streaming effect can be observed.
         thread = Thread(target=model.generate, kwargs=generate_input)
         thread.start()
         start_time = time.time()
@@ -203,7 +206,9 @@ if __name__ == "__main__":
     # to be used by a downstream application as an iterator:
     streamer = TextIteratorStreamer(
         tokenizer=tokenizer,
-        skip_prompt=True)
+        skip_prompt=True,
+        skip_special_tokens=True,
+    )
 
     if torch.__version__ >= "2" and sys.platform != "win32":
         model = torch.compile(model)
