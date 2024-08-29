@@ -84,8 +84,9 @@ with gr.Blocks() as demo:
         # and no streaming effect can be observed.
         thread = Thread(target=model.generate, kwargs=generate_input)
         thread.start()
+
         start_time = time.time()
-        bot_message =''
+        bot_message = ""
         print('Human:', history[-1][0])
         print('Assistant: ', end='', flush=True)
         for new_text in streamer:
