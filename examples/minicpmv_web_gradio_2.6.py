@@ -9,6 +9,7 @@ from PIL import Image
 from decord import VideoReader, cpu
 import io
 import os
+import sys
 import copy
 import requests
 import base64
@@ -688,6 +689,9 @@ if __name__ == "__main__":
 
     gpu_usage = GPUtil.getGPUs()[0].memoryUsed
     print(f"量化后显存占用: {round(gpu_usage / 1024, 2)}GB")
+
+    if torch.__version__ >= "2" and sys.platform != "win32":
+        model = torch.compile(model)
 
     # launch
     demo.launch(
