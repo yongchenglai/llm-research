@@ -198,7 +198,7 @@ def encode_mm_file(mm_file):
 
 
 def make_text(text):
-    #return {"type": "text", "pairs": text} # # For remote call
+    # return {"type": "text", "pairs": text} # # For remote call
     return text
 
 
