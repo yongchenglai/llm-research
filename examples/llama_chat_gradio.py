@@ -56,7 +56,7 @@ with gr.Blocks() as demo:
             prompt += '\n'.join([("<s>Human: "+one_chat[0].replace('<br>', '\n')+'\n</s>'
                 if one_chat[0] else '')
                     + "<s>Assistant: "+one_chat[1].replace('<br>', '\n')+'\n</s>'
-                for one_chat in history_true[-slider_context_times:] ])
+                for one_chat in history_true[-slider_context_times:]])
 
         prompt += "<s>Human: "+history[-1][0].replace('<br>', '\n')+"\n</s><s>Assistant:"
 
