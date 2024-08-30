@@ -421,7 +421,7 @@ def flushed():
 def clear(txt_message, chat_bot, app_session):
     txt_message.files.clear()
     txt_message.text = ''
-    chat_bot = copy.deepcopy(init_conversation)
+    # chat_bot = copy.deepcopy(init_conversation)
     app_session['sts'] = None
     app_session['ctx'] = []
     app_session['images_cnt'] = 0
