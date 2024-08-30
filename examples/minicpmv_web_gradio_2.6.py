@@ -239,7 +239,7 @@ def count_video_frames(_context):
     num_frames = 0
     for message in _context:
         for item in message["content"]:
-            #if item["type"] == "image": # For remote call
+            # if item["type"] == "image": # For remote call
             if isinstance(item, Image.Image):
                 num_frames += 1
     return num_frames
