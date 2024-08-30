@@ -477,7 +477,7 @@ with gr.Blocks() as demo:
                 label=f"Chat with {model_name}",
                 # value=copy.deepcopy(init_conversation),
                 value=None,
-                height=300,
+                height=350,
                 flushing=False,
                 bubble_full_width=False)
 
