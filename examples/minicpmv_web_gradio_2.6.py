@@ -439,8 +439,7 @@ init_conversation = [
         None,
         {
             # The first message of bot closes the typewriter.
-            # "text": "You can talk to me now",
-            "text": "",
+            "text": "You can talk to me now",
             "flushing": False
         }
     ],
