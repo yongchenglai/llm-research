@@ -297,9 +297,11 @@ def respond(_question, _chat_bot, _app_cfg, params_form):
         upload_image_disabled, upload_video_disabled), _chat_bot, _app_cfg
 
 
-def fewshot_add_demonstration(_image, _user_message,
-                              _assistant_message,
-                              _chat_bot, _app_cfg):
+def fewshot_add_demonstration(
+    _image, _user_message,
+    _assistant_message,
+    _chat_bot, _app_cfg,
+):
     ctx = _app_cfg["ctx"]
     message_item = []
     if _image is not None:
