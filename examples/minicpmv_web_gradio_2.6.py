@@ -484,7 +484,7 @@ with gr.Blocks() as demo:
             with gr.Tab("Chat & Video Understanding") as chat_tab:
                 txt_message = create_multimodal_input()
                 chat_tab_label = gr.Textbox(value="Chat",
-                                            lines=2,
+                                            lines=4,
                                             interactive=False,
                                             visible=False)
 
