@@ -82,7 +82,7 @@ COPY minicpmv_web_gradio_2.6.py /app
 RUN chmod u+x /app/minicpmv_web_gradio_2.6.py
 
 # Copy Model weight
-# COPY MiniCPM-V-2_6 /app/openbmb/MiniCPM-V-2_6
+COPY MiniCPM-V-2_6 /app/openbmb/MiniCPM-V-2_6
 
 RUN openssl req -x509 -days 3650 -nodes -newkey rsa  \
     -keyout ./key.pem -out ./cert.pem -subj "/CN=ChatTTS"
