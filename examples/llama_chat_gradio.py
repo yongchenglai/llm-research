@@ -61,7 +61,7 @@ with gr.Blocks() as demo:
         prompt += "<s>Human: "+history[-1][0].replace('<br>', '\n')+"\n</s><s>Assistant:"
 
         inputs = tokenizer.apply_chat_template(
-            [prompt],
+            prompt,
             tokenize=False,
             add_generation_prompt=False)
 
