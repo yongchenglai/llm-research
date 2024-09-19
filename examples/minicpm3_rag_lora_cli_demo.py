@@ -16,6 +16,7 @@ if __name__ == "__main__":
 
     tokenizer = AutoTokenizer.from_pretrained(lora_model_dir)
     model = PeftModel.from_pretrained(model, lora_model_dir)
+    print(model)
 
     passages_list = [
         "In the novel 'The Silent Watcher,' the lead character is named Alex Carter. Alex is a private detective who uncovers a series of mysterious events in a small town.",
