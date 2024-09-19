@@ -10,12 +10,17 @@ if __name__ == "__main__":
     lora_model_dir = "/models/openbmb/MiniCPM3-RAG-LoRA"
 
     model = AutoModelForCausalLM.from_pretrained(
-        base_model_dir,
+        pretrained_model_name_or_path=base_model_dir,
         device_map="auto",
+        trust_remote_code=True,
         torch_dtype=torch.bfloat16).eval()
+    print(model)
 
     tokenizer = AutoTokenizer.from_pretrained(lora_model_dir)
-    model = PeftModel.from_pretrained(model, lora_model_dir)
+    model = PeftModel.from_pretrained(
+        model=model,
+        model_id=lora_model_dir,
+        trust_remote_code=True)
     print(model)
 
     passages_list = [
