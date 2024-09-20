@@ -6,20 +6,30 @@ import torch
 from transformers import AutoTokenizer
 
 
-def vllm_gen(dialog: List, top_p: float, temperature: float, max_dec_len: int):
+def vllm_gen(
+    dialog: List,
+    top_p: float,
+    temperature: float,
+    max_dec_len: int,
+):
     """generate model output with huggingface api
 
     Args:
         query (str): actual model input.
-        top_p (float): only the smallest set of most probable tokens with probabilities that add up to top_p or higher are kept for generation.
-        temperature (float): Strictly positive float value used to modulate the logits distribution.
+        top_p (float): only the smallest set of most probable tokens
+        with probabilities that add up to top_p or higher are kept for generation.
+        temperature (float): Strictly positive float value used to
+        modulate the logits distribution.
         max_dec_len (int): The maximum numbers of tokens to generate.
 
     Yields:
         str: real-time generation results of hf model
     """
     assert len(dialog) % 2 == 1
-    prompt = tokenizer.apply_chat_template(dialog, tokenize=False, add_generation_prompt=False)
+    prompt = tokenizer.apply_chat_template(
+        dialog,
+        tokenize=False,
+        add_generation_prompt=False)
     token_ids = tokenizer.convert_tokens_to_ids(["<|im_end|>"])
     params_dict = {
         "n": 1,
@@ -41,12 +51,20 @@ def vllm_gen(dialog: List, top_p: float, temperature: float, max_dec_len: int):
         "skip_special_tokens": True,
     }
     sampling_params = SamplingParams(**params_dict)
-    outputs = llm.generate(prompts=prompt, sampling_params=sampling_params)[0]
+    outputs = llm.generate(
+        prompts=prompt,
+        sampling_params=sampling_params)[0]
     generated_text = outputs.outputs[0].text
     return generated_text
 
 
-def generate(chat_history: List, query: str, top_p: float, temperature: float, max_dec_len: int):
+def generate(
+    chat_history: List,
+    query: str,
+    top_p: float,
+    temperature: float,
+    max_dec_len: int,
+):
     """generate after hitting "submit" button
 
     Args:
