@@ -71,7 +71,7 @@ WORKDIR /app
 COPY vllm-0.4.3 /app/vllm-0.4.3
 # RUN pip install --no-cache-dir vllm==0.6.1
 # RUN pip install --no-cache-dir vllm==0.4.3
-RUN pip install --no-cache-dir  /app/vllm-0.4.3
+RUN pip install /app/vllm-0.4.3
 
 COPY examples/vllm_based_chat_gradio.py /app
 RUN chmod u+x /app/vllm_based_chat_gradio.py
