@@ -60,7 +60,8 @@ RUN pip install --no-cache-dir \
     datamodel_code_generator
 
 
-RUN pip install --no-cache-dir vllm==0.6.1
+# RUN pip install --no-cache-dir vllm==0.6.1
+RUN pip install --no-cache-dir vllm==0.5.5
 
 RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
     mv frpc_linux_amd64 frpc_linux_amd64_v0.2 && \
