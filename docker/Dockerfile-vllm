@@ -60,6 +60,8 @@ RUN pip install --no-cache-dir \
     datamodel_code_generator
 
 
+RUN pip install --no-cache-dir vllm
+
 RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
     mv frpc_linux_amd64 frpc_linux_amd64_v0.2 && \
     mv frpc_linux_amd64_v0.2 /opt/conda/lib/python3.10/site-packages/gradio/ && \
@@ -68,8 +70,8 @@ RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
 #设置工作目录
 WORKDIR /app
 
-COPY examples/llama_chat_gradio.py /app
-RUN chmod u+x /app/llama_chat_gradio.py
+COPY examples/vllm_based_chat_gradio.py /app
+RUN chmod u+x /app/vllm_based_chat_gradio.py
 
 #开启7860端口
 EXPOSE 7860
