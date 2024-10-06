@@ -1,0 +1,58 @@
+# docker/Dockerfile-qwen-audio
+FROM pytorch/pytorch:2.1.2-cuda12.1-cudnn8-devel
+#FROM pytorch/pytorch:2.1.2-cuda12.1-cudnn8-runtime
+#FROM nvidia/cuda:12.2.0-devel-ubuntu22.04
+
+# Install the timezone data package
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" \
+        apt-get install -y tzdata && \
+        rm -rf /var/lib/apt/lists/*
+
+# Set the timezone to Asia/Shanghai
+ENV TZ=Asia/Shanghai
+# Copy the local time file to the container
+RUN cp /usr/share/zoneinfo/$TZ /etc/localtime \
+        && echo $TZ > /etc/timezone
+
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" \
+    apt-get install -y git tmux htop vim git-lfs pip wget openssl && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN pip install -U flash-attn --no-build-isolation --use-pep517
+
+RUN pip install --no-cache-dir  \
+        -i https://pypi.tuna.tsinghua.edu.cn/simple  \
+        --trusted-host pypi.tuna.tsinghua.edu.cn \
+        bitsandbytes==0.42.0 \
+        transformers>=4.42.3 \
+        peft>=0.11.1  \
+        accelerate>=0.30.1  \
+        deepspeed==0.14.0 \
+        datasets>=2.16.0 \
+        # torch==2.1.2 \
+        torchaudio \
+        numpy  \
+        # trl>=0.8.6 \
+        gradio>=4.0.0 \
+        tiktoken \
+        transformers_stream_generator \
+        pydub
+
+RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
+    mv frpc_linux_amd64 frpc_linux_amd64_v0.2 && \
+    mv frpc_linux_amd64_v0.2 /opt/conda/lib/python3.10/site-packages/gradio/ && \
+    chmod 755 /opt/conda/lib/python3.10/site-packages/gradio/frpc_linux_amd64_v0.2
+
+WORKDIR /app
+COPY examples/qwen_audio_web_gradio.py /app
+RUN chmod u+x /app/qwen_audio_web_gradio.py
+
+RUN openssl req -x509 -days 3650 -nodes -newkey rsa  \
+    -keyout ./key.pem -out ./cert.pem -subj "/CN=ChatTTS"
+
+EXPOSE 7860
+
+
+
+
+
