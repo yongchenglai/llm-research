@@ -32,11 +32,21 @@ RUN pip install --no-cache-dir  \
         # torch==2.1.2 \
         torchaudio \
         numpy  \
-        # trl>=0.8.6 \
+        trl>=0.8.6 \
         gradio>=4.0.0 \
         tiktoken \
         transformers_stream_generator \
-        pydub
+        pydub \
+        triton==2.3.0 \
+        pypdf==4.3.0 \
+        pydantic==2.8.2 \
+        pydantic_core==2.20.1 \
+        langchain==0.2.6 \
+        langchain-community==0.2.1 \
+        langchain-core==0.2.19 \
+        langchain-text-splitters==0.2.0 \
+        langchainplus-sdk==0.0.20
+
 
 RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
     mv frpc_linux_amd64 frpc_linux_amd64_v0.2 && \
@@ -44,8 +54,8 @@ RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
     chmod 755 /opt/conda/lib/python3.10/site-packages/gradio/frpc_linux_amd64_v0.2
 
 WORKDIR /app
-COPY examples/qwen_audio_web_gradio.py /app
-RUN chmod u+x /app/qwen_audio_web_gradio.py
+COPY examples/rag_langchain_web_gradio.py /app
+RUN chmod u+x /app/rag_langchain_web_gradio.py
 
 RUN openssl req -x509 -days 3650 -nodes -newkey rsa  \
     -keyout ./key.pem -out ./cert.pem -subj "/CN=ChatTTS"
