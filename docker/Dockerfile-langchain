@@ -37,6 +37,7 @@ RUN pip install --no-cache-dir  \
         tiktoken \
         transformers_stream_generator \
         datamodel_code_generator \
+        sentence_transformers \
         pydub \
         triton==2.3.0 \
         pypdf==4.3.0 \
