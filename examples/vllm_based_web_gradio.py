@@ -193,8 +193,7 @@ if __name__ == "__main__":
         pretrained_model_name_or_path=args.model_path,
         trust_remote_code=True)
 
-    server_name = args.server_name
-    server_port = args.server_port
+    print(llm)
 
     # launch gradio demo
     # with gr.Blocks(theme="soft") as demo:
@@ -243,8 +242,8 @@ if __name__ == "__main__":
 
     demo.queue()
     demo.launch(
-        server_name=server_name,
-        server_port=server_port,
+        server_name=args.server_name,
+        server_port=args.server_port,
         show_error=True)
 
 
