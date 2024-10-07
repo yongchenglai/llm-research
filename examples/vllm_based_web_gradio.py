@@ -224,12 +224,10 @@ if __name__ == "__main__":
 
         submit.click(
             fn=generate,
-            # inputs=[chatbot, user_input, top_p, temperature, max_dec_len],
             inputs=[chatbot, user_input, args.top_p, args.temperature, args.max_tokens],
             outputs=[user_input, chatbot])
         regen.click(
             fn=regenerate,
-            # inputs=[chatbot, top_p, temperature, max_dec_len],
             inputs=[chatbot, args.top_p, args.temperature, args.max_tokens],
             outputs=[user_input, chatbot])
         clear.click(
