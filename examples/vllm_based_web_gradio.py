@@ -13,7 +13,7 @@ def get_args():
                         default="openbmb/MiniCPM-1B-sft-bf16")
     parser.add_argument("--torch_dtype", type=str, default="bfloat16",
                         choices=["float32", "bfloat16"])
-    parser.add_argument("--server_name", type=str, default="127.0.0.1")
+    parser.add_argument("--server_name", type=str, default="0.0.0.0")
     parser.add_argument("--server_port", type=int, default=7860)
     # for MiniCPM-1B and MiniCPM-2B model, max_tokens should be set to 2048
     parser.add_argument("--max_model_len", type=int, default=4096)
