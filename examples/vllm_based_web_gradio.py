@@ -147,11 +147,9 @@ def clear_history():
 
 def reverse_last_round(chat_history):
     """reverse last round QA and keep the chat history before
-
     Args:
         chat_history (List): [[q_1, a_1], [q_2, a_2], ..., [q_n, a_n]].
         list that stores all QA records
-
     Returns:
         List: [[q_1, a_1], [q_2, a_2], ..., [q_n-1, a_n-1]].
         chat_history without last round.
@@ -178,11 +176,12 @@ if __name__ == "__main__":
     path = args.model_path
     llm = LLM(
         model=path,
-        tensor_parallel_size=1,
+        tensor_parallel_size=args.tensor_parallel_size,
         dtype=torch_dtype,
         trust_remote_code=True,
-        gpu_memory_utilization=0.9,
-        max_model_len=args.max_tokens
+        gpu_memory_utilization=args.gpu_memory_utilization,
+        max_model_len=args.max_model_len,
+        quantization=args.quantization
     )
     tokenizer = AutoTokenizer.from_pretrained(
         pretrained_model_name_or_path=args.model_path,
