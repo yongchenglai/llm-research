@@ -22,6 +22,13 @@ def get_args():
     parser.add_argument("--gpu_memory_utilization", type=float, default=0.9)
     parser.add_argument("--quantization", type=str, default=None)
 
+    # 生成参数
+    parser.add_argument("--top_k", type=int, default=3)
+    parser.add_argument("--top_p", type=float, default=0.7)
+    parser.add_argument("--temperature", type=float, default=0.7)
+    parser.add_argument("--max_new_tokens", type=int, default=4096)
+    parser.add_argument("--repetition_penalty", type=float, default=1.02)
+
     args = parser.parse_args()
 
     return args
@@ -190,10 +197,12 @@ if __name__ == "__main__":
     server_port = args.server_port
 
     # launch gradio demo
-    with gr.Blocks(theme="soft") as demo:
-        gr.Markdown("""# MiniCPM Gradio Demo""")
+    # with gr.Blocks(theme="soft") as demo:
+    with gr.Blocks() as demo:
+        # gr.Markdown("""# MiniCPM Gradio Demo""")
 
         with gr.Row():
+            """
             with gr.Column(scale=1):
                 top_p = gr.Slider(0, 1, value=0.8, step=0.1, label="top_p")
                 temperature = gr.Slider(
@@ -201,9 +210,10 @@ if __name__ == "__main__":
                 max_dec_len = gr.Slider(
                     minimum=1, maximum=args.max_tokens,
                     value=args.max_tokens, step=1, label="max_tokens")
-
+            """
             with gr.Column(scale=5):
-                chatbot = gr.Chatbot(bubble_full_width=False, height=400)
+                # chatbot = gr.Chatbot(bubble_full_width=False, height=400)
+                chatbot = gr.Chatbot()
                 user_input = gr.Textbox(
                     label="User", placeholder="Input your query here!", lines=8)
                 with gr.Row():
@@ -214,11 +224,13 @@ if __name__ == "__main__":
 
         submit.click(
             fn=generate,
-            inputs=[chatbot, user_input, top_p, temperature, max_dec_len],
+            # inputs=[chatbot, user_input, top_p, temperature, max_dec_len],
+            inputs=[chatbot, user_input, args.top_p, args.temperature, args.max_tokens],
             outputs=[user_input, chatbot])
         regen.click(
             fn=regenerate,
-            inputs=[chatbot, top_p, temperature, max_dec_len],
+            # inputs=[chatbot, top_p, temperature, max_dec_len],
+            inputs=[chatbot, args.top_p, args.temperature, args.max_tokens],
             outputs=[user_input, chatbot])
         clear.click(
             fn=clear_history,
