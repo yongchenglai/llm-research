@@ -70,7 +70,7 @@ def get_args():
     parser.add_argument("--server_name", type=str, default="0.0.0.0")
     parser.add_argument("--server_port", type=int, default=7860)
 
-    parser.add_argument("--max_tokens", type=int, default=8192)
+    parser.add_argument("--max_tokens", type=int, default=4096)
     parser.add_argument("--tensor_parallel_size", type=int, default=1)
     parser.add_argument("--gpu_memory_utilization", type=float, default=0.9)
 
