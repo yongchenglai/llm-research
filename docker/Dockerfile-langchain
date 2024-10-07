@@ -44,8 +44,8 @@ RUN pip install --no-cache-dir  \
         langchain==0.2.6 \
         langchain_community==0.2.1 \
         langchain-core==0.2.19 \
-        langchain-text-splitters==0.2.0 \
-        langchainplus_sdk==0.0.20
+        langchain-text-splitters==0.2.0
+        #langchainplus_sdk==0.0.20
 
 
 RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
