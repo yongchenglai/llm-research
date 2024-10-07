@@ -31,9 +31,11 @@ vllm_nccl_cu12                           2.18.1.0.4.0
 
 from langchain.document_loaders import PyPDFLoader, TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import Chroma
+# from langchain.vectorstores import Chroma
+from langchain_community.vectorstores import Chroma
 from langchain.chains.qa_with_sources import load_qa_with_sources_chain
-from langchain.embeddings.huggingface import HuggingFaceBgeEmbeddings
+# from langchain.embeddings.huggingface import HuggingFaceBgeEmbeddings
+from langchain_community.embeddings import HuggingFaceBgeEmbeddings
 import argparse
 from langchain.llms.base import LLM
 from typing import Any, List, Optional
