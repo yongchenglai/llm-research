@@ -197,8 +197,12 @@ if __name__ == "__main__":
         with gr.Row():
             with gr.Column(scale=1):
                 top_p = gr.Slider(0, 1, value=0.8, step=0.1, label="top_p")
-                temperature = gr.Slider(0.1, 2.0, value=0.5, step=0.1, label="temperature")
-                max_dec_len = gr.Slider(1, args.max_tokens, value=args.max_tokens, step=1, label="max_tokens")
+                temperature = gr.Slider(
+                    minimum=0.1, maximum=2.0, value=0.5, step=0.1, label="temperature")
+                max_dec_len = gr.Slider(
+                    minimum=1, maximum=args.max_tokens,
+                    value=args.max_tokens, step=1, label="max_tokens")
+
             with gr.Column(scale=5):
                 chatbot = gr.Chatbot(bubble_full_width=False, height=400)
                 user_input = gr.Textbox(label="User", placeholder="Input your query here!", lines=8)
