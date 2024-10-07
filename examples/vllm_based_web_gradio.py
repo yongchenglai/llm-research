@@ -202,7 +202,7 @@ if __name__ == "__main__":
         # gr.Markdown("""# MiniCPM Gradio Demo""")
 
         with gr.Row():
-            """
+            """"""
             with gr.Column(scale=1):
                 top_p = gr.Slider(0, 1, value=0.8, step=0.1, label="top_p")
                 temperature = gr.Slider(
@@ -210,7 +210,7 @@ if __name__ == "__main__":
                 max_dec_len = gr.Slider(
                     minimum=1, maximum=args.max_tokens,
                     value=args.max_tokens, step=1, label="max_tokens")
-            """
+
             with gr.Column(scale=5):
                 # chatbot = gr.Chatbot(bubble_full_width=False, height=400)
                 chatbot = gr.Chatbot()
@@ -224,11 +224,13 @@ if __name__ == "__main__":
 
         submit.click(
             fn=generate,
-            inputs=[chatbot, user_input, args.top_p, args.temperature, args.max_tokens],
+            inputs=[chatbot, user_input, top_p, temperature, max_dec_len],
+            # inputs=[chatbot, user_input, args.top_p, args.temperature, args.max_tokens],
             outputs=[user_input, chatbot])
         regen.click(
             fn=regenerate,
-            inputs=[chatbot, args.top_p, args.temperature, args.max_tokens],
+            inputs=[chatbot, top_p, temperature, max_dec_len],
+            # inputs=[chatbot, args.top_p, args.temperature, args.max_tokens],
             outputs=[user_input, chatbot])
         clear.click(
             fn=clear_history,
