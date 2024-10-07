@@ -1,7 +1,7 @@
 """
-my package: langchain_demo
+my package: rag_langchain_web_gradio.py
 langchain                                0.2.6
-langchain-community                      0.2.1
+langchain_community                      0.2.1
 langchain-core                           0.2.19
 langchain-text-splitters                 0.2.0
 langchainplus-sdk                        0.0.20
@@ -354,7 +354,8 @@ def analysis_links(docs):
     ...     {'source': 'Document2', 'page': 2, 'content': 'This is the second document.'}
     ... ]
     >>> extract_links(docs)
-    'Document1 page:1 \n\nThis is the first document.\nDocument2 page:2 \n\nThis is the second document.'
+    'Document1 page:1 \n\nThis is the first document.\nDocument2 page:2 \n\n
+    This is the second document.'
     """
     links_string = ""
     for i in docs:
@@ -386,7 +387,8 @@ def main():
         docs = vectorstore.similarity_search(query, k=args.embed_top_k)
         all_links = analysis_links(docs)
         final_result = rag_chain.invoke({"context": all_links, "question": query})
-        # result = rag_chain({"input_documents": docs, "question": query}, return_only_outputs=True)
+        # result = rag_chain({"input_documents": docs, "question": query},
+        # return_only_outputs=True)
         print(final_result)
 
 
@@ -416,7 +418,8 @@ def process_query(file, query):
     docs = vectorstore.similarity_search(query, k=args.embed_top_k)
     all_links = analysis_links(docs)
     final_result = rag_chain.invoke({"context": all_links, "question": query})
-    # result = rag_chain({"input_documents": docs, "question": query}, return_only_outputs=False)
+    # result = rag_chain({"input_documents": docs, "question": query},
+    # return_only_outputs=False)
     print(final_result)
     final_result = final_result.split("FINAL ANSWER:")[-1]
     return final_result, all_links
