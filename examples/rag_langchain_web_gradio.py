@@ -155,9 +155,9 @@ class MiniCPM_LLM(LLM):
             )
             self.model = AutoModelForCausalLM.from_pretrained(
                 pretrained_model_name_or_path=model_path,
+                device_map=args.cpm_device,
                 trust_remote_code=True,
                 torch_dtype=torch.float16,
-                trust_remote_code=True,
                 attn_implementation="flash_attention_2",
                 quantization_config=BitsAndBytesConfig(
                     load_in_4bit=True,
@@ -167,7 +167,7 @@ class MiniCPM_LLM(LLM):
                     llm_int8_skip_modules=["out_proj", "kv_proj", "lm_head"],
                 ),
                 low_cpu_mem_usage=True,
-            ).to(args.cpm_device)
+            )
             self.model = self.model.eval()
             print(self.model)
 
