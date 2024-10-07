@@ -29,7 +29,8 @@ vllm_nccl_cu12                           2.18.1.0.4.0
 """
 
 
-from langchain.document_loaders import PyPDFLoader, TextLoader
+# from langchain.document_loaders import PyPDFLoader, TextLoader
+from langchain_community.document_loaders import PyPDFLoader, TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 # from langchain.vectorstores import Chroma
 from langchain_community.vectorstores import Chroma
