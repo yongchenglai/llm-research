@@ -37,7 +37,7 @@ RUN pip install --no-cache-dir  \
         tiktoken \
         transformers_stream_generator \
         datamodel_code_generator \
-        sentence_transformers 
+        sentence_transformers
         #chromadb \
         #pydub \
         #triton==2.3.0 \
