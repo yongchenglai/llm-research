@@ -195,14 +195,14 @@ class MiniCPM_LLM(LLM):
             inputs = inputs.to(args.cpm_device)
             # Generate
             generate_ids = self.model.generate(
-                inputs.input_ids,
+                input_ids=inputs.input_ids,
                 max_length=args.max_new_tokens,
                 temperature=args.temperature,
                 top_p=args.top_p,
                 repetition_penalty=args.repetition_penalty,
             )
             responds = self.tokenizer.batch_decode(
-                generate_ids,
+                generate_ids=generate_ids,
                 skip_special_tokens=True,
                 clean_up_tokenization_spaces=False,
             )[0]
