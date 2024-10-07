@@ -40,7 +40,8 @@ from langchain_community.embeddings import HuggingFaceBgeEmbeddings
 import argparse
 from langchain.llms.base import LLM
 from typing import Any, List, Optional
-from transformers import AutoTokenizer, AutoModelForCausalLM, GenerationConfig
+from transformers import AutoTokenizer, \
+    AutoModelForCausalLM, TextIteratorStreamer, BitsAndBytesConfig
 import torch
 from langchain.prompts import PromptTemplate
 from pydantic.v1 import Field
@@ -155,7 +156,17 @@ class MiniCPM_LLM(LLM):
             self.model = AutoModelForCausalLM.from_pretrained(
                 pretrained_model_name_or_path=model_path,
                 trust_remote_code=True,
-                torch_dtype=torch.float16
+                torch_dtype=torch.float16,
+                trust_remote_code=True,
+                attn_implementation="flash_attention_2",
+                quantization_config=BitsAndBytesConfig(
+                    load_in_4bit=True,
+                    bnb_4bit_quant_type="nf4",
+                    bnb_4bit_use_double_quant=True,
+                    bnb_4bit_compute_dtype=args.torch_dtype,
+                    llm_int8_skip_modules=["out_proj", "kv_proj", "lm_head"],
+                ),
+                low_cpu_mem_usage=True,
             ).to(args.cpm_device)
             self.model = self.model.eval()
             print(self.model)
