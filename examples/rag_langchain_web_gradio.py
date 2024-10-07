@@ -262,6 +262,7 @@ def load_documents(file_paths):
         files_list = file_paths
     else:
         files_list = [file_paths]
+    
     documents = []
     for file_path in files_list:
         if file_path.endswith(".pdf"):
