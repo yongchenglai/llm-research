@@ -70,7 +70,7 @@ def get_args():
     parser.add_argument("--server_name", type=str, default="0.0.0.0")
     parser.add_argument("--server_port", type=int, default=7860)
 
-    parser.add_argument("--max_tokens", type=int, default=4096)
+    parser.add_argument("--max_model_len", type=int, default=4096)
     parser.add_argument("--tensor_parallel_size", type=int, default=1)
     parser.add_argument("--gpu_memory_utilization", type=float, default=0.9)
     parser.add_argument("--quantization", type=str, default=None)
@@ -154,7 +154,7 @@ class MiniCPM_LLM(LLM):
                 trust_remote_code=True,
                 gpu_memory_utilization=args.gpu_memory_utilization,
                 enforce_eager=True,
-                max_model_len=args.max_tokens,
+                max_model_len=args.max_model_len,
                 quantization=args.quantization,
             )
         else:
