@@ -69,6 +69,7 @@ def get_args():
         help="使用torch还是vllm后端，默认为torch")
     parser.add_argument("--server_name", type=str, default="0.0.0.0")
     parser.add_argument("--server_port", type=int, default=7860)
+    parser.add_argument("--max_tokens", type=int, default=8192)
 
     # 嵌入模型参数设置
     parser.add_argument(
@@ -145,8 +146,11 @@ class MiniCPM_LLM(LLM):
 
             self.model = LLM(
                 model=model_path,
+                tensor_parallel_size=1,
                 trust_remote_code=True,
-                enforce_eager=True
+                gpu_memory_utilization=0.9,
+                enforce_eager=True,
+                max_model_len=args.max_tokens
             )
         else:
             self.tokenizer = AutoTokenizer.from_pretrained(
