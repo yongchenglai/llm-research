@@ -150,7 +150,7 @@ class MiniCPM_LLM(LLM):
                 trust_remote_code=True,
                 gpu_memory_utilization=0.9,
                 enforce_eager=True,
-                max_model_len=args.max_tokens
+                max_model_len=args.max_tokens,
             )
         else:
             self.tokenizer = AutoTokenizer.from_pretrained(
