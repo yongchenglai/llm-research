@@ -151,7 +151,7 @@ class MiniCPM_LLM(LLM):
                 model=model_path,
                 tensor_parallel_size=args.tensor_parallel_size,
                 trust_remote_code=True,
-                gpu_memory_utilization=0.9,
+                gpu_memory_utilization=args.gpu_memory_utilization,
                 enforce_eager=True,
                 max_model_len=args.max_tokens,
             )
