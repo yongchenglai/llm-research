@@ -205,7 +205,8 @@ if __name__ == "__main__":
 
             with gr.Column(scale=5):
                 chatbot = gr.Chatbot(bubble_full_width=False, height=400)
-                user_input = gr.Textbox(label="User", placeholder="Input your query here!", lines=8)
+                user_input = gr.Textbox(
+                    label="User", placeholder="Input your query here!", lines=8)
                 with gr.Row():
                     submit = gr.Button("Submit")
                     clear = gr.Button("Clear")
