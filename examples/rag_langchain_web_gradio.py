@@ -73,6 +73,7 @@ def get_args():
     parser.add_argument("--max_tokens", type=int, default=4096)
     parser.add_argument("--tensor_parallel_size", type=int, default=1)
     parser.add_argument("--gpu_memory_utilization", type=float, default=0.9)
+    parser.add_argument("--quantization", type=str, default=None)
 
     # 嵌入模型参数设置
     parser.add_argument(
@@ -154,6 +155,7 @@ class MiniCPM_LLM(LLM):
                 gpu_memory_utilization=args.gpu_memory_utilization,
                 enforce_eager=True,
                 max_model_len=args.max_tokens,
+                quantization=args.quantization,
             )
         else:
             self.tokenizer = AutoTokenizer.from_pretrained(
