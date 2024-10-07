@@ -51,7 +51,7 @@ RUN pip install --no-cache-dir  \
         #langchainplus_sdk==0.0.20
 
 RUN pip install --no-cache-dir  \
-    vllm==0.5.0.post1+cu121 \
+    vllm==0.5.0.post1 \
     vllm-flash-attn==2.5.9 \
     vllm_nccl_cu12==2.18.1.0.4.0
 
