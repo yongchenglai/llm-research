@@ -262,7 +262,7 @@ def load_documents(file_paths):
         files_list = file_paths
     else:
         files_list = [file_paths]
-    
+
     documents = []
     for file_path in files_list:
         if file_path.endswith(".pdf"):
@@ -446,8 +446,6 @@ if __name__ == "__main__":
     with gr.Blocks(css="#textbox { height: 380%; }") as demo:
         with gr.Row():
             with gr.Column():
-                link_content = gr.Textbox(label="link_content", lines=30, max_lines=40)
-            with gr.Column():
                 file_input = gr.File(label="upload_files", file_count="multiple")
                 final_answer = gr.Textbox(label="final_answer", lines=5, max_lines=10)
                 query_input = gr.Textbox(
@@ -457,6 +455,9 @@ if __name__ == "__main__":
                     max_lines=10,
                 )
                 submit_button = gr.Button("Submit")
+
+            with gr.Column():
+                link_content = gr.Textbox(label="link_content", lines=30, max_lines=40)
 
         submit_button.click(
             fn=process_query,
