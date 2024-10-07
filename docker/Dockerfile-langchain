@@ -36,6 +36,7 @@ RUN pip install --no-cache-dir  \
         gradio>=4.0.0 \
         tiktoken \
         transformers_stream_generator \
+        datamodel_code_generator \
         pydub \
         triton==2.3.0 \
         pypdf==4.3.0 \

@@ -411,7 +411,7 @@ if __name__ == "__main__":
 
     args = get_args()
     llm, embedding_models = load_models()
-    
+
     # 如果不需要web界面可以直接运行main函数
     #  main()
 
