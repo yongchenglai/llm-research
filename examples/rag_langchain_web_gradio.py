@@ -158,6 +158,7 @@ class MiniCPM_LLM(LLM):
                 torch_dtype=torch.float16
             ).to(args.cpm_device)
             self.model = self.model.eval()
+            print(self.model)
 
     def _call(self, prompt, stop: Optional[List[str]] = None):
         """
