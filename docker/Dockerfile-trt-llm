@@ -1,0 +1,22 @@
+# vim Dockerfile-trt-llm
+FROM nvidia/cuda:12.1.0-devel-ubuntu22.04
+
+# 装相关依赖包
+# RUN apt-get update && apt-get -y install python3.10 \
+RUN  apt-get update -y && apt-get install -y  \
+     python3-pip openmpi-bin libopenmpi-dev git
+
+# 安装TensorRT-LLM
+RUN pip3 install --no-cache-dir tensorrt_llm==0.13.0 -U \
+    --extra-index-url https://pypi.nvidia.com
+
+
+RUN pip install --no-cache-dir \
+    -i https://pypi.tuna.tsinghua.edu.cn/simple \
+    --trusted-host pypi.tuna.tsinghua.edu.cn \
+    datasets>=2.14.6 \
+    evaluate>=0.4.1  \
+    rouge_score>=0.1.2 \
+    sentencepiece>=0.1.99
+ \
+    
