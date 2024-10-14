@@ -36,7 +36,7 @@ RUN pip install --no-cache-dir \
     transformers_stream_generator \
     deepspeed==0.14.0 \
     scikit-learn \
-    torch==2.1.2 \
+    #torch==2.1.2 \
     torchvision \
     pytorchvideo \
     torchdata \
