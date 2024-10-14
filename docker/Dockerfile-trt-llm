@@ -7,8 +7,9 @@ RUN  apt-get update -y && apt-get install -y  \
      python3-pip openmpi-bin libopenmpi-dev git
 
 # 安装TensorRT-LLM
-RUN pip3 install --no-cache-dir tensorrt_llm==0.13.0 -U \
-    --extra-index-url https://pypi.nvidia.com
+RUN pip3 install --no-cache-dir  \
+    --extra-index-url https://pypi.nvidia.com \
+    tensorrt_llm==0.13.0
 
 
 RUN pip install --no-cache-dir \
