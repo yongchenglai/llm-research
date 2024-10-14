@@ -32,7 +32,7 @@ RUN pip install --no-cache-dir \
     evaluate \
     pytest \
     peft==0.10.0 \
-    transformers==4.43.3 \
+    transformers==4.45.2 \
     transformers_stream_generator \
     deepspeed==0.14.0 \
     scikit-learn \
