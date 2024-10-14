@@ -12,8 +12,7 @@ RUN pip3 install --no-cache-dir tensorrt_llm==0.13.0 -U \
 
 
 RUN pip install --no-cache-dir \
-    -i https://pypi.tuna.tsinghua.edu.cn/simple \
-    --trusted-host pypi.tuna.tsinghua.edu.cn \
+    --extra-index-url https://pypi.nvidia.com \
     datasets>=2.14.6 \
     evaluate>=0.4.1  \
     rouge_score>=0.1.2 \
