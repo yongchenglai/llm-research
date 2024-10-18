@@ -48,7 +48,7 @@ from vllm.tracing import (
     log_tracing_disabled_warning,
 )
 from vllm.utils import random_uuid
-from utils import decode_function_call
+from openai_utils import decode_function_call
 import json
 
 logger = init_logger(__name__)
