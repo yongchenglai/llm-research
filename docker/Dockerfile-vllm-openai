@@ -23,6 +23,12 @@ RUN apt-get update && DEBIAN_FRONTEND="noninteractive" \
     rm -rf /var/lib/apt/lists/*
 
 # RUN pip install -U flash-attn --no-build-isolation --use-pep517
+RUN pip install --no-cache-dir \
+        --index-url https://download.pytorch.org/whl/cu122 \
+        torch==2.4.0  \
+        torchvision  \
+        torchaudio==2.4.0
+
 
 RUN pip install --no-cache-dir  \
         -i https://pypi.tuna.tsinghua.edu.cn/simple  \
@@ -33,8 +39,6 @@ RUN pip install --no-cache-dir  \
         accelerate>=0.30.1  \
         deepspeed==0.14.0 \
         datasets>=2.16.0 \
-        # torch==2.1.2 \
-        # torchaudio \
         numpy  \
         trl>=0.8.6 \
         gradio>=4.0.0 \
