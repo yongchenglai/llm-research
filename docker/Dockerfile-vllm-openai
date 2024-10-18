@@ -72,7 +72,7 @@ WORKDIR /app
 COPY examples/vllm_based_web_gradio.py /app
 COPY examples/openai_api_server.py /app
 COPY examples/openai_protocol.py /app
-COPY examples/
+COPY examples/openai_serving_chat.py /app
 
 RUN chmod u+x /app/vllm_based_web_gradio.py
 RUN chmod u+x /app/openai_api_server.py
