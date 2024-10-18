@@ -24,6 +24,7 @@ from vllm.engine.protocol import AsyncEngineClient
 from vllm.entrypoints.launcher import serve_http
 from vllm.entrypoints.logger import RequestLogger
 from vllm.entrypoints.openai.cli_args import make_arg_parser
+
 # yapf conflicts with isort for this block
 # yapf: disable
 from openai_protocol import (ChatCompletionRequest,
