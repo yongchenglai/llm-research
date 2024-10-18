@@ -66,7 +66,7 @@ RUN chmod u+x /app/vllm_based_web_gradio.py
 RUN openssl req -x509 -days 3650 -nodes -newkey rsa  \
     -keyout ./key.pem -out ./cert.pem -subj "/CN=ChatTTS"
 
-EXPOSE 7860
+
 
 
 
