@@ -1,4 +1,4 @@
-# docker/Dockerfile-vllm-gradio
+# docker/Dockerfile-vllm-openai
 FROM pytorch/pytorch:2.1.2-cuda12.1-cudnn8-devel
 
 # Install the timezone data package
