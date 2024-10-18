@@ -45,17 +45,8 @@ RUN pip install --no-cache-dir  \
         fastapi \
         prometheus_client \
         starlette \
-        #chromadb \
-        #pydub \
         triton==2.3.0
-        #pypdf==4.3.0 \
-        #pydantic==2.8.2 \
-        #pydantic_core==2.20.1 \
-        #langchain==0.2.6 \
-        #langchain_community==0.2.1 \
-        #langchain-core==0.2.19 \
-        #langchain-text-splitters==0.2.0
-        #langchainplus_sdk==0.0.20
+
 
 RUN pip install --no-cache-dir  \
     vllm==0.5.5 \
