@@ -61,7 +61,10 @@ RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
 
 WORKDIR /app
 COPY examples/vllm_based_web_gradio.py /app
+COPY examples/openai_api_server.py /app
+
 RUN chmod u+x /app/vllm_based_web_gradio.py
+RUN chmod u+x /app/openai_api_server.py
 
 RUN openssl req -x509 -days 3650 -nodes -newkey rsa  \
     -keyout ./key.pem -out ./cert.pem -subj "/CN=ChatTTS"
