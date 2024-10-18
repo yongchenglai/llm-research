@@ -34,7 +34,7 @@ RUN pip install --no-cache-dir  \
         deepspeed==0.14.0 \
         datasets>=2.16.0 \
         # torch==2.1.2 \
-        torchaudio \
+        # torchaudio \
         numpy  \
         trl>=0.8.6 \
         gradio>=4.0.0 \
