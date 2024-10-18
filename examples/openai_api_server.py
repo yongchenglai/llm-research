@@ -110,7 +110,7 @@ async def build_async_engine_client(args) -> AsyncIterator[AsyncEngineClient]:
     else:
         # Start RPCServer in separate process (holds the AsyncLLMEngine).
         # port = get_open_port(envs.VLLM_RPC_PORT)
-        port = get_open_port(envs.VLLM_PORT)
+        port = get_open_port()
         rpc_server_process = Process(target=run_rpc_server,
                                      args=(engine_args,
                                            UsageContext.OPENAI_API_SERVER,
