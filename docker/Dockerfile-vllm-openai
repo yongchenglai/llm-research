@@ -24,8 +24,8 @@ RUN apt-get update && DEBIAN_FRONTEND="noninteractive" \
 
 # RUN pip install -U flash-attn --no-build-isolation --use-pep517
 RUN pip install --no-cache-dir \
-        torch==2.4.0  torchvision  torchaudio==2.4.0 \
-        --index-url https://download.pytorch.org/whl/cu122
+        torch==2.4.0  torchvision==0.19.0  torchaudio==2.4.0 \
+        --index-url https://download.pytorch.org/whl/cu121
 
 RUN pip install --no-cache-dir  \
         -i https://pypi.tuna.tsinghua.edu.cn/simple  \
