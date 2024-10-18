@@ -16,7 +16,7 @@ RUN apt-get update && DEBIAN_FRONTEND="noninteractive" \
     apt-get install -y git tmux htop vim git-lfs pip wget openssl && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip install -U flash-attn --no-build-isolation --use-pep517
+# RUN pip install -U flash-attn --no-build-isolation --use-pep517
 
 RUN pip install --no-cache-dir  \
         -i https://pypi.tuna.tsinghua.edu.cn/simple  \
