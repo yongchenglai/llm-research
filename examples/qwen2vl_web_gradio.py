@@ -7,9 +7,9 @@ from threading import Thread
 import gradio as gr
 import torch
 from qwen_vl_utils import process_vision_info
-from transformers import AutoProcessor, \
-    Qwen2VLForConditionalGeneration, \
-    TextIteratorStreamer
+from transformers import AutoProcessor, Qwen2VLForConditionalGeneration
+from transformers import TextIteratorStreamer
+from transformers import BitsAndBytesConfig
 
 DEFAULT_CKPT_PATH = 'Qwen/Qwen2-VL-7B-Instruct'
 
@@ -22,7 +22,10 @@ def _get_args():
                         default=DEFAULT_CKPT_PATH,
                         help='Checkpoint name or path, default to %(default)r')
     parser.add_argument('--cpu-only', action='store_true', help='Run demo with CPU only')
-
+    parser.add_argument("--torch_dtype", type=str, default="bfloat16",
+                        choices=["float32", "bfloat16", "float16"])
+    parser.add_argument('--quant', type=int, choices=[4, 8], default=0,
+                        help='Enable 4-bit or 8-bit precision loading')
     parser.add_argument('--flash-attn2',
                         action='store_true',
                         default=False,
@@ -31,12 +34,15 @@ def _get_args():
                         action='store_true',
                         default=False,
                         help='Create a publicly shareable link for the interface.')
-    parser.add_argument('--inbrowser',
-                        action='store_true',
-                        default=False,
-                        help='Automatically launch the interface in a new tab on the default browser.')
-    parser.add_argument('--server-port', type=int, default=7860, help='Demo server port.')
-    parser.add_argument('--server-name', type=str, default='127.0.0.1', help='Demo server name.')
+    parser.add_argument(
+        '--inbrowser',
+        action='store_true',
+        default=False,
+        help='Automatically launch the interface in a new tab on the default browser.')
+    parser.add_argument('--server-port', type=int, default=7860,
+                        help='Demo server port.')
+    parser.add_argument('--server-name', type=str, default='0.0.0.0',
+                        help='Demo server name.')
 
     args = parser.parse_args()
     return args
@@ -49,15 +55,44 @@ def _load_model_processor(args):
         device_map = 'auto'
 
     # Check if flash-attn2 flag is enabled and load model accordingly
-    if args.flash_attn2:
-        model = Qwen2VLForConditionalGeneration.from_pretrained(args.checkpoint_path,
-                                                                torch_dtype='auto',
-                                                                attn_implementation='flash_attention_2',
-                                                                device_map=device_map)
+    if args.quant == 4:
+        model = Qwen2VLForConditionalGeneration.from_pretrained(
+            args.model_name_or_path,
+            torch_dtype=args.torch_dtype,
+            attn_implementation='flash_attention_2',
+            device_map=device_map,
+            trust_remote_code=True,
+            quantization_config=BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_quant_type="nf4",
+                bnb_4bit_use_double_quant=True,
+                bnb_4bit_compute_dtype=args.torch_dtype,
+                llm_int8_skip_modules=["out_proj", "kv_proj", "lm_head"],
+            ),
+            low_cpu_mem_usage=True,
+        )
+    elif args.quant == 8:
+        model = Qwen2VLForConditionalGeneration.from_pretrained(
+            pretrained_model_name_or_path=args.model_name_or_path,
+            device_map=device_map,
+            torch_dtype=args.torch_dtype,
+            trust_remote_code=True,
+            attn_implementation="flash_attention_2",
+            quantization_config=BitsAndBytesConfig(
+                load_in_8bit=True,
+                bnb_4bit_compute_dtype=args.torch_dtype,
+            ),
+            low_cpu_mem_usage=True
+        )
     else:
-        model = Qwen2VLForConditionalGeneration.from_pretrained(args.checkpoint_path, device_map=device_map)
+        model = Qwen2VLForConditionalGeneration.from_pretrained(
+            pretrained_model_name_or_path=args.model_name_or_path,
+            device_map=device_map,
+            torch_dtype=args.torch_dtype,
+            trust_remote_code=True
+        )
 
-    processor = AutoProcessor.from_pretrained(args.checkpoint_path)
+    processor = AutoProcessor.from_pretrained(args.model_name_or_path)
     return model, processor
 
 
@@ -137,13 +172,25 @@ def _launch_demo(args, model, processor):
 
         messages = _transform_messages(messages)
 
-        text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+        text = processor.apply_chat_template(
+            messages,
+            tokenize=False,
+            add_generation_prompt=True)
         image_inputs, video_inputs = process_vision_info(messages)
-        inputs = processor(text=[text], images=image_inputs, videos=video_inputs, padding=True, return_tensors='pt')
+        inputs = processor(
+            text=[text],
+            images=image_inputs,
+            videos=video_inputs,
+            padding=True,
+            return_tensors='pt')
         inputs = inputs.to(model.device)
 
         tokenizer = processor.tokenizer
-        streamer = TextIteratorStreamer(tokenizer, timeout=20.0, skip_prompt=True, skip_special_tokens=True)
+        streamer = TextIteratorStreamer(
+            tokenizer,
+            timeout=20.0,
+            skip_prompt=True,
+            skip_special_tokens=True)
 
         gen_kwargs = {'max_new_tokens': 512, 'streamer': streamer, **inputs}
 
@@ -184,7 +231,8 @@ def _launch_demo(args, model, processor):
             messages.pop()
 
             for response in call_local_model(model, processor, messages):
-                _chatbot[-1] = (_parse_text(chat_query), _remove_image_special(_parse_text(response)))
+                _chatbot[-1] = (_parse_text(chat_query),
+                                _remove_image_special(_parse_text(response)))
 
                 yield _chatbot
                 full_response = _parse_text(response)
@@ -244,49 +292,63 @@ def _launch_demo(args, model, processor):
         return []
 
     with gr.Blocks() as demo:
-        gr.Markdown("""\
-<p align="center"><img src="https://modelscope.oss-cn-beijing.aliyuncs.com/resource/qwen.png" style="height: 80px"/><p>"""
-                   )
-        gr.Markdown("""<center><font size=8>Qwen2-VL</center>""")
-        gr.Markdown("""\
-<center><font size=3>This WebUI is based on Qwen2-VL, developed by Alibaba Cloud.</center>""")
-        gr.Markdown("""<center><font size=3>本WebUI基于Qwen2-VL。</center>""")
-
+        # gr.Markdown("""<center><font size=3>本WebUI基于Qwen2-VL。</center>""")
         chatbot = gr.Chatbot(label='Qwen2-VL', elem_classes='control-height', height=500)
         query = gr.Textbox(lines=2, label='Input')
         task_history = gr.State([])
 
         with gr.Row():
-            addfile_btn = gr.UploadButton('📁 Upload (上传文件)', file_types=['image', 'video'])
-            submit_btn = gr.Button('🚀 Submit (发送)')
-            regen_btn = gr.Button('🤔️ Regenerate (重试)')
-            empty_bin = gr.Button('🧹 Clear History (清除历史)')
+            addfile_btn = gr.UploadButton('Upload', file_types=['image', 'video'])
+            submit_btn = gr.Button('Submit')
+            regen_btn = gr.Button('Regenerate')
+            empty_bin = gr.Button('Clear History')
 
-        submit_btn.click(add_text, [chatbot, task_history, query],
-                         [chatbot, task_history]).then(predict, [chatbot, task_history], [chatbot], show_progress=True)
-        submit_btn.click(reset_user_input, [], [query])
-        empty_bin.click(reset_state, [chatbot, task_history], [chatbot], show_progress=True)
-        regen_btn.click(regenerate, [chatbot, task_history], [chatbot], show_progress=True)
-        addfile_btn.upload(add_file, [chatbot, task_history, addfile_btn], [chatbot, task_history], show_progress=True)
-
-        gr.Markdown("""\
-<font size=2>Note: This demo is governed by the original license of Qwen2-VL. \
-We strongly advise users not to knowingly generate or allow others to knowingly generate harmful content, \
-including hate speech, violence, pornography, deception, etc. \
-(注：本演示受Qwen2-VL的许可协议限制。我们强烈建议，用户不应传播及不应允许他人传播以下内容，\
-包括但不限于仇恨言论、暴力、色情、欺诈相关的有害信息。)""")
+        submit_btn.click(
+            fn=add_text,
+            inputs=[chatbot, task_history, query],
+            outputs=[chatbot, task_history]
+        ).then(
+            fn=predict,
+            inputs=[chatbot, task_history],
+            outputs=[chatbot],
+            show_progress=True)
+        submit_btn.click(
+            fn=reset_user_input,
+            inputs=[],
+            outputs=[query])
+        empty_bin.click(
+            fn=reset_state,
+            inputs=[chatbot, task_history],
+            outputs=[chatbot],
+            show_progress=True)
+        regen_btn.click(
+            fn=regenerate,
+            inputs=[chatbot, task_history],
+            outputs=[chatbot],
+            show_progress=True)
+        addfile_btn.upload(
+            fn=add_file,
+            inputs=[chatbot, task_history, addfile_btn],
+            outputs=[chatbot, task_history],
+            show_progress=True)
 
     demo.queue().launch(
         share=args.share,
+        debug=True,
+        show_api=False,
         inbrowser=args.inbrowser,
         server_port=args.server_port,
         server_name=args.server_name,
+        # ssl_certfile="cert.pem",
+        # ssl_keyfile="key.pem",
+        # ssl_verify=False,
     )
 
 
 def main():
     args = _get_args()
     model, processor = _load_model_processor(args)
+    print(model)
     _launch_demo(args, model, processor)
 
 
