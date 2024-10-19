@@ -24,7 +24,7 @@ RUN pip install --no-cache-dir  \
         -i https://pypi.tuna.tsinghua.edu.cn/simple  \
         --trusted-host pypi.tuna.tsinghua.edu.cn \
         bitsandbytes==0.42.0 \
-        accelerate \
+        accelerate>=0.30.1 \
         transformers>=4.45.2 \
         transformers_stream_generator \
         torch==2.4.0 \
