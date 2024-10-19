@@ -312,20 +312,24 @@ def _launch_demo(args, model, processor):
             inputs=[chatbot, task_history],
             outputs=[chatbot],
             show_progress=True)
+
         submit_btn.click(
             fn=reset_user_input,
             inputs=[],
             outputs=[query])
+
         empty_bin.click(
             fn=reset_state,
             inputs=[chatbot, task_history],
             outputs=[chatbot],
             show_progress=True)
+
         regen_btn.click(
             fn=regenerate,
             inputs=[chatbot, task_history],
             outputs=[chatbot],
             show_progress=True)
+
         addfile_btn.upload(
             fn=add_file,
             inputs=[chatbot, task_history, addfile_btn],
