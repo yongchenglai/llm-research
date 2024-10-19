@@ -1,7 +1,3 @@
-# Copyright (c) Alibaba Cloud.
-#
-# This source code is licensed under the license found in the
-# LICENSE file in the root directory of this source tree.
 # qwen2vl_web_gradio.py
 import copy
 import re
@@ -11,7 +7,9 @@ from threading import Thread
 import gradio as gr
 import torch
 from qwen_vl_utils import process_vision_info
-from transformers import AutoProcessor, Qwen2VLForConditionalGeneration, TextIteratorStreamer
+from transformers import AutoProcessor, \
+    Qwen2VLForConditionalGeneration, \
+    TextIteratorStreamer
 
 DEFAULT_CKPT_PATH = 'Qwen/Qwen2-VL-7B-Instruct'
 
@@ -19,8 +17,7 @@ DEFAULT_CKPT_PATH = 'Qwen/Qwen2-VL-7B-Instruct'
 def _get_args():
     parser = ArgumentParser()
 
-    parser.add_argument('-c',
-                        '--checkpoint-path',
+    parser.add_argument('--model_name_or_path',
                         type=str,
                         default=DEFAULT_CKPT_PATH,
                         help='Checkpoint name or path, default to %(default)r')
