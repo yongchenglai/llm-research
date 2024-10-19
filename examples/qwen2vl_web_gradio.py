@@ -26,19 +26,12 @@ def _get_args():
                         choices=["float32", "bfloat16", "float16"])
     parser.add_argument('--quant', type=int, choices=[4, 8], default=0,
                         help='Enable 4-bit or 8-bit precision loading')
-    parser.add_argument('--flash-attn2',
-                        action='store_true',
-                        default=False,
+    parser.add_argument('--flash-attn2',action='store_true',default=False,
                         help='Enable flash_attention_2 when loading the model.')
-    parser.add_argument('--share',
-                        action='store_true',
-                        default=False,
+    parser.add_argument('--share', action='store_true', default=False,
                         help='Create a publicly shareable link for the interface.')
-    parser.add_argument(
-        '--inbrowser',
-        action='store_true',
-        default=False,
-        help='Automatically launch the interface in a new tab on the default browser.')
+    parser.add_argument('--inbrowser', action='store_true', default=False,
+                        help='Automatically launch the interface in a new tab on the default browser.')
     parser.add_argument('--server-port', type=int, default=7860,
                         help='Demo server port.')
     parser.add_argument('--server-name', type=str, default='0.0.0.0',
@@ -55,42 +48,80 @@ def _load_model_processor(args):
         device_map = 'auto'
 
     # Check if flash-attn2 flag is enabled and load model accordingly
-    if args.quant == 4:
-        model = Qwen2VLForConditionalGeneration.from_pretrained(
-            args.model_name_or_path,
-            torch_dtype=args.torch_dtype,
-            attn_implementation='flash_attention_2',
-            device_map=device_map,
-            trust_remote_code=True,
-            quantization_config=BitsAndBytesConfig(
-                load_in_4bit=True,
-                bnb_4bit_quant_type="nf4",
-                bnb_4bit_use_double_quant=True,
-                bnb_4bit_compute_dtype=args.torch_dtype,
-                llm_int8_skip_modules=["out_proj", "kv_proj", "lm_head"],
-            ),
-            low_cpu_mem_usage=True,
-        )
-    elif args.quant == 8:
-        model = Qwen2VLForConditionalGeneration.from_pretrained(
-            pretrained_model_name_or_path=args.model_name_or_path,
-            device_map=device_map,
-            torch_dtype=args.torch_dtype,
-            trust_remote_code=True,
-            attn_implementation="flash_attention_2",
-            quantization_config=BitsAndBytesConfig(
-                load_in_8bit=True,
-                bnb_4bit_compute_dtype=args.torch_dtype,
-            ),
-            low_cpu_mem_usage=True
-        )
+    if args.flash_attn2:
+        if args.quant == 4:
+            model = Qwen2VLForConditionalGeneration.from_pretrained(
+                args.model_name_or_path,
+                torch_dtype=args.torch_dtype,
+                attn_implementation='flash_attention_2',
+                device_map=device_map,
+                trust_remote_code=True,
+                quantization_config=BitsAndBytesConfig(
+                    load_in_4bit=True,
+                    bnb_4bit_quant_type="nf4",
+                    bnb_4bit_use_double_quant=True,
+                    bnb_4bit_compute_dtype=args.torch_dtype,
+                    llm_int8_skip_modules=["out_proj", "kv_proj", "lm_head"],
+                ),
+                low_cpu_mem_usage=True,
+            )
+        elif args.quant == 8:
+            model = Qwen2VLForConditionalGeneration.from_pretrained(
+                pretrained_model_name_or_path=args.model_name_or_path,
+                device_map=device_map,
+                torch_dtype=args.torch_dtype,
+                trust_remote_code=True,
+                attn_implementation="flash_attention_2",
+                quantization_config=BitsAndBytesConfig(
+                    load_in_8bit=True,
+                    bnb_4bit_compute_dtype=args.torch_dtype,
+                ),
+                low_cpu_mem_usage=True
+            )
+        else:
+            model = Qwen2VLForConditionalGeneration.from_pretrained(
+                pretrained_model_name_or_path=args.model_name_or_path,
+                device_map=device_map,
+                torch_dtype=args.torch_dtype,
+                trust_remote_code=True
+            )
     else:
-        model = Qwen2VLForConditionalGeneration.from_pretrained(
-            pretrained_model_name_or_path=args.model_name_or_path,
-            device_map=device_map,
-            torch_dtype=args.torch_dtype,
-            trust_remote_code=True
-        )
+        if args.quant == 4:
+            model = Qwen2VLForConditionalGeneration.from_pretrained(
+                args.model_name_or_path,
+                torch_dtype=args.torch_dtype,
+                # attn_implementation='flash_attention_2',
+                device_map=device_map,
+                trust_remote_code=True,
+                quantization_config=BitsAndBytesConfig(
+                    load_in_4bit=True,
+                    bnb_4bit_quant_type="nf4",
+                    bnb_4bit_use_double_quant=True,
+                    bnb_4bit_compute_dtype=args.torch_dtype,
+                    llm_int8_skip_modules=["out_proj", "kv_proj", "lm_head"],
+                ),
+                low_cpu_mem_usage=True,
+            )
+        elif args.quant == 8:
+            model = Qwen2VLForConditionalGeneration.from_pretrained(
+                pretrained_model_name_or_path=args.model_name_or_path,
+                device_map=device_map,
+                torch_dtype=args.torch_dtype,
+                # attn_implementation='flash_attention_2',
+                trust_remote_code=True,
+                quantization_config=BitsAndBytesConfig(
+                    load_in_8bit=True,
+                    bnb_4bit_compute_dtype=args.torch_dtype,
+                ),
+                low_cpu_mem_usage=True
+            )
+        else:
+            model = Qwen2VLForConditionalGeneration.from_pretrained(
+                pretrained_model_name_or_path=args.model_name_or_path,
+                device_map=device_map,
+                torch_dtype=args.torch_dtype,
+                trust_remote_code=True
+            )
 
     processor = AutoProcessor.from_pretrained(args.model_name_or_path)
     return model, processor
