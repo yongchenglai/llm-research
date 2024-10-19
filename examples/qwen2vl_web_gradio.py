@@ -26,7 +26,7 @@ def _get_args():
                         choices=["float32", "bfloat16", "float16"])
     parser.add_argument('--quant', type=int, choices=[4, 8], default=0,
                         help='Enable 4-bit or 8-bit precision loading')
-    parser.add_argument('--flash-attn2',action='store_true',default=False,
+    parser.add_argument('--flash-attn2', action='store_true',default=False,
                         help='Enable flash_attention_2 when loading the model.')
     parser.add_argument('--share', action='store_true', default=False,
                         help='Create a publicly shareable link for the interface.')
