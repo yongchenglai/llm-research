@@ -33,9 +33,12 @@ RUN pip install --no-cache-dir  \
         qwen-vl-utils==0.0.2 \
         av \
         decord \
-        pillow \
+        Pillow==10.1.0 \
         request \
-        
+        packaging \
+        tiktoken
+        PIL
+
 
 
 RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
