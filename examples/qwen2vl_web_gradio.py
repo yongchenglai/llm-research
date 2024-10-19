@@ -187,7 +187,7 @@ def _launch_demo(args, model, processor):
 
         tokenizer = processor.tokenizer
         streamer = TextIteratorStreamer(
-            tokenizer,
+            tokenizer=tokenizer,
             timeout=20.0,
             skip_prompt=True,
             skip_special_tokens=True)
