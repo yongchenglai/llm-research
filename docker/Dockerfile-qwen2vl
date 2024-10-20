@@ -39,7 +39,11 @@ RUN pip install --no-cache-dir  \
         uvicorn \
         tiktoken \
         sentencepiece==0.1.99 \
-        trl>=0.8.6 \
+        trl>=0.8.6  \
+
+RUN pip install --no-cache-dir  \
+        -i https://pypi.tuna.tsinghua.edu.cn/simple  \
+        --trusted-host pypi.tuna.tsinghua.edu.cn \
         packaging==23.2 \
         addict==2.4.0 \
         editdistance==0.6.2 \
