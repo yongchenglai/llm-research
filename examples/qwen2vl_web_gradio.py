@@ -52,7 +52,7 @@ def _load_model_processor(args):
     if args.flash_attn2:
         if args.quant == 4:
             model = Qwen2VLForConditionalGeneration.from_pretrained(
-                args.model_name_or_path,
+                pretrained_model_name_or_path=args.model_name_or_path,
                 torch_dtype=args.torch_dtype,
                 attn_implementation='flash_attention_2',
                 device_map=device_map,
@@ -89,7 +89,7 @@ def _load_model_processor(args):
     else:
         if args.quant == 4:
             model = Qwen2VLForConditionalGeneration.from_pretrained(
-                args.model_name_or_path,
+                pretrained_model_name_or_path=args.model_name_or_path,
                 torch_dtype=args.torch_dtype,
                 # attn_implementation='flash_attention_2',
                 device_map=device_map,
