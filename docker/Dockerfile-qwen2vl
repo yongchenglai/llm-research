@@ -26,6 +26,7 @@ RUN pip install --no-cache-dir  \
         bitsandbytes==0.42.0 \
         accelerate>=0.30.1 \
         transformers==4.45.2 \
+        peft>=0.11.1 \
         transformers_stream_generator \
         torch==2.1.2 \
         torchvision \
@@ -54,9 +55,9 @@ RUN pip install --no-cache-dir  \
         opencv_python_headless==4.5.5.64 \
         openpyxl==3.1.2 \
         sacrebleu==2.3.2 \
-        seaborn==0.13.0 
-        #shortuuid==1.0.11 \
-        #spacy==3.7.2 \
+        seaborn==0.13.0 \
+        shortuuid==1.0.11 \
+        spacy
         #timm==0.9.10 \
         #tqdm==4.66.1 \
         #protobuf==4.25.0 \
