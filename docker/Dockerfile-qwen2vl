@@ -39,7 +39,7 @@ RUN pip install --no-cache-dir  \
         uvicorn \
         tiktoken \
         sentencepiece==0.1.99 \
-        trl>=0.8.6 
+        trl>=0.8.6
 
 RUN pip install --no-cache-dir  \
         -i https://pypi.tuna.tsinghua.edu.cn/simple  \
@@ -59,10 +59,10 @@ RUN pip install --no-cache-dir  \
         requests \
         opencv_python_headless==4.5.5.64 \
         openpyxl==3.1.2 \
-        sacrebleu==2.3.2
-        # seaborn==0.13.0
+        sacrebleu==2.3.2 \
+        seaborn==0.13.0 \
         # checkpoint
-        # shortuuid==1.0.11
+        shortuuid==1.0.11
         #spacy \
         #timm==0.9.10 \
         #tqdm==4.66.1 \
