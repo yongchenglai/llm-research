@@ -68,9 +68,9 @@ RUN pip install --no-cache-dir  \
         spacy \
         # checkpoint
         timm==0.9.10 \
-        functools
-        #tqdm==4.66.1 \
-        #typing_extensions==4.8.0
+        # functools
+        tqdm==4.66.1 \
+        typing_extensions==4.8.0
 
 
 RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
