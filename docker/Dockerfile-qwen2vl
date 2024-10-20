@@ -31,8 +31,9 @@ RUN pip install --no-cache-dir  \
         torch==2.1.2 \
         torchvision \
         # gradio==4.42.0 \
-        gradio==4.38.0 \
-        gradio_client==1.3.0
+        # gradio_client==1.3.0 \
+        gradio==4.22.0 \
+        gradio_client
 
 
 RUN pip install --no-cache-dir  \
