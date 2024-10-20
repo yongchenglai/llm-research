@@ -6,7 +6,7 @@ from threading import Thread
 
 import gradio as gr
 import torch
-#from qwen_vl_utils import process_vision_info
+# from qwen_vl_utils import process_vision_info
 from qwen2vl_vision_process import process_vision_info
 from transformers import AutoProcessor, Qwen2VLForConditionalGeneration
 from transformers import TextIteratorStreamer
