@@ -72,7 +72,8 @@ RUN pip install --no-cache-dir  \
         spacy \
         timm==0.9.10 \
         tqdm==4.66.1 \
-        typing_extensions==4.8.0
+        typing_extensions
+        # typing_extensions==4.8.0
 
 
 RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
