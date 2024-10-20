@@ -47,7 +47,8 @@ RUN pip install --no-cache-dir  \
         jsonlines==4.0.0 \
         markdown2==2.4.10 \
         more_itertools==10.1.0 \
-        nltk==3.8.1
+        nltk==3.8.1 \
+        pydantic
         # request==2.28.1 \
 
 
