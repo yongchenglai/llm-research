@@ -335,6 +335,12 @@ def _launch_demo(args, model, processor):
             regen_btn = gr.Button('Regenerate')
             empty_bin = gr.Button('Clear History')
 
+        addfile_btn.upload(
+            fn=add_file,
+            inputs=[chatbot, task_history, addfile_btn],
+            outputs=[chatbot, task_history],
+            show_progress=True)
+
         submit_btn.click(
             fn=add_text,
             inputs=[chatbot, task_history, query],
@@ -360,12 +366,6 @@ def _launch_demo(args, model, processor):
             fn=regenerate,
             inputs=[chatbot, task_history],
             outputs=[chatbot],
-            show_progress=True)
-
-        addfile_btn.upload(
-            fn=add_file,
-            inputs=[chatbot, task_history, addfile_btn],
-            outputs=[chatbot, task_history],
             show_progress=True)
 
     demo.queue().launch(
