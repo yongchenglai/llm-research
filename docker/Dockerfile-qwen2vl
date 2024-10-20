@@ -36,10 +36,11 @@ RUN pip install --no-cache-dir  \
         numpy==1.24.4 \
         Pillow==10.2.0 \
         uvicorn \
-        # tiktoken==0.24.0.post1 \
+        tiktoken==0.24.0.post1
+        # request \
         # sentencepiece==0.1.99
-        request==2.28.1 \
-        packaging==24.1
+        # request==2.28.1 \
+        # packaging==24.1
 
 
 RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
