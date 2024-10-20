@@ -46,6 +46,7 @@ RUN wget https://cdn-media.hf-mirror.com/frpc-gradio-0.2/frpc_linux_amd64 && \
 
 WORKDIR /app
 COPY examples/qwen2vl_web_gradio.py /app
+COPY examples/qwen2vl_vision_process.py /app
 RUN chmod u+x /app/qwen2vl_web_gradio.py
 
 RUN openssl req -x509 -days 3650 -nodes -newkey rsa  \
