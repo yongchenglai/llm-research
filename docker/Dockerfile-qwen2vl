@@ -55,6 +55,7 @@ RUN pip install --no-cache-dir  \
         more_itertools==10.1.0 \
         nltk==3.8.1 \
         pydantic \
+        pydantic_core \
         fastapi \
         starlette \
         requests \
