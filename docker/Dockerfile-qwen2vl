@@ -66,9 +66,7 @@ RUN pip install --no-cache-dir  \
         shortuuid==1.0.11 \
         protobuf==4.25.0 \
         spacy \
-        # checkpoint
         timm==0.9.10 \
-        # functools
         tqdm==4.66.1 \
         typing_extensions==4.8.0
 
