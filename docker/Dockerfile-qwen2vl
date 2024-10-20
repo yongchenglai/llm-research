@@ -36,7 +36,7 @@ RUN pip install --no-cache-dir  \
         numpy==1.24.4 \
         Pillow==10.2.0 \
         uvicorn \
-        tiktoken==0.24.0.post1
+        tiktoken
         # request \
         # sentencepiece==0.1.99
         # request==2.28.1 \
