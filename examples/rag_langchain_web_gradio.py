@@ -25,7 +25,7 @@ vllm_nccl_cu12                           2.18.1.0.4.0
 极低显存(4g)使用方法：
 1. 根据MiniCPM/quantize/readme.md进行量化，推荐量化MiniCPM-1B-sft-bf16
 2. 将llm_model_name修改为量化后模型地址
-3. 保证encode_model_device设置为cpu
+3. 保证embedding_model_device设置为cpu
 """
 
 
