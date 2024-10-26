@@ -320,7 +320,8 @@ def embed_documents(documents, embedding_models):
     # Create a Chroma vectorstore from a list of documents.
     vectorstore = Chroma.from_documents(
         documents=texts_list,
-        embedding_models)
+        embedding=embedding_models,
+    )
     return vectorstore
 
 
@@ -339,14 +340,16 @@ def create_prompt_template():
 
     Question: {question}
     FINAL ANSWER:"""
-    PROMPT = PromptTemplate(
+
+    # Prompt template for a language model.
+    prompt_template = PromptTemplate(
         template=custom_prompt_template,
         input_variables=["context", "question"]
     )
-    return PROMPT
+    return prompt_template
 
 
-# 创建RAG链
+# Create RAG chain
 def create_rag_chain(llm, prompt):
     # qa=load_qa_with_sources_chain(llm, chain_type="stuff")
     qa = prompt | llm
