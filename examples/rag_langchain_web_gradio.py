@@ -317,7 +317,10 @@ def embed_documents(documents, embedding_models):
     )
     # Split documents.
     texts_list = text_splitter.split_documents(documents)
-    vectorstore = Chroma.from_documents(texts_list, embedding_models)
+    # Create a Chroma vectorstore from a list of documents.
+    vectorstore = Chroma.from_documents(
+        documents=texts_list,
+        embedding_models)
     return vectorstore
 
 
