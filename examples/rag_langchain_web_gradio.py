@@ -285,7 +285,7 @@ def load_models():
     llm: MiniCPM模型
     embedding_models: embedding模型
     """
-    llm = load_llm_model(model_path=args.cpm_model_path)
+    llm_model = load_llm_model(model_path=args.cpm_model_path)
     embedding_models = HuggingFaceBgeEmbeddings(
         model_name=args.encode_model,
         model_kwargs={"device": args.encode_model_device},  # 或者 'cuda' 如果你有GPU
@@ -297,7 +297,7 @@ def load_models():
         },
         query_instruction=args.query_instruction,
     )
-    return llm, embedding_models
+    return llm_model, embedding_models
 
 
 # 分割并嵌入文档
