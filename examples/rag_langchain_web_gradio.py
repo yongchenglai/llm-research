@@ -164,7 +164,7 @@ class load_llm_model(LLM):
             )
             self.model = AutoModelForCausalLM.from_pretrained(
                 pretrained_model_name_or_path=model_path,
-                device_map=args.lm_model_device,
+                device_map=args.llm_model_device,
                 trust_remote_code=True,
                 torch_dtype=torch.bfloat16,
                 attn_implementation="flash_attention_2",
@@ -192,7 +192,7 @@ class load_llm_model(LLM):
         """
         if args.backend == "torch":
             inputs = self.tokenizer("<用户>{}".format(prompt), return_tensors="pt")
-            inputs = inputs.to(args.lm_model_device)
+            inputs = inputs.to(args.llm_model_device)
             # Generate
             generate_ids = self.model.generate(
                 input_ids=inputs.input_ids,
@@ -314,8 +314,9 @@ def embed_documents(documents, embedding_models):
         chunk_size=args.chunk_size,
         chunk_overlap=args.chunk_overlap
     )
-    texts = text_splitter.split_documents(documents)
-    vectorstore = Chroma.from_documents(texts, embedding_models)
+    # Split documents.
+    texts_list = text_splitter.split_documents(documents)
+    vectorstore = Chroma.from_documents(texts_list, embedding_models)
     return vectorstore
 
 
