@@ -419,16 +419,18 @@ def process_query(file, query):
     if file != exist_file:
 
         # 加载文档
-        documents = load_documents(file if isinstance(file, list) else file.name)
+        documents_list = load_documents(file if isinstance(file, list) else file.name)
 
         # 嵌入文档
-        vectorstore = embed_documents(documents, embedding_models)
+        vectorstore = embed_documents(
+            documents=documents_list,
+            embedding_models=embedding_models)
 
         # 自建prompt模版
-        Prompt = create_prompt_template()
+        prompt_temp = create_prompt_template()
 
         # 创建RAG链
-        rag_chain = create_rag_chain(llm_model, Prompt)
+        rag_chain = create_rag_chain(llm_model, prompt_temp)
 
         exist_file = file
 
