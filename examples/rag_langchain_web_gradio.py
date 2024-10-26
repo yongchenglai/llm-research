@@ -129,7 +129,7 @@ def clean_text(text):
     return cleaned_text
 
 
-class MiniCPM_LLM(LLM):
+class load_llm_model(LLM):
     tokenizer: Any = Field(default=None)
     model: Any = Field(default=None)
 
@@ -285,7 +285,7 @@ def load_models():
     llm: MiniCPM模型
     embedding_models: embedding模型
     """
-    llm = MiniCPM_LLM(model_path=args.cpm_model_path)
+    llm = load_llm_model(model_path=args.cpm_model_path)
     embedding_models = HuggingFaceBgeEmbeddings(
         model_name=args.encode_model,
         model_kwargs={"device": args.encode_model_device},  # 或者 'cuda' 如果你有GPU
