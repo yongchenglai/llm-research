@@ -24,7 +24,7 @@ vllm_nccl_cu12                           2.18.1.0.4.0
 
 极低显存(4g)使用方法：
 1. 根据MiniCPM/quantize/readme.md进行量化，推荐量化MiniCPM-1B-sft-bf16
-2. 将cpm_model_path修改为量化后模型地址
+2. 将llm_model_name修改为量化后模型地址
 3. 保证encode_model_device设置为cpu
 """
 
@@ -54,13 +54,13 @@ def get_args():
 
     # 大语言模型参数设置
     parser.add_argument(
-        "--cpm_model_path",
+        "--llm_model_name",
         type=str,
         default="openbmb/MiniCPM-1B-sft-bf16",
         help="MiniCPM模型路径或者huggingface id"
     )
     parser.add_argument(
-        "--cpm_device", type=str, default="cuda:0",
+        "--llm_model_device", type=str, default="cuda:0",
         choices=["auto", "cuda:0"],
         help="MiniCPM模型所在设备，默认为cuda:0")
     parser.add_argument(
@@ -77,10 +77,10 @@ def get_args():
 
     # 嵌入模型参数设置
     parser.add_argument(
-        "--encode_model", type=str, default="BAAI/bge-base-zh",
+        "--embedding_model_name", type=str, default="BAAI/bge-base-zh",
         help="用于召回编码的embedding模型，默认为BAAI/bge-base-zh,可输入本地地址")
     parser.add_argument(
-        "--encode_model_device", type=str, default="cpu",
+        "--embedding_model_device", type=str, default="cpu",
         choices=["cpu", "cuda:0"],
         help="用于召回编码的embedding模型所在设备，默认为cpu")
     parser.add_argument(
@@ -164,7 +164,7 @@ class load_llm_model(LLM):
             )
             self.model = AutoModelForCausalLM.from_pretrained(
                 pretrained_model_name_or_path=model_path,
-                device_map=args.cpm_device,
+                device_map=args.lm_model_device,
                 trust_remote_code=True,
                 torch_dtype=torch.bfloat16,
                 attn_implementation="flash_attention_2",
@@ -192,7 +192,7 @@ class load_llm_model(LLM):
         """
         if args.backend == "torch":
             inputs = self.tokenizer("<用户>{}".format(prompt), return_tensors="pt")
-            inputs = inputs.to(args.cpm_device)
+            inputs = inputs.to(args.lm_model_device)
             # Generate
             generate_ids = self.model.generate(
                 input_ids=inputs.input_ids,
@@ -285,10 +285,10 @@ def load_models():
     llm: MiniCPM模型
     embedding_models: embedding模型
     """
-    llm_model = load_llm_model(model_path=args.cpm_model_path)
-    embedding_models = HuggingFaceBgeEmbeddings(
-        model_name=args.encode_model,
-        model_kwargs={"device": args.encode_model_device},  # 或者 'cuda' 如果你有GPU
+    llm_model = load_llm_model(model_path=args.llm_model_name)
+    embedding_model = HuggingFaceBgeEmbeddings(
+        model_name=args.embedding_model_name,
+        model_kwargs={"device": args.embedding_model_device},  # 或者 'cuda' 如果你有GPU
         encode_kwargs={
             "normalize_embeddings": True,  # 是否归一化嵌入
             "show_progress_bar": True,  # 是否显示进度条
@@ -297,7 +297,7 @@ def load_models():
         },
         query_instruction=args.query_instruction,
     )
-    return llm_model, embedding_models
+    return llm_model, embedding_model
 
 
 # 分割并嵌入文档
