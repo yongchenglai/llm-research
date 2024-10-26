@@ -387,7 +387,7 @@ def main():
     Prompt = create_prompt_template()
 
     # 创建RAG链
-    rag_chain = create_rag_chain(llm, Prompt)
+    rag_chain = create_rag_chain(llm_model, Prompt)
 
     # 用户查询
     while True:
@@ -420,7 +420,7 @@ def process_query(file, query):
         Prompt = create_prompt_template()
 
         # 创建RAG链
-        rag_chain = create_rag_chain(llm, Prompt)
+        rag_chain = create_rag_chain(llm_model, Prompt)
 
         exist_file = file
 
@@ -438,7 +438,7 @@ def process_query(file, query):
 if __name__ == "__main__":
 
     args = get_args()
-    llm, embedding_models = load_models()
+    llm_model, embedding_models = load_models()
 
     # 如果不需要web界面可以直接运行main函数
     #  main()
