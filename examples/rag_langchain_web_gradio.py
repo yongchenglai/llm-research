@@ -266,7 +266,7 @@ def load_documents(file_paths):
     documents = []
     for file_path in files_list:
         if file_path.endswith(".pdf"):
-            loader = PyPDFLoader(file_patch=file_path)
+            loader = PyPDFLoader(file_path=file_path)
         elif file_path.endswith(".txt"):
             loader = TextLoader(file_path=file_path)
         else:
