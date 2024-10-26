@@ -263,7 +263,7 @@ def load_documents(file_paths):
     else:
         files_list = [file_paths]
 
-    documents = []
+    documents_list = []
     for file_path in files_list:
         if file_path.endswith(".pdf"):
             loader = PyPDFLoader(file_path=file_path)
@@ -273,9 +273,9 @@ def load_documents(file_paths):
             raise ValueError("Unsupported file type")
         doc = loader.load()
         doc[0].page_content = clean_text(doc[0].page_content)
-        documents.extend(doc)
+        documents_list.extend(doc)
 
-    return documents
+    return documents_list
 
 
 def load_models():
