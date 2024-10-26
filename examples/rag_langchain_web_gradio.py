@@ -435,7 +435,8 @@ def process_query(file, query):
         exist_file = file
 
     # 搜索并获取结果
-    docs = vectorstore.similarity_search(query, k=args.embed_top_k)
+    # Run similarity search with Chroma
+    docs = vectorstore.similarity_search(query=query, k=args.embed_top_k)
     all_links = analysis_links(docs)
     final_result = rag_chain.invoke({"context": all_links, "question": query})
     # result = rag_chain({"input_documents": docs, "question": query},
