@@ -310,6 +310,7 @@ def embed_documents(documents, embedding_models):
     返回:
     vectorstore:向量数据库
     """
+    # from langchain.text_splitter import RecursiveCharacterTextSplitter
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=args.chunk_size,
         chunk_overlap=args.chunk_overlap
