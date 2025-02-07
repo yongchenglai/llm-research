@@ -67,7 +67,7 @@ with gr.Blocks() as demo:
 
         generate_input = {
             "input_ids": input_ids,
-            "max_new_tokens": 512,
+            "max_new_tokens": 4096,
             "do_sample": True,
             "top_k": 50,
             "top_p": top_p,
