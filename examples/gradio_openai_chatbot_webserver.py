@@ -13,6 +13,9 @@ import gradio as gr
 import argparse
 from openai import OpenAI
 
+LENGTH_NOTIFICATION_CN = "······\n由于大模型的上下文窗口大小限制，回答已经被大模型截断。"
+LENGTH_NOTIFICATION_EN = "...\nThe answer is truncated by your chosen LLM due to its limitation on context length."
+
 
 def predict(message, history):
     # Convert chat history to OpenAI format
@@ -26,7 +29,7 @@ def predict(message, history):
     history_openai_format.append({"role": "user", "content": message})
 
     # Create a chat completion request and send it to the API server
-    stream = client.chat.completions.create(
+    response = client.chat.completions.create(
         model=args.model,  # Model name to use
         messages=history_openai_format,  # Chat history
         temperature=args.temp,  # Temperature for text generation
@@ -34,18 +37,42 @@ def predict(message, history):
         #  max_tokens=32768,
         extra_body={
             'repetition_penalty':
-            1,
+                1,
             'stop_token_ids': [
                 int(id.strip()) for id in args.stop_token_ids.split(',')
                 if id.strip()
             ] if args.stop_token_ids else []
         })
 
+    """
     # Read and return generated text from response stream
     partial_message = ""
-    for chunk in stream:
+    for chunk in response:
         partial_message += (chunk.choices[0].delta.content or "")
         yield partial_message
+    """
+    ans = ""
+    for resp in response:
+        if not resp.choices:
+            continue
+        if not resp.choices[0].delta.content:
+            resp.choices[0].delta.content = ""
+
+        if hasattr(resp.choices[0].delta, "reasoning_content") \
+                and resp.choices[0].delta.reasoning_content:
+            if ans.find("<think>") < 0:
+                ans += "<think>"
+            ans = ans.replace("</think>", "")
+            ans += resp.choices[0].delta.reasoning_content + "</think>"
+        else:
+            ans += resp.choices[0].delta.content
+
+        if resp.choices[0].finish_reason == "length":
+            if is_chinese(ans):
+                ans += LENGTH_NOTIFICATION_CN
+            else:
+                ans += LENGTH_NOTIFICATION_EN
+        yield ans
 
 
 if __name__ == '__main__':
@@ -87,5 +114,3 @@ if __name__ == '__main__':
         server_name=args.server_host,
         server_port=args.server_port,
     )
-
-
